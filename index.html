@@ -28,7 +28,9 @@
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);
   font-family:"IBM Plex Sans KR","Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  font-size:16px;line-height:1.7;word-break:keep-all}
+  font-size:16px;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere}
+/* 일본어는 띄어쓰기가 없어 keep-all이면 한 줄로 이어져 상자를 뚫는다 → 글자 단위 줄바꿈(금칙 처리 strict) */
+[lang="ja"]{word-break:normal;line-break:strict}
 button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .app{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
