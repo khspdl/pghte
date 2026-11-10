@@ -11928,5 +11928,54 @@ var PROBLEMS = [
   ],
   oneLine: "이미지 CVE 스캔은 Artifact Registry에 올리면 Artifact Analysis(옛 Container Analysis)가 알아서 한다. 막는 건 Binary Authorization이다.",
   tip: "스캔 결과는 <code>gcloud artifacts docker images describe IMAGE --show-package-vulnerability</code>로 볼 수 있고, Pub/Sub 토픽(<code>container-analysis-occurrences-v1</code>)으로 새 취약점 알림을 받아 Slack 등에 보낼 수 있습니다. 빌드 중 바로 판정하려면 On-Demand Scanning을 Cloud Build 단계에 넣습니다."
+},
+{
+  id: 932,
+  title: "Cloud Build CI 파이프라인(Python 컨테이너 빌드·테스트·push)이 예상보다 느림, 빌드 시간 단축(2개) → 더 높은 CPU의 빌드 VM(머신 유형) + --cache-from으로 이미지 캐시(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Cloud Build", "--cache-from", "머신 유형", "빌드 고속화", "Dockerfile", "Artifact Registry"],
+  mine: "AC",
+  correct: "AC",
+  pending: true,
+  section: "2.1",
+  freq: "high",
+  freqNote: "Cloud Build(2.1)는 CLAUDE.md high 기준이고, --cache-from은 1세트 Q38·공식 모의고사 Q15에 이어 세 번째입니다. <b>“빌드가 느림 = 고 CPU 머신 유형 + --cache-from(+ Kaniko 캐시, 업로드 파일 줄이기)”</b>를 가져가면 됩니다.",
+  question: {
+    en: "新しいコンテナ イメージの構築を自動化するために、Cloud Build を使用して継続的インテグレーション パイプラインを構成しています。このパイプラインでは、ソースコードからアプリケーションを構築し、単体テストと統合テストを別々のステップで実行した後、コンテナを Artifact Registry にpush します。コンテナ ビルド ファイルは次のとおりです。\n\nあなたは、Cloud Build での処理に予想より時間がかかることに気づきました。ビルド時間を短縮するにはどうすればよいですか。2 つ選択してください。",
+    ko: "새 컨테이너 이미지 빌드를 자동화하기 위해 Cloud Build로 지속적 통합 파이프라인을 구성하고 있습니다. 이 파이프라인은 소스 코드로 애플리케이션을 빌드하고, 단위 테스트와 통합 테스트를 별도 단계에서 실행한 다음, 컨테이너를 Artifact Registry에 push합니다. 컨테이너 빌드 파일은 다음과 같습니다.\n\n당신은 Cloud Build 처리에 예상보다 시간이 걸린다는 것을 알아챘습니다. 빌드 시간을 줄이려면 어떻게 해야 합니까? 2개를 선택하세요."
+  },
+  questionCode: "FROM python:3.7-alpine\nCOPY . /app\nWORKDIR /app\nRUN pip install -r requirements.txt\nCMD [ \"gunicorn\", \"-w 4\", \"main:app\" ]",
+  options: {
+    A: { en: "Cloud Build を実行する仮想マシン（VM）の CPU 割り当てを増やす。", ko: "Cloud Build를 실행하는 가상 머신(VM)의 CPU 할당을 늘린다." },
+    B: { en: "VPC 内の Compute Engine VM に Container Registry をデプロイし、これを使用して最後のイメージを保存する。", ko: "VPC 안의 Compute Engine VM에 Container Registry를 배포하고, 이를 사용해 최종 이미지를 저장한다." },
+    C: { en: "ビルド構成ファイルで --cache-from 引数を使用して、以降のビルドのコンテナ イメージをキャッシュに保存する。", ko: "빌드 구성 파일에서 --cache-from 인수를 사용해, 이후 빌드를 위한 컨테이너 이미지를 캐시에 저장한다." },
+    D: { en: "ビルドファイル内のベースイメージを ubuntu:latest に変更し、パッケージ マネージャー ユーティリティを使用して Python 3.7 をインストールする。", ko: "빌드 파일의 베이스 이미지를 ubuntu:latest로 바꾸고, 패키지 관리자 유틸리티로 Python 3.7을 설치한다." },
+    E: { en: "Cloud Storage にアプリケーション ソースコードを保存し、gsutil を使用してソースコードをダウンロードするようにパイプラインを構成する。", ko: "Cloud Storage에 애플리케이션 소스 코드를 저장하고, gsutil로 소스 코드를 내려받도록 파이프라인을 구성한다." }
+  },
+  keywords: [
+    ["ビルド時間を短縮", "Cloud Build 공식 “빌드 고속화 모범 사례”의 항목을 고르는 문제", "A·C"],
+    ["CPU 割り当てを増やす(A)", "빌드 구성 <code>options.machineType</code>(예: <code>E2_HIGHCPU_8</code>)로 <mark>더 큰 머신 유형</mark> 선택", "A"],
+    ["--cache-from(C)", "이전 이미지의 레이어를 재사용 → <code>pip install</code> 같은 무거운 단계 생략", "C"],
+    ["VM に Container Registry をデプロイ(B)", "레지스트리를 직접 운영할 뿐 빌드는 빨라지지 않음(Container Registry도 지원 종료)", "B 제외"],
+    ["ubuntu:latest + パッケージ マネージャー(D)", "alpine보다 큰 이미지 + 설치 단계 추가 → 오히려 느려짐", "D 제외"],
+    ["Cloud Storage + gsutil(E)", "소스 다운로드 단계를 더할 뿐, 시간 단축 효과 없음", "E 제외"]
+  ],
+  keywordNote: "일본어 표기: 継続的インテグレーション(CI), ビルドを高速化する際のベスト プラクティス(공식 문서), マシンタイプ(확인 필요), --cache-from(영어 그대로), 単体テスト / 統合テスト.",
+  whyWrong: "",
+  whyRight: "<p>Cloud Build 공식 문서 “ビルドを高速化する際のベスト プラクティス”에 있는 방법 두 개가 A와 C입니다.</p>\n<div class=\"tbl\"><table><thead><tr><th>보기</th><th>방법</th><th>효과</th></tr></thead><tbody><tr><td><mark>A</mark></td><td>고 CPU 머신 유형(<code>options: machineType: E2_HIGHCPU_8</code> 등, 또는 비공개 풀)</td><td>컴파일·테스트·pip 설치처럼 CPU를 쓰는 단계가 빨라짐</td></tr><tr><td><mark>C</mark></td><td><code>docker build --cache-from IMAGE:latest</code>(먼저 이전 이미지를 pull)</td><td>바뀌지 않은 레이어를 재사용 → 의존성 설치 단계 생략</td></tr></tbody></table></div>\n<p>그 밖의 공식 방법: Kaniko 캐시, Cloud Storage에 빌드 산출물 캐시, <code>.gcloudignore</code>로 업로드 파일 줄이기, 가벼운 베이스 이미지(alpine 등).</p>\n<p><b>참고</b>: 이 Dockerfile은 <code>COPY . /app</code>이 <code>pip install</code>보다 앞에 있어, 코드가 조금만 바뀌어도 의존성 설치 레이어 캐시가 깨집니다. <code>COPY requirements.txt</code> → <code>pip install</code> → <code>COPY . /app</code> 순으로 바꾸면 <code>--cache-from</code> 효과가 커집니다(보기에는 없음).</p>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"38\">Q38</button>과 <button class=\"qref\" data-id=\"915\">공식 모의고사 Q15</button>도 --cache-from이 답이었습니다. 이번은 두 개를 고르는 형태라 머신 유형(A)이 추가로 붙었습니다.</p>",
+  others: {
+    B: "레지스트리를 VM에 직접 띄우면 운영 부담만 늘고 빌드 시간은 줄지 않습니다. Container Registry는 지원이 종료되어 Artifact Registry를 써야 합니다.",
+    D: "ubuntu:latest는 python:3.7-alpine보다 크고, Python 설치 단계까지 더해져 빌드가 더 느려집니다. latest 태그는 재현성도 떨어집니다.",
+    E: "Cloud Build는 이미 소스를 받아 빌드합니다. Cloud Storage에서 gsutil로 다시 내려받는 단계는 시간만 더합니다."
+  },
+  rules: [
+    ["Cloud Build 빌드가 느림(CPU 단계)", "더 큰 머신 유형(options.machineType, 비공개 풀)"],
+    ["Docker 레이어를 매번 다시 빌드", "--cache-from(또는 Kaniko 캐시)"],
+    ["업로드할 소스가 큼", "​.gcloudignore로 불필요 파일 제외"],
+    ["베이스 이미지 교체", "더 가벼운 쪽(alpine·distroless)이면 단축, 무거운 쪽(ubuntu + 설치)은 역효과"],
+    ["레지스트리 자체 운영·소스 재다운로드", "오답"]
+  ],
+  oneLine: "Cloud Build가 느리면 머신을 키우고(고 CPU) --cache-from으로 레이어를 재사용한다. 레지스트리 자체 운영·무거운 베이스 이미지는 역효과다.",
+  tip: "cloudbuild.yaml 예: 첫 단계에서 <code>docker pull IMAGE:latest || exit 0</code>, 빌드 단계에서 <code>docker build --cache-from IMAGE:latest -t IMAGE:$SHORT_SHA .</code>, 마지막에 <code>options: machineType: E2_HIGHCPU_8</code>. 고 CPU 머신은 분당 요금이 높으니 빌드 시간 단축 효과와 함께 비용도 확인합니다."
 }
 ];
