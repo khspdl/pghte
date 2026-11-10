@@ -11693,5 +11693,52 @@ var PROBLEMS = [
   ],
   oneLine: "세션은 사라져도 되니 Memorystore(TTL), 장바구니는 남아야 하니 Firestore. 로컬 메모리 + 세션 어피니티는 상태 보존이 아니다.",
   tip: "Redis에서 세션 키에 <code>SET session:&lt;id&gt; ... EX 1800</code>으로 30분 TTL을 걸고, 요청이 올 때마다 <code>EXPIRE</code>로 연장하면 “무조작 30분 로그아웃”이 됩니다. 카트 문서는 <code>carts/{userId}</code>처럼 변하지 않는 사용자 ID를 키로 둡니다."
+},
+{
+  id: 927,
+  title: "공개 API의 호출자 인증·할당량 적용·지표 보고, LB와 PHP 앱 사이의 빈칸 → Cloud Endpoints(ESPv2 프록시)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Cloud Endpoints", "ESPv2", "API 관리", "할당량", "API 키", "IAP", "API Gateway", "Apigee"],
+  mine: "C",
+  correct: "B",
+  pending: true,
+  section: "1.1",
+  freq: "high",
+  freqNote: "API 설계·관리(Apigee·API Gateway·Endpoints)는 CLAUDE.md high 기준 항목입니다. <b>“API 호출자 인증 + 할당량 + 지표 = API 관리(Endpoints·API Gateway·Apigee), 사람(사용자) 접근 제어 = IAP”</b>를 가져가면 됩니다.",
+  question: {
+    en: "API 呼び出し元の認証、割り当ての適用、指標のレポートを行う公開 API を作成する必要があります。このアーキテクチャを実現するには、どのツールを使用する必要がありますか。\n\nGoogle Cloud のアーキテクチャを表す図。「コンピュータ」から「Cloud Load Balancing」に矢印が伸び、さらに「Cloud Load Balancing」から空のボックスに、そして空のボックスから「PHP アプリケーション」に矢印が伸びています。",
+    ko: "API 호출자 인증, 할당량 적용, 지표 보고를 수행하는 공개 API를 만들어야 합니다. 이 아키텍처를 실현하려면 어떤 도구를 사용해야 합니까?\n\nGoogle Cloud 아키텍처를 나타낸 그림. “컴퓨터”에서 “Cloud Load Balancing”으로 화살표가 뻗고, 다시 “Cloud Load Balancing”에서 빈 상자로, 그리고 빈 상자에서 “PHP 애플리케이션”으로 화살표가 뻗어 있습니다."
+  },
+  questionCode: "[그림] コンピュータ → Cloud Load Balancing → [ 空のボックス ] → PHP Application  (Google Cloud 枠内)",
+  options: {
+    A: { en: "Cloud Run", ko: "Cloud Run" },
+    B: { en: "Cloud Endpoints", ko: "Cloud Endpoints" },
+    C: { en: "Identity-Aware Proxy", ko: "Identity-Aware Proxy" },
+    D: { en: "HTTP(S) 負荷分散用 GKE Ingress", ko: "HTTP(S) 부하 분산용 GKE Ingress" }
+  },
+  keywords: [
+    ["API 呼び出し元の認証", "API 키·JWT·Google ID 토큰으로 <mark>호출하는 프로그램</mark>을 확인 = API 관리 기능", "B(C 제외)"],
+    ["割り当ての適用", "API 키(소비자 프로젝트)별 요청 수 할당량 = Endpoints·API Gateway·Apigee", "B"],
+    ["指標のレポート", "호출 수·지연·오류율을 API별로 보고(Endpoints 대시보드)", "B"],
+    ["LB と PHP アプリの間の空のボックス", "요청을 가로채는 <mark>프록시</mark> 자리 → ESPv2(Endpoints) 프록시", "A·D 제외"],
+    ["Identity-Aware Proxy(C)", "<mark>사람(Google 계정)</mark>의 웹 앱 접근 제어. 할당량·API 지표 없음", "C 제외"],
+    ["GKE Ingress(D)·Cloud Run(A)", "부하 분산·실행 환경일 뿐 API 관리 기능 없음", "A·D 제외"]
+  ],
+  keywordNote: "일본어 표기: Cloud Endpoints(영어 그대로), Extensible Service Proxy V2(ESPv2), 割り当て(할당량), API キー, Identity-Aware Proxy(IAP), 負荷分散.",
+  whyWrong: "<p><b>틀린 원인: 인증 대상 혼동.</b> “呼び出し元の認証”과 그림 속 “프록시 자리”를 보고 IAP(Identity-Aware <b>Proxy</b>)를 골랐습니다.</p>\n<ul><li>IAP는 <mark>사람</mark>(Google 계정·그룹)이 웹 앱에 들어오는 것을 막는 문입니다. “누가 로그인했나”만 봅니다.</li><li>이 문제는 요건이 세 개입니다: <b>인증 + 할당량 + 지표</b>. IAP에는 API 키별 할당량도, API 호출 지표 보고도 없습니다.</li><li>“공개 API(公開 API)”라는 말도 불특정 외부 개발자·앱이 호출한다는 뜻이라, 조직 계정 기반 IAP와 맞지 않습니다.</li></ul>\n<p>판단법: <b>인증 + 할당량 + 지표(+ 레이트 제한, 개발자 포털)</b>가 한 묶음으로 나오면 API 관리 제품(Endpoints·API Gateway·Apigee)입니다.</p>",
+  whyRight: "<p>Cloud Endpoints는 앱 앞에 <mark>ESPv2(Extensible Service Proxy V2)</mark>라는 프록시를 두고, OpenAPI 사양으로 정의한 API에 대해 다음을 해 줍니다.</p>\n<div class=\"tbl\"><table><thead><tr><th>요건</th><th>Endpoints가 하는 일</th></tr></thead><tbody><tr><td>呼び出し元の認証</td><td>API 키, JWT(Firebase Auth·Auth0·Google ID 토큰) 검증</td></tr><tr><td>割り当ての適用</td><td>OpenAPI의 <code>x-google-management.quota</code>로 소비자별 분당 요청 수 제한</td></tr><tr><td>指標のレポート</td><td>Endpoints 대시보드·Cloud Monitoring에 호출 수·지연·오류 보고, 로그는 Cloud Logging</td></tr></tbody></table></div>\n<p>그림의 빈 상자는 LB와 PHP 앱(Compute Engine 등) 사이에서 요청을 검사하는 <b>ESPv2 프록시</b> 자리입니다.</p>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"39\">Q39</button>는 API Gateway(Endpoints와 같은 계열의 서버리스 관리형 게이트웨이), <button class=\"qref\" data-id=\"33\">Q33</button>·<button class=\"qref\" data-id=\"311\">3세트 Q11</button>은 Apigee 할당량 정책이었습니다. 보기에 Endpoints 하나만 API 관리 제품이라 B입니다. IAP는 <button class=\"qref\" data-id=\"902\">공식 모의고사 Q2</button>처럼 “사내 사용자만 웹 앱 접근” 문맥에서 답이 됩니다.</p>",
+  others: {
+    A: "Cloud Run은 컨테이너 실행 환경입니다. 이미 PHP 앱이 있고, Cloud Run 자체에는 API 키 할당량·API 지표 보고 기능이 없습니다(ESPv2를 Cloud Run에 올려 쓰는 구성은 있지만 그때 답은 여전히 Endpoints).",
+    D: "GKE Ingress는 HTTP(S) 부하 분산 구성 도구입니다. 그림에 이미 Cloud Load Balancing이 있고, 호출자 인증·할당량·지표 기능이 없습니다."
+  },
+  rules: [
+    ["API 호출자 인증 + 할당량 + 지표 보고(보기에 Endpoints)", "Cloud Endpoints(ESPv2)"],
+    ["서버리스 백엔드 앞 관리형 API 게이트웨이", "API Gateway"],
+    ["수익화·개발자 포털·고급 정책·하이브리드", "Apigee"],
+    ["사람(Google 계정)의 웹 앱 접근 제어", "IAP"],
+    ["부하 분산·실행 환경", "API 관리 기능 아님"]
+  ],
+  oneLine: "인증·할당량·지표를 묶어 API를 관리하는 건 Endpoints(ESPv2) 같은 API 관리 제품. IAP는 사람의 로그인 문지기다.",
+  tip: "새로 만든다면 Cloud Run·Cloud Functions 백엔드에는 관리형 API Gateway, 대규모·멀티클라우드·수익화에는 Apigee를 많이 씁니다. Endpoints는 ESPv2를 직접 배포(Compute Engine·GKE 사이드카)하는 방식이라 그림처럼 VM의 PHP 앱 앞에 두는 구성에 맞습니다."
 }
 ];
