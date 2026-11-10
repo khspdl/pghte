@@ -12764,5 +12764,51 @@ var PROBLEMS = [
   ],
   oneLine: "모든 메시지를 두 곳에 쓰려면 토픽 하나에 구독 두 개(팬아웃). 구독 하나는 엔드포인트 하나이고, 나눠 받는 것이지 복사가 아니다.",
   tip: "변환이 필요 없다면 Pub/Sub의 <b>BigQuery 구독</b>과 <b>Cloud Storage 구독</b>을 쓰면 Cloud Run 서비스 없이 바로 적재돼 운영 부담이 더 줄어듭니다. push 구독에는 인증용 서비스 계정(OIDC 토큰)을 지정하고, Cloud Run 서비스는 그 SA에만 <code>roles/run.invoker</code>를 줍니다."
+},
+{
+  id: 950,
+  title: "Cloud Logging의 중요 감사 로그를 거의 실시간으로 여러 프로세스가 서로 다른 분석 → Pub/Sub 대상 로그 싱크 + Pub/Sub 구독에서 읽기(프로세스마다 구독)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["로그 싱크", "Pub/Sub", "Cloud Logging", "감사 로그", "팬아웃", "실시간 분석", "Dataproc"],
+  mine: "C",
+  correct: "B",
+  pending: true,
+  guess: true,
+  section: ["4.3", "4.1"],
+  freq: "high",
+  freqNote: "관측 가능성(Logging, 4.3)과 이벤트 통합(Pub/Sub)은 CLAUDE.md high 기준이고, 2세트 Q44·4세트 Q16과 같은 “로그 싱크 → Pub/Sub” 유형입니다. <b>“로그를 실시간으로 외부·여러 소비자에 = Pub/Sub 싱크(+ 소비자별 구독), 장기 보관 = Cloud Storage 싱크, SQL 분석 = BigQuery 싱크”</b>를 가져가면 됩니다.",
+  question: {
+    en: "Cloud Logging で、重要な監査アクティビティの情報を取得しています。Cloud Logging から情報を読み取り、ほぼリアルタイムでログの分析を行う必要があります。複数のプロセスでログデータに対して異なる種類の分析を行うにはどうすればよいですか。",
+    ko: "Cloud Logging에서 중요한 감사 활동 정보를 수집하고 있습니다. Cloud Logging에서 정보를 읽어 거의 실시간으로 로그를 분석해야 합니다. 여러 프로세스에서 로그 데이터에 대해 서로 다른 종류의 분석을 하려면 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "Cloud Logging API からログを直接読み取るアプリを作成する。", ko: "Cloud Logging API에서 로그를 직접 읽는 앱을 만든다." },
+    B: { en: "Pub/Sub に対して Cloud Logging シンクを設定し、Pub/Sub  サブスクリプションからログを読み取ります。", ko: "Pub/Sub에 대해 Cloud Logging 싱크를 설정하고, Pub/Sub 구독에서 로그를 읽는다." },
+    C: { en: "Cloud Logging API から直接読み取る Cloud Run function のエンドポイントを作成し、ログを Dataproc にコピーする。", ko: "Cloud Logging API에서 직접 읽는 Cloud Run function 엔드포인트를 만들고, 로그를 Dataproc에 복사한다." },
+    D: { en: "Cloud Storage に対して Cloud Logging シンクを設定し、Cloud Storage バケットからログを読み取る。", ko: "Cloud Storage에 대해 Cloud Logging 싱크를 설정하고, Cloud Storage 버킷에서 로그를 읽는다." }
+  },
+  keywords: [
+    ["ほぼリアルタイム", "로그가 들어오는 즉시 밖으로 흘려보내기 → <mark>Pub/Sub 싱크</mark>(스트리밍)", "B(D 제외)"],
+    ["複数のプロセスで異なる種類の分析", "같은 로그를 여러 소비자가 모두 받기 = <mark>팬아웃</mark> → 프로세스마다 구독", "B(A·C 제외)"],
+    ["Cloud Logging API から直接読み取る(A・C)", "폴링·할당량(읽기 요청 제한)·중복·누락 관리를 직접, 실시간·다중 소비에 부적합", "A·C 제외"],
+    ["Dataproc にコピー(C)", "Spark·Hadoop 배치 클러스터 운영 추가(옛 Dataproc → Managed Service for Apache Spark)", "C 제외"],
+    ["Cloud Storage シンク(D)", "시간 단위 배치 파일로 내보냄 → 실시간 아님", "D 제외"]
+  ],
+  keywordNote: "일본어 표기: シンク(ログシンク), サブスクリプション, 監査ログ(監査アクティビティ), ほぼリアルタイム, Dataproc(→ Managed Service for Apache Spark).",
+  whyWrong: "<p><b>찍은 이유와 틀린 점</b>: C는 “함수로 읽어 분석 도구(Dataproc)에 넘긴다”라 그럴듯하지만, 요건 두 개를 모두 놓칩니다.</p>\n<ul><li><b>거의 실시간</b>: Logging API에서 직접 읽으려면 주기적으로 조회(폴링)해야 하고, 읽기 API 할당량에 걸리기 쉽습니다. 로그를 들어오는 즉시 밀어주는 것은 <mark>싱크</mark>입니다.</li><li><b>여러 프로세스가 서로 다른 분석</b>: Dataproc 하나로 복사하는 구조는 소비자가 하나입니다. Pub/Sub은 구독을 여러 개 만들면 각 프로세스가 같은 로그 전체를 따로 받습니다.</li></ul>\n<p>판단법: 로그를 Cloud Logging 밖으로 꺼낼 때는 <b>API로 직접 읽기보다 싱크</b>. 대상은 용도로 고름(실시간·여러 소비자 = Pub/Sub, SQL = BigQuery, 장기 보관 = Cloud Storage).</p>",
+  whyRight: "<div class=\"tbl\"><table><thead><tr><th>요건</th><th>Pub/Sub 싱크 + 구독</th></tr></thead><tbody><tr><td>거의 실시간</td><td>싱크가 필터에 맞는 로그를 들어오는 즉시 Pub/Sub 토픽으로 보냄</td></tr><tr><td>여러 프로세스가 서로 다른 분석</td><td>프로세스마다 구독을 하나씩 → 각자 모든 로그 사본을 받음(팬아웃)</td></tr><tr><td>운영 부담</td><td>폴링·할당량·중복 관리 불필요, 소비자 추가 = 구독 추가</td></tr></tbody></table></div>\n<pre><code>gcloud logging sinks create audit-to-pubsub \\\n  pubsub.googleapis.com/projects/PROJECT/topics/audit-logs \\\n  --log-filter='logName:\"cloudaudit.googleapis.com\"'</code></pre>\n<p>싱크를 만든 뒤 표시되는 <b>작성자 ID(서비스 계정)</b>에 토픽의 <code>roles/pubsub.publisher</code>를 줘야 로그가 들어갑니다.</p>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"244\">2세트 Q44</button>(대량 로그를 실시간으로 서드파티에 = Pub/Sub 싱크), <button class=\"qref\" data-id=\"416\">4세트 Q16</button>(감사 로그 → Pub/Sub 싱크)와 같은 답입니다. “여러 프로세스 = 구독 여러 개”는 <button class=\"qref\" data-id=\"949\">공식 모의고사 Q49</button>의 팬아웃과 같은 원리입니다.</p>",
+  others: {
+    A: "Logging API로 직접 읽으면 주기적 조회가 필요해 실시간성이 떨어지고, 읽기 할당량 제한에 걸리기 쉽습니다. 여러 프로세스가 각자 API를 두드리면 더 심해집니다.",
+    D: "Cloud Storage 싱크는 로그를 시간 단위로 모아 파일로 내보내므로 거의 실시간 분석에 맞지 않습니다. 장기 보관·감사 보존용입니다."
+  },
+  rules: [
+    ["로그를 거의 실시간으로 외부·여러 소비자에", "Pub/Sub 싱크 + 소비자별 구독"],
+    ["로그를 SQL로 분석", "BigQuery 싱크(또는 Log Analytics)"],
+    ["로그 장기 보관·감사 보존", "Cloud Storage 싱크(또는 로그 버킷 보존 기간)"],
+    ["Logging API로 직접 읽어 처리", "폴링·할당량 문제로 오답"],
+    ["싱크 권한", "작성자 ID(writer identity)에 대상 쓰기 권한"]
+  ],
+  oneLine: "로그를 실시간으로 여러 곳에서 분석하려면 Pub/Sub 싱크로 흘리고 프로세스마다 구독한다. API 직접 읽기와 Storage 싱크는 실시간이 아니다.",
+  tip: "조직 전체 감사 로그라면 조직 수준 집계 싱크(<code>--organization --include-children</code>)로 한 토픽에 모읍니다. 처리 실패 메시지는 구독의 데드 레터 토픽으로 빼고, 로그 원본은 별도로 로그 버킷 보존 기간이나 Cloud Storage 싱크로 보관합니다."
 }
 ];
