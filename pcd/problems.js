@@ -12259,5 +12259,51 @@ var PROBLEMS = [
   ],
   oneLine: "같은 일을 나눠 하는 워커들은 구독 하나를 함께 pull한다. 구독을 인스턴스마다 만들면 메시지가 복제된다.",
   tip: "감사 VM 풀은 MIG로 두고, 구독의 미확인 메시지 수(<code>subscription/num_undelivered_messages</code>) 같은 Cloud Monitoring 지표로 자동 확장하면 백로그에 맞춰 VM이 늘고 줄어듭니다. 처리 실패가 반복되는 메시지는 데드 레터 토픽으로 빼 둡니다."
+},
+{
+  id: 939,
+  title: "이전 막바지에 폐지 예정 웹 API(Python 3.x)를 현대화, 월말 피크 자동 확장 + 잦은 새 버전 배포 + 비용·작업·운영 최소 → 코드를 현대화해 Cloud Run에 배포(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Cloud Run", "플랫폼 선택", "App Engine 가변형", "GKE", "Compute Engine", "현대화", "자동 확장"],
+  mine: "B",
+  correct: "B",
+  pending: true,
+  section: "1.1",
+  freq: "high",
+  freqNote: "실행 플랫폼 선택(1.1)은 CLAUDE.md high 기준으로, 공식 모의고사 Q7·Q30에 이어 세 번째 Cloud Run 선택 문제입니다. <b>“HTTP API + 자동 확장 + 빠른 배포 + 비용·운영 최소 = Cloud Run”</b>을 가져가면 됩니다.",
+  question: {
+    en: "オンプレミス データセンターを Google Cloud に移行する最終段階にいるとします。最終期限が迫っていますが、サーバーで実行しているウェブ API が廃止予定であることがわかりました。この API のモダナイズと Google Cloud への移行を両立させるソリューションを提案する必要があります。モダナイズ後のウェブ API は、次の要件を満たしている必要があります。\n\n- 毎月末のトラフィックが多い期間に自動スケーリングする\n- Python 3.x で記述されている\n- デベロッパーが頻繁なコード変更に応じて新しいバージョンをすばやくデプロイできる\n\nサービスの実行に伴う費用、作業、運用オーバーヘッドを最小限に抑えるには、どうすればよいですか。",
+    ko: "온프레미스 데이터 센터를 Google Cloud로 이전하는 마지막 단계에 있다고 합시다. 최종 기한이 다가오고 있는데, 서버에서 실행 중인 웹 API가 폐지 예정이라는 것을 알게 되었습니다. 이 API의 현대화와 Google Cloud로의 이전을 함께 해결하는 솔루션을 제안해야 합니다. 현대화한 웹 API는 다음 요건을 충족해야 합니다.\n\n- 매월 말 트래픽이 많은 기간에 자동 확장한다\n- Python 3.x로 작성되어 있다\n- 개발자가 잦은 코드 변경에 맞춰 새 버전을 빠르게 배포할 수 있다\n\n서비스 실행에 드는 비용, 작업, 운영 오버헤드를 최소화하려면 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "コードをモダナイズして App Engine フレキシブル環境にデプロイする。", ko: "코드를 현대화해 App Engine 가변형 환경에 배포한다." },
+    B: { en: "コードをモダナイズして Cloud Run にデプロイする。", ko: "코드를 현대화해 Cloud Run에 배포한다." },
+    C: { en: "モダナイズしたアプリケーションを n1-standard-1 Compute Engine インスタンスにデプロイする。", ko: "현대화한 애플리케이션을 n1-standard-1 Compute Engine 인스턴스에 배포한다." },
+    D: { en: "GKE でのコンテナとして実行されるようにアプリケーションを作り直すことを開発チームに依頼する。", ko: "GKE에서 컨테이너로 실행되도록 애플리케이션을 다시 만들어 달라고 개발팀에 요청한다." }
+  },
+  keywords: [
+    ["毎月末…自動スケーリング", "평소엔 적고 월말에 급증 → 요청 기반 자동 확장 + <mark>0까지 축소</mark>", "B(C 제외)"],
+    ["新しいバージョンをすばやくデプロイ", "<code>gcloud run deploy --source</code>로 빌드·배포, 리비전·트래픽 분할로 즉시 전환·롤백", "B"],
+    ["費用、作業、運用オーバーヘッドを最小限", "서버리스·사용량 과금·인프라 관리 없음", "B(A·D 제외)"],
+    ["App Engine フレキシブル(A)", "VM 기반이라 최소 1 인스턴스 상주·배포 수 분·0으로 축소 불가", "A 제외"],
+    ["n1-standard-1 インスタンス(C)", "VM 1대 고정, 자동 확장 없음, OS 관리 필요", "C 제외"],
+    ["GKE で作り直す(D)", "기한 임박에 재작성 + 클러스터 운영 부담", "D 제외"]
+  ],
+  keywordNote: "일본어 표기: モダナイズ, App Engine フレキシブル環境(App Engine flexible), 自動スケーリング, リビジョン, 運用オーバーヘッド.",
+  whyWrong: "",
+  whyRight: "<p>요건 세 개 + “비용·작업·운영 최소”를 모두 만족하는 것은 Cloud Run입니다.</p>\n<div class=\"tbl\"><table><thead><tr><th>요건</th><th>Cloud Run</th></tr></thead><tbody><tr><td>월말 피크 자동 확장</td><td>요청 수에 따라 초 단위로 인스턴스 증감, 평소엔 0까지 축소</td></tr><tr><td>Python 3.x</td><td>컨테이너면 어떤 언어·버전도 가능(소스 배포 시 Buildpacks가 Python 인식)</td></tr><tr><td>잦은 새 버전 배포</td><td>배포마다 새 리비전, 트래픽 분할·즉시 롤백, Cloud Build 연동 CI/CD</td></tr><tr><td>비용·운영 최소</td><td>사용한 만큼만 과금, 서버·클러스터 관리 없음</td></tr></tbody></table></div>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"930\">공식 모의고사 Q30</button>(대부분 유휴 + 스파이크 = Cloud Run + Firestore), <button class=\"qref\" data-id=\"907\">공식 모의고사 Q7</button>, <button class=\"qref\" data-id=\"30\">Q30</button>과 같은 판단입니다. 소스 배포는 <button class=\"qref\" data-id=\"418\">4세트 Q18</button>(<code>gcloud run deploy --source</code>).</p>",
+  others: {
+    A: "App Engine 가변형 환경은 Compute Engine VM 위에서 돌아 최소 1개 인스턴스가 항상 떠 있고(0으로 축소 불가), 배포에 수 분이 걸립니다. 비용·속도 모두 Cloud Run에 집니다.",
+    C: "VM 1대(n1-standard-1)는 월말 피크에 자동 확장되지 않고, OS 패치·배포 자동화를 직접 해야 해 운영 부담이 큽니다.",
+    D: "기한이 임박했는데 재작성을 요청하는 것은 작업이 크고, GKE 클러스터 운영(노드·업그레이드) 부담도 생깁니다. 쿠버네티스가 필요한 이유도 없습니다."
+  },
+  rules: [
+    ["HTTP API + 자동 확장 + 잦은 배포 + 비용·운영 최소", "Cloud Run"],
+    ["App Engine 가변형", "VM 기반·최소 1 인스턴스 → 새 설계에선 Cloud Run이 우선"],
+    ["단일 VM", "자동 확장 없음"],
+    ["쿠버네티스 API·GPU·상태 저장 등 이유가 있을 때", "GKE"]
+  ],
+  oneLine: "HTTP API를 빨리 옮겨 자동 확장하고 자주 배포하면서 운영은 최소로 = Cloud Run.",
+  tip: "Python이면 Dockerfile 없이 <code>gcloud run deploy api --source .</code>로 Buildpacks 빌드·배포가 한 번에 됩니다. 월말 피크 전 콜드 스타트가 걱정되면 그 기간만 최소 인스턴스를 올렸다가 내리는 예약 작업(Cloud Scheduler)을 둘 수 있습니다."
 }
 ];
