@@ -11882,5 +11882,51 @@ var PROBLEMS = [
   ],
   oneLine: "안 쓰는 날이 대부분이면 앱은 Cloud Run, DB는 Firestore로 둘 다 0까지 내려가게 한다. 상주 노드·VM·Cloud SQL은 놀면서도 돈이 든다.",
   tip: "스파이크 첫 요청의 콜드 스타트가 문제면 최소 인스턴스를 1로 두는 절충(그만큼 상시 과금)이나 시작 시 CPU 부스트를 씁니다. 급증 시 Firestore는 새 컬렉션에 갑자기 많은 쓰기가 몰리면 핫스팟이 생기므로 “500/50/5 규칙”(초당 500회에서 시작해 5분마다 50%씩 늘림)으로 서서히 늘리는 것이 권장됩니다."
+},
+{
+  id: 931,
+  title: "여러 오픈소스 OS 컨테이너 이미지를 게시할 때 CVE 스캔, 개발 속도 영향 없이 + 관리형 → Artifact Registry 이미지 취약점 스캔(Container Analysis API → Artifact Analysis)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Artifact Analysis", "Container Analysis API", "Container Scanning API", "Artifact Registry", "취약점 스캔", "CVE"],
+  mine: "A",
+  correct: "A",
+  pending: true,
+  section: ["1.2", "2.1"],
+  freq: "high",
+  freqNote: "CI/CD(Artifact Registry)와 보안은 CLAUDE.md high 기준이고, 같은 유형이 1세트 Q40·3세트 Q4로도 나왔습니다. <b>“이미지 push 때 CVE 자동 스캔 + 관리형 = Artifact Registry + Artifact Analysis(옛 Container Analysis)”</b>를 가져가면 됩니다.",
+  question: {
+    en: "自社の開発チームが、コンテナ イメージでさまざまなオープンソースのオペレーティング システムを使用することを必要としています。イメージがパブリッシュされるとき、共通脆弱性識別子（CVE）のスキャンが必要となります。このスキャン処理がソフトウェア開発のアジリティに影響することがあってはなりません。可能な場所ではマネージド サービスを使用することを希望しています。どうすればよいですか。",
+    ko: "자사 개발팀이 컨테이너 이미지에서 다양한 오픈소스 운영체제를 사용해야 합니다. 이미지가 게시될 때 CVE(Common Vulnerabilities and Exposures, 공통 취약점 식별자) 스캔이 필요합니다. 이 스캔 처리가 소프트웨어 개발의 민첩성에 영향을 주어서는 안 됩니다. 가능한 곳에서는 관리형 서비스를 사용하기를 원합니다. 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "Container Analysis API を有効にして、Artifact Registry でイメージの脆弱性スキャンを実施する。", ko: "Container Analysis API를 사용 설정하고, Artifact Registry에서 이미지 취약점 스캔을 실시한다." },
+    B: { en: "コード チェックインでトリガーされ、コードの CVE をスキャンする Cloud Run サービスを作成する。", ko: "코드 체크인으로 트리거되어 코드의 CVE를 스캔하는 Cloud Run 서비스를 만든다." },
+    C: { en: "商用サポートされていないベースイメージを開発環境で使用することを禁止する。", ko: "상용 지원되지 않는 베이스 이미지를 개발 환경에서 사용하는 것을 금지한다." },
+    D: { en: "Cloud Monitoring を使用して Cloud Build の出力を確認し、脆弱性のあるバージョンが使用されているかどうかを判断する。", ko: "Cloud Monitoring으로 Cloud Build 출력을 확인해, 취약한 버전이 사용되고 있는지 판단한다." }
+  },
+  keywords: [
+    ["イメージがパブリッシュされるとき…CVE のスキャン", "Artifact Registry에 <mark>push하면 자동 스캔</mark>(OS 패키지 CVE)", "A"],
+    ["さまざまなオープンソースの OS", "Debian·Ubuntu·Alpine·RHEL 등 여러 OS 패키지를 지원하는 관리형 스캐너", "A(C 제외)"],
+    ["アジリティに影響することがあってはならない", "빌드를 멈추지 않고 비동기로 스캔, 사용 OS를 제한하지 않음", "A(C 제외)"],
+    ["マネージド サービス", "직접 만든 스캐너(B)·로그 육안 확인(D)이 아니라 관리형 스캔", "B·D 제외"],
+    ["Container Analysis API(A)", "현재 이름은 <mark>Artifact Analysis</mark>. 자동 스캔은 Container Scanning API 사용 설정으로 켬", "A"]
+  ],
+  keywordNote: "일본어 표기: 共通脆弱性識別子（CVE）, 脆弱性スキャン, 自動スキャン, Artifact Analysis(옛 Container Analysis, 영어 그대로), Container Scanning API, Artifact Registry.",
+  whyWrong: "",
+  whyRight: "<p>Container Analysis(현재 이름 <mark>Artifact Analysis</mark>)는 Artifact Registry에 이미지가 push될 때 OS 패키지와 언어 패키지를 자동 스캔해 CVE를 메타데이터로 저장하는 관리형 서비스입니다.</p>\n<ul><li><b>게시 시점 스캔</b>: push 트리거로 자동 실행, 이후 새 CVE가 공개되면 결과도 계속 갱신(push·pull 후 30일간)</li><li><b>여러 OS</b>: Debian, Ubuntu, Alpine, RHEL·CentOS 등 주요 오픈소스 OS 지원</li><li><b>민첩성 영향 없음</b>: 빌드 단계와 분리돼 비동기로 실행되고, 사용할 OS를 막지 않음</li><li><b>관리형</b>: API를 켜기만 하면 됨(스캐너 운영 불필요)</li></ul>\n<p>엄밀히는 자동 스캔은 <code>containerscanning.googleapis.com</code>(Container Scanning API)을, 결과 메타데이터는 <code>containeranalysis.googleapis.com</code>을 씁니다. 시험에서는 둘 다 “Artifact Registry 취약점 스캔 켜기”로 읽으면 됩니다.</p>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"40\">Q40</button>(매일 배포하는 Linux 컨테이너의 OS 취약점 통지)과 <button class=\"qref\" data-id=\"304\">3세트 Q4</button>(Cloud Build 파이프라인에 스캔 추가, 다른 팀 영향 최소)와 같은 답입니다. 배포 자체를 <b>막아야</b> 하면 <button class=\"qref\" data-id=\"49\">Q49</button>처럼 Binary Authorization을 더합니다.</p>",
+  others: {
+    B: "직접 만든 스캐너는 관리형이 아니고 운영 부담이 큽니다. 게다가 “코드”를 스캔해 컨테이너 이미지의 OS 패키지 CVE는 보지 못합니다.",
+    C: "OS 선택을 제한하는 것은 “다양한 오픈소스 OS를 써야 한다”는 요건과 개발 민첩성에 어긋나고, 스캔도 하지 않습니다.",
+    D: "Cloud Monitoring은 지표 감시 도구라 빌드 출력에서 취약 버전을 판단하지 못합니다. 사람이 확인하는 방식이라 관리형 스캔도 아닙니다."
+  },
+  rules: [
+    ["이미지 게시(push) 시 CVE 스캔 + 관리형", "Artifact Registry + Artifact Analysis 자동 스캔(Container Scanning API)"],
+    ["스캔 결과에 따라 배포를 차단", "Binary Authorization + 증명(스캔 자체는 안 함)"],
+    ["빌드 단계에서 바로 판정(온디맨드)", "On-Demand Scanning API(gcloud artifacts docker images scan)"],
+    ["웹 앱을 실제로 크롤링해 XSS 등 탐지", "Web Security Scanner"],
+    ["OS 사용 금지·직접 만든 스캐너·로그 육안 확인", "오답"]
+  ],
+  oneLine: "이미지 CVE 스캔은 Artifact Registry에 올리면 Artifact Analysis(옛 Container Analysis)가 알아서 한다. 막는 건 Binary Authorization이다.",
+  tip: "스캔 결과는 <code>gcloud artifacts docker images describe IMAGE --show-package-vulnerability</code>로 볼 수 있고, Pub/Sub 토픽(<code>container-analysis-occurrences-v1</code>)으로 새 취약점 알림을 받아 Slack 등에 보낼 수 있습니다. 빌드 중 바로 판정하려면 On-Demand Scanning을 Cloud Build 단계에 넣습니다."
 }
 ];
