@@ -12161,5 +12161,53 @@ var PROBLEMS = [
   ],
   oneLine: "Memorystore는 내부 IP뿐이라 Cloud Run은 같은 리전의 커넥터로 VPC에 들어가야 한다. 리전이 다르면 연결이 안 된다.",
   tip: "배포 예: <code>gcloud run deploy app --vpc-connector=conn-asia --vpc-egress=private-ranges-only --region=asia-northeast1</code>(커넥터도 asia-northeast1). 새로 만든다면 Direct VPC egress(<code>--network=default --subnet=default</code>)가 비용·성능상 권장됩니다. Redis 연결 대상 IP·포트는 환경 변수(<code>REDISHOST</code>)로 넘기고, AUTH를 켰다면 Secret Manager에서 비밀번호를 가져옵니다."
+},
+{
+  id: 937,
+  title: "모놀리스를 GKE 마이크로서비스로 이전, 공유 파일 시스템의 구성 파일을 여러 인스턴스가 읽고 씀, 이전 작업 최소·코드 재작성 없음 → Filestore를 NFS PersistentVolume(ReadWriteMany)으로 마운트(ConfigMap은 읽기 전용)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Filestore", "NFS", "PersistentVolume", "ReadWriteMany", "ConfigMap", "Cloud Storage FUSE", "영구 디스크", "GKE 이전"],
+  mine: "D",
+  correct: "C",
+  pending: true,
+  guess: true,
+  section: ["3.2", "4.1"],
+  freq: "mid",
+  freqNote: "GKE 배포(3.2)·스토리지 통합(4.1) 범위의 저장소 선택 세부 문제입니다. <b>“여러 Pod가 같은 파일을 읽고 쓰기 + 코드 변경 없음 = Filestore(NFS, ReadWriteMany), 읽기 전용 설정 주입 = ConfigMap”</b>을 가져가면 됩니다.",
+  question: {
+    en: "最近、所属組織で、以前のアプリケーションのプラットフォームを再構築して GKE に移行するイニシアチブが開始されました。モノリシック アプリケーションをマイクロサービスに分解する必要があります。構成ファイルは共有ファイル システムに格納され、複数のインスタンスが、構成ファイルに対する読み取りと書き込みの権限を持っています。この移行を管理するために必要な作業を最小限に抑え、アプリケーション コードの書き直しを避ける必要があります。どうすればよいですか。",
+    ko: "최근 소속 조직에서 이전 애플리케이션의 플랫폼을 재구축해 GKE로 이전하는 이니셔티브가 시작되었습니다. 모놀리식 애플리케이션을 마이크로서비스로 분해해야 합니다. 구성 파일은 공유 파일 시스템에 저장되어 있고, 여러 인스턴스가 구성 파일에 대한 읽기와 쓰기 권한을 가지고 있습니다. 이 이전을 관리하는 데 필요한 작업을 최소한으로 줄이고, 애플리케이션 코드의 재작성을 피해야 합니다. 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "新しい Cloud Storage バケットを作成し、そのバケットをコンテナの FUSE を介してマウントする。", ko: "새 Cloud Storage 버킷을 만들고, 그 버킷을 컨테이너의 FUSE를 통해 마운트한다." },
+    B: { en: "新しい永続ディスクを作成し、その Volume を共有 PersistentVolume としてマウントする。", ko: "새 영구 디스크를 만들고, 그 볼륨을 공유 PersistentVolume으로 마운트한다." },
+    C: { en: "新しい Filestore インスタンスを作成し、その Volume を nfs PersistentVolume としてマウントする。", ko: "새 Filestore 인스턴스를 만들고, 그 볼륨을 nfs PersistentVolume으로 마운트한다." },
+    D: { en: "構成ファイルのコンテンツを格納するための新しい ConfigMap と volumeMount を作成する。", ko: "구성 파일 내용을 저장하기 위한 새 ConfigMap과 volumeMount를 만든다." }
+  },
+  keywords: [
+    ["共有ファイル システム", "지금 NFS 같은 공유 파일 시스템을 씀 → 그대로 옮길 곳 = <mark>Filestore(관리형 NFS)</mark>", "C"],
+    ["複数のインスタンスが…読み取りと書き込み", "여러 Pod가 동시에 <mark>읽기·쓰기</mark> = ReadWriteMany(RWX) 볼륨", "C(B·D 제외)"],
+    ["アプリケーション コードの書き直しを避ける", "POSIX 파일 시스템 그대로 마운트 → 경로·파일 API 변경 없음", "C(A 제외)"],
+    ["ConfigMap と volumeMount(D)", "ConfigMap 볼륨은 <mark>읽기 전용</mark>, 앱이 파일에 쓰면 실패(1MiB 한도)", "D 제외"],
+    ["永続ディスクを共有 PersistentVolume(B)", "영구 디스크는 읽기·쓰기는 노드 하나(ReadWriteOnce), 여러 노드는 읽기 전용만", "B 제외"],
+    ["Cloud Storage FUSE(A)", "객체 저장소라 완전한 POSIX가 아님(동시 쓰기·잠금·부분 수정 미지원)", "A 제외"]
+  ],
+  keywordNote: "일본어 표기: Filestore(영어 그대로), NFS, 永続ディスク, PersistentVolume·ConfigMap(영어 그대로), アクセスモード ReadWriteMany(확인 필요), Cloud Storage FUSE.",
+  whyWrong: "<p><b>찍은 이유와 틀린 점</b>: “구성 파일”이라는 말에서 ConfigMap이 바로 떠오르는 함정입니다.</p>\n<ul><li>ConfigMap을 볼륨으로 마운트하면 <mark>읽기 전용</mark>입니다. 문제는 “여러 인스턴스가 구성 파일에 <b>읽기와 쓰기</b> 권한”이라고 명시했으므로, 앱이 파일을 쓰는 순간 실패합니다.</li><li>쓰기를 하려면 앱이 Kubernetes API로 ConfigMap을 수정하도록 코드를 바꿔야 해 “코드 재작성 회피”에도 어긋납니다.</li></ul>\n<p>판단법: “구성 파일”이라는 단어가 아니라 <b>접근 방식(누가·읽기만/쓰기도·여러 개가 동시에)</b>을 봅니다. 읽기만 = ConfigMap·Secret, 여러 Pod가 쓰기 = Filestore(RWX).</p>",
+  whyRight: "<p>Filestore는 Google Cloud의 <mark>관리형 NFS 파일 서버</mark>입니다. GKE에서 NFS PersistentVolume(또는 Filestore CSI 드라이버의 StorageClass)으로 마운트하면 <b>여러 노드의 여러 Pod가 같은 파일을 동시에 읽고 쓸 수 있습니다(ReadWriteMany)</b>.</p>\n<ul><li>지금 쓰는 “공유 파일 시스템”과 같은 방식(NFS·POSIX) → 앱은 같은 경로에서 파일을 읽고 쓰면 됨 = 코드 재작성 없음</li><li>관리형이라 NFS 서버를 직접 운영할 필요 없음 = 이전 작업 최소</li></ul>\n<div class=\"tbl\"><table><thead><tr><th>보기</th><th>여러 Pod 동시 쓰기</th><th>코드 변경</th></tr></thead><tbody><tr><td>A Cloud Storage FUSE</td><td>제한적(POSIX 아님)</td><td>잠금·부분 쓰기 쓰면 필요</td></tr><tr><td>B 영구 디스크</td><td>✕(RWO, 다중 노드는 읽기 전용)</td><td>—</td></tr><tr><td><mark>C Filestore NFS</mark></td><td>○(RWX)</td><td>없음</td></tr><tr><td>D ConfigMap</td><td>✕(읽기 전용)</td><td>필요</td></tr></tbody></table></div>\n<p><b>기존 문제와 비교</b>: GKE의 영구 디스크·PVC는 <button class=\"qref\" data-id=\"428\">4세트 Q28</button>(PVC 확장)에서 다뤘습니다. 이번은 “여러 Pod 공유 쓰기”라 영구 디스크가 아니라 Filestore입니다.</p>",
+  others: {
+    A: "Cloud Storage FUSE는 버킷을 파일처럼 마운트하지만 객체 저장소라 동시 쓰기 제어·파일 잠금·부분 수정이 안 되고, 마지막 쓰기가 덮어씁니다. 여러 인스턴스가 같은 구성 파일을 쓰는 용도에 맞지 않습니다.",
+    B: "영구 디스크(Persistent Disk)는 ReadWriteOnce라 한 노드만 읽기·쓰기 할 수 있고, 여러 노드에서 공유하려면 읽기 전용(ReadOnlyMany)만 가능합니다.",
+    D: "ConfigMap 볼륨은 읽기 전용이고 크기도 1MiB까지입니다. 쓰기가 필요하면 Kubernetes API를 부르도록 코드를 바꿔야 합니다."
+  },
+  rules: [
+    ["여러 Pod·노드가 같은 파일을 읽고 쓰기 + 코드 변경 없음", "Filestore(NFS, ReadWriteMany)"],
+    ["Pod 하나의 영구 저장(DB 데이터 등)", "영구 디스크 PVC(ReadWriteOnce)"],
+    ["읽기 전용 설정값·설정 파일 주입", "ConfigMap(민감 정보는 Secret)"],
+    ["대용량 객체를 파일처럼 읽기(주로 읽기·추가)", "Cloud Storage FUSE"],
+    ["“구성 파일”이라는 단어", "접근 방식(쓰기 여부·동시 접근)으로 판단"]
+  ],
+  oneLine: "여러 Pod가 같은 파일을 읽고 쓰면 Filestore(NFS, RWX). ConfigMap은 읽기 전용, 영구 디스크는 한 노드만 쓴다.",
+  tip: "GKE에서는 Filestore CSI 드라이버를 켜고 <code>storageClassName: standard-rwx</code>, <code>accessModes: [ReadWriteMany]</code>인 PVC를 만들면 Filestore 인스턴스가 자동으로 생깁니다. 다만 마이크로서비스로 쪼갠 뒤에는 공유 파일로 설정을 주고받는 구조 자체를 ConfigMap(읽기)·DB·Firestore로 점진적으로 바꾸는 것이 장기적으로 좋습니다."
 }
 ];
