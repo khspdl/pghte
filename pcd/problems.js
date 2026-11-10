@@ -12351,5 +12351,51 @@ var PROBLEMS = [
   ],
   oneLine: "라이브러리가 없으면 메타데이터 서버에서 토큰을 받아 Bearer 헤더에 넣는다. GOOGLE_APPLICATION_CREDENTIALS는 라이브러리가 읽는 키 파일 경로다.",
   tip: "Google API(Cloud Storage 등)에는 <b>액세스 토큰</b>(<code>.../token</code>), 다른 Cloud Run 서비스나 IAP 뒤 앱에는 <b>ID 토큰</b>(<code>.../identity?audience=https://SERVICE_URL</code>)을 씁니다. 두 엔드포인트를 헷갈리지 않도록 주의합니다."
+},
+{
+  id: 941,
+  title: "Cloud Run 웹 앱이 계정 도메인과 관계없이 각 사용자의 Google Drive에 파일 쓰기 → OAuth 클라이언트 ID + drive.file 스코프로 사용자마다 액세스 토큰 받기(도메인 전체 위임 아님)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["OAuth 2.0", "OAuth 클라이언트 ID", "스코프", "drive.file", "도메인 전체 위임", "서비스 계정", "Google Drive API"],
+  mine: "C",
+  correct: "C",
+  pending: true,
+  guess: true,
+  section: "1.2",
+  freq: "mid",
+  freqNote: "인증·권한(1.2) 범위로, 공식 모의고사 Q11(OAuth 승인 코드 흐름)에 이은 두 번째 “사용자 대신 API 호출” 문제입니다. <b>“사용자 본인 데이터(Drive·Gmail) + 여러 도메인 = 사용자 동의 OAuth(최소 스코프), 도메인 전체 위임은 자기 Workspace 도메인 관리자용”</b>을 가져가면 됩니다.",
+  question: {
+    en: "ウェブ アプリケーションを書いています。このアプリケーションによって、ユーザーのアカウント ドメインがどれであるかに関係なく、そのユーザーのドライブにファイルが書き込まれるようにします。アプリケーションは Cloud Run でホストされます。Google Drive API への認証を行うようにアプリケーションを構成する必要があります。どうすればよいですか。",
+    ko: "웹 애플리케이션을 작성하고 있습니다. 이 애플리케이션을 통해, 사용자의 계정 도메인이 무엇이든 관계없이 그 사용자의 드라이브에 파일이 쓰이도록 합니다. 애플리케이션은 Cloud Run에서 호스팅됩니다. Google Drive API에 인증하도록 애플리케이션을 구성해야 합니다. 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "ドメイン全体の権限が委任された OAuth クライアント ID を使用する。", ko: "도메인 전체 권한이 위임된 OAuth 클라이언트 ID를 사용한다." },
+    B: { en: "ドメイン全体の権限が委任されたサービス アカウントを使用する。", ko: "도메인 전체 권한이 위임된 서비스 계정을 사용한다." },
+    C: { en: "OAuth クライアント ID と https://www.googleapis.com/auth/drive.file スコープを使用して、 各ユーザーのアクセス トークンを取得する。", ko: "OAuth 클라이언트 ID와 https://www.googleapis.com/auth/drive.file 스코프를 사용해 각 사용자의 액세스 토큰을 받는다." },
+    D: { en: "サービス アカウントと https://www.googleapis.com/auth/drive.file スコープを使用して、署名付き JSON Web Token（JWT）を生成する。", ko: "서비스 계정과 https://www.googleapis.com/auth/drive.file 스코프를 사용해 서명된 JSON 웹 토큰(JWT)을 생성한다." }
+  },
+  keywords: [
+    ["そのユーザーのドライブに書き込む", "데이터 주인이 <mark>사용자 본인</mark> → 사용자의 동의를 받은 OAuth 액세스 토큰 필요", "C(D 제외)"],
+    ["アカウント ドメインがどれであるかに関係なく", "여러 조직·개인 Gmail 사용자 → 한 도메인 관리자가 주는 <mark>도메인 전체 위임</mark>은 불가", "C(A·B 제외)"],
+    ["drive.file スコープ", "앱이 만들거나 사용자가 연 파일만 접근하는 <mark>최소 권한 스코프</mark>", "C"],
+    ["ドメイン全体の権限…委任(A・B)", "Workspace 관리자가 자기 도메인 사용자에 대해 서비스 계정에 주는 권한, 다른 도메인 사용자에겐 효과 없음", "A·B 제외"],
+    ["サービス アカウント + JWT(D)", "서비스 계정 자신의 Drive(사용자 것 아님)에 씀", "D 제외"]
+  ],
+  keywordNote: "일본어 표기: OAuth クライアント ID, スコープ, アクセス トークン, ドメイン全体の権限の委任(도메인 전체 위임), サービス アカウント, OAuth 同意画面.",
+  whyWrong: "",
+  whyRight: "<p>사용자 본인의 Drive에 쓰려면 <mark>그 사용자가 동의한 OAuth 2.0 액세스 토큰</mark>이 필요합니다.</p>\n<ol><li>Google Cloud 콘솔에서 OAuth 동의 화면을 구성하고 <b>OAuth 클라이언트 ID</b>(웹 애플리케이션, 리디렉션 URI = Cloud Run URL)를 만듦</li><li>사용자를 Google 로그인으로 보내 <code>drive.file</code> 스코프 동의를 받음 → 승인 코드 → 서버에서 액세스 토큰(+ 갱신 토큰) 교환</li><li>그 토큰으로 Drive API 호출</li></ol>\n<p>로그인하는 사용자의 계정으로 동작하므로 어떤 도메인(회사 Workspace, 개인 Gmail)이든 됩니다. <code>drive.file</code>은 앱이 만든 파일만 다루는 최소 스코프라 검증(민감 스코프 심사) 부담도 작습니다.</p>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"911\">공식 모의고사 Q11</button>(사용자 본인 ID로 Cloud Storage API = OAuth 승인 코드 흐름)과 같은 원리입니다. “서비스 계정”은 앱 자신의 ID라 <button class=\"qref\" data-id=\"940\">공식 모의고사 Q40</button>처럼 앱이 자기 권한으로 Google Cloud를 부를 때 씁니다.</p>",
+  others: {
+    A: "도메인 전체 위임은 OAuth 클라이언트 ID가 아니라 서비스 계정에 주는 것이고, 그것도 위임해 준 Workspace 도메인의 사용자에게만 적용됩니다.",
+    B: "도메인 전체 위임 서비스 계정은 Workspace 관리자가 자기 도메인 사용자들을 대신하도록 허락한 것입니다. “어떤 도메인이든”이라는 요건을 만족하지 못하고, 권한도 지나치게 큽니다.",
+    D: "서비스 계정의 JWT로 받은 토큰은 서비스 계정 자신으로 동작해, 사용자의 Drive가 아니라 서비스 계정 소유 공간에 씁니다(서비스 계정에는 사용자 Drive 권한이 없음)."
+  },
+  rules: [
+    ["사용자 본인의 Google 데이터(Drive·Gmail·Calendar) + 여러 도메인", "OAuth 클라이언트 ID + 사용자 동의(최소 스코프)"],
+    ["자기 Workspace 도메인 사용자 전원의 데이터를 관리자 권한으로", "서비스 계정 + 도메인 전체 위임"],
+    ["앱 자신의 권한으로 Google Cloud API", "연결된 서비스 계정(ADC·메타데이터 서버)"],
+    ["Drive 스코프 고르기", "drive.file(앱이 만든·연 파일만)을 우선, 전체 drive는 꼭 필요할 때만"]
+  ],
+  oneLine: "남의(사용자) Drive에 쓰려면 그 사용자의 동의 = OAuth 클라이언트 ID + drive.file 스코프. 도메인 전체 위임은 자기 회사 도메인 안에서만 통한다.",
+  tip: "갱신 토큰(refresh token)은 Secret Manager나 암호화된 DB(Firestore 등)에 사용자별로 저장하고, 오프라인 접근이 필요하면 인증 요청에 <code>access_type=offline</code>을 붙입니다. 외부 사용자가 대상이면 OAuth 동의 화면의 사용자 유형을 “外部”로 두고 앱 검증을 받습니다."
 }
 ];
