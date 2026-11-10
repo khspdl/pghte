@@ -12674,5 +12674,49 @@ var PROBLEMS = [
   ],
   oneLine: "Cloud Run 새 기능은 트래픽 분할로 조금씩 열고, 문제가 보이면 바로 되돌린다. 스모크 테스트 후 일괄 공개는 위험하다.",
   tip: "사용자마다 버전이 바뀌지 않게 하려면 세션 어피니티를 켜거나 기능 플래그로 사용자 단위로 고정합니다. Cloud Deploy의 Cloud Run 카나리 배포 전략(<code>canary: percentages: [10, 50]</code>)을 쓰면 단계 진행·승인·롤백을 파이프라인으로 자동화할 수 있습니다."
+},
+{
+  id: 948,
+  title: "Compute Engine 웹사이트의 디자인 3종 전환율 테스트, 앱 코드 변경 불가 → Cloud Run에 배포하고 트래픽 분할 사용(리비전 3개 배포만으로는 트래픽이 최신 하나로)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Cloud Run", "트래픽 분할", "A/B 테스트", "리비전", "전환율", "Cloud Run functions"],
+  mine: "A",
+  correct: "A",
+  pending: true,
+  section: "1.1",
+  freq: "high",
+  freqNote: "Cloud Run 트래픽 분할은 CLAUDE.md high 기준이고, 2세트 Q38(A/B 테스트 = 가중치 트래픽 분할)과 같은 유형입니다. <b>“여러 버전에 사용자를 나눠 비교 + 코드 변경 없음 = 트래픽 분할(리비전은 그 단위일 뿐)”</b>을 가져가면 됩니다.",
+  question: {
+    en: "あなたの組織のウェブサイトは Compute Engine にデプロイされています。マーケティング チームでは、異なる 3 つのデザインのウェブサイトでコンバージョン率をテストしたいと考えています。アプリケーションのコードを変更することはできません。どうすればよいですか。",
+    ko: "당신 조직의 웹사이트는 Compute Engine에 배포되어 있습니다. 마케팅 팀에서는 서로 다른 3가지 디자인의 웹사이트로 전환율을 테스트하려고 합니다. 애플리케이션 코드를 변경할 수는 없습니다. 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "ウェブサイトを Cloud Run にデプロイし、トラフィック分割を使用する。", ko: "웹사이트를 Cloud Run에 배포하고 트래픽 분할을 사용한다." },
+    B: { en: "ウェブサイトを 3 つの個別のリビジョンとして Cloud Run にデプロイする。", ko: "웹사이트를 3개의 개별 리비전으로 Cloud Run에 배포한다." },
+    C: { en: "ウェブサイトを 3 つの個別の機能として Cloud Run functions にデプロイする。", ko: "웹사이트를 3개의 개별 함수로 Cloud Run functions에 배포한다." },
+    D: { en: "ウェブサイトを Cloud Run functions にデプロイし、カスタムコードを実装して異なるデザインを表示する。", ko: "웹사이트를 Cloud Run functions에 배포하고, 커스텀 코드를 구현해 서로 다른 디자인을 표시한다." }
+  },
+  keywords: [
+    ["3 つのデザインで…コンバージョン率をテスト", "같은 시간에 사용자를 세 버전으로 <mark>나눠 보내</mark> 비교 = A/B(멀티버리언트) 테스트 → <mark>트래픽 분할</mark>", "A"],
+    ["コードを変更することはできない", "분배를 앱이 아니라 플랫폼(Cloud Run)이 해야 함", "A(D 제외)"],
+    ["3 つの個別のリビジョン(B)", "배포만 하면 기본으로 <mark>최신 리비전이 100%</mark> → 분배가 일어나지 않음", "B 제외"],
+    ["Cloud Run functions(C・D)", "함수 3개는 URL이 따로라 분배 장치가 없고, D는 코드 변경 필요", "C·D 제외"]
+  ],
+  keywordNote: "일본어 표기: トラフィック分割(A/B テスト), リビジョン, コンバージョン率, Cloud Run functions(옛 Cloud Functions).",
+  whyWrong: "",
+  whyRight: "<p>Cloud Run에 디자인별로 리비전을 배포한 뒤 <mark>트래픽 분할</mark>로 비율을 나눕니다. 앱 코드는 그대로입니다.</p>\n<pre><code>gcloud run deploy web --image web:design-a --tag a\ngcloud run deploy web --image web:design-b --tag b --no-traffic\ngcloud run deploy web --image web:design-c --tag c --no-traffic\ngcloud run services update-traffic web --to-tags=a=34,b=33,c=33</code></pre>\n<p><b>불안했던 점(“리비전” 표현이 A에 없음)</b>: 트래픽 분할은 <b>리비전 사이</b>에 비율을 나누는 기능이라, A를 실행하면 리비전 여러 개는 당연히 전제로 깔립니다. 반대로 B는 “리비전 3개로 배포”까지만 말하고 분배가 없어 테스트가 안 됩니다. 핵심 동작(분배)이 들어 있는 쪽이 정답입니다.</p>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"238\">2세트 Q38</button>(새 추천 알고리즘의 매출 영향 A/B 테스트 = 가중치 트래픽 분할)과 같은 판단입니다. 바로 앞 <button class=\"qref\" data-id=\"947\">공식 모의고사 Q47</button>은 같은 기능을 단계적 출시에 쓴 경우입니다.</p>",
+  others: {
+    B: "리비전 3개를 배포해도 트래픽은 기본으로 최신 리비전(또는 지정한 하나)에 100% 갑니다. 분할을 설정하지 않으면 사용자를 나눠 비교할 수 없습니다.",
+    C: "함수 3개는 서로 다른 URL을 가질 뿐 사용자를 비율로 나눠 줄 장치가 없습니다. 웹사이트 전체를 함수로 옮기는 것도 부자연스럽습니다.",
+    D: "디자인을 고르는 커스텀 코드를 구현해야 하므로 “코드 변경 불가” 조건에 어긋납니다."
+  },
+  rules: [
+    ["여러 디자인·버전에 사용자를 나눠 전환율 비교 + 코드 변경 없음", "Cloud Run 트래픽 분할"],
+    ["리비전만 여러 개 배포", "분배 없음(최신 100%)"],
+    ["사용자마다 같은 디자인 유지", "세션 어피니티 켜기"],
+    ["특정 사용자군만 대상", "기능 플래그"]
+  ],
+  oneLine: "디자인 3개를 비교하려면 Cloud Run 트래픽 분할로 사용자를 나눈다. 리비전을 배포하기만 하면 최신 하나로만 간다.",
+  tip: "전환율 비교 중 같은 사용자가 페이지마다 다른 디자인을 보면 결과가 흐려지므로 세션 어피니티(<code>--session-affinity</code>)를 켭니다. 리비전마다 태그를 달아 두면 <code>https://a---web-xxx.run.app</code> 같은 고정 URL로 디자인별 확인도 할 수 있습니다."
 }
 ];
