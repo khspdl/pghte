@@ -10525,12 +10525,11 @@ var PROBLEMS = [
 },
 {
   id: 901,
-  title: "GKE 마이크로서비스 게임에서 지연 스팬이 큰 HTTP 요청 찾기 → OpenTelemetry로 계측해 Cloud Trace에 트레이스 전송 + Trace 분석 보고서(추정, 채점 전)",
+  title: "GKE 마이크로서비스 게임에서 지연 스팬이 큰 HTTP 요청 찾기 → OpenTelemetry로 계측해 Cloud Trace에 트레이스 전송 + Trace 분석 보고서",
   added: "2026-11-09",
   tags: ["Cloud Trace", "OpenTelemetry", "분산 트레이싱", "GKE", "병목", "지연 시간"],
   mine: "A",
   correct: "A",
-  pending: true,
   section: "4.3",
   freq: "high",
   freqNote: "관측 가능성(계측·Cloud Trace, 4.3)은 high 항목이고, 공식 모의고사에도 나왔으니 출제 의도가 분명한 주제입니다. <b>“요청 안의 지연 스팬 = OpenTelemetry 계측 + Cloud Trace”</b>를 가져가면 됩니다.",
@@ -10544,6 +10543,13 @@ var PROBLEMS = [
     C: { en: "kubectl を使用して、GKE ワークロード指標を構成する。すべての Pod を選択して、それぞれの指標を Cloud Monitoring に送信する。Cloud Monitoring にアプリケーション指標のカスタム ダッシュボードを作成して、GKE クラスタのパフォーマンスのボトルネックを特定する。", ko: "kubectl로 GKE 워크로드 지표를 구성한다. 모든 Pod를 선택해 각각의 지표를 Cloud Monitoring으로 보낸다. Cloud Monitoring에 애플리케이션 지표의 사용자 지정 대시보드를 만들어 GKE 클러스터 성능의 병목을 특정한다." },
     D: { en: "GKE ノードに tcpdump をインストールする。tcpdump を実行し、長期間ネットワーク トラフィックをキャプチャしてデータを収集する。Wireshark を使用してデータファイルを分析し、レイテンシが大きくなっている原因を突き止める。", ko: "GKE 노드에 tcpdump를 설치한다. tcpdump를 실행해 장기간 네트워크 트래픽을 캡처하고 데이터를 수집한다. Wireshark로 데이터 파일을 분석해 지연이 커지는 원인을 밝혀낸다." }
   },
+  explanation: {
+    A: { en: "A は正解です。これが、ユーザー リクエストのレイテンシ スパンをキャプチャする場合に Google が推奨するアプローチです（https://cloud.google.com/trace/docs/analysis-reports）。", ko: "A는 정답입니다. 이것이 사용자 요청의 지연 스팬을 캡처할 때 Google이 권장하는 접근 방식입니다(https://cloud.google.com/trace/docs/analysis-reports)." },
+    B: { en: "B は不正解です。STDOUT ログには、レイテンシ データをキャプチャする場合に便利なデータ形式がありません。", ko: "B는 오답입니다. STDOUT 로그에는 지연 데이터를 캡처할 때 편리한 데이터 형식이 없습니다." },
+    C: { en: "C は不正解です。Pod 全体の指標によって特定の リクエストのトレースデータをキャプチャできるとは限りません。", ko: "C는 오답입니다. Pod 전체의 지표로 특정 요청의 트레이스 데이터를 캡처할 수 있다고는 할 수 없습니다." },
+    D: { en: "D は不正解です。GKE ノードに tcpdump をインストールすることは、推奨されるプラクティスではありません。", ko: "D는 오답입니다. GKE 노드에 tcpdump를 설치하는 것은 권장되는 방법이 아닙니다." }
+  },
+  refs: ["https://cloud.google.com/trace/docs/analysis-reports", "https://cloud.google.com/trace/docs/setup"],
   keywords: [
     ["レイテンシ スパンが非常に大きい HTTP リクエスト", "“스팬” = 트레이스의 구간 단위 → <mark>분산 트레이싱(Cloud Trace)</mark>", "A"],
     ["マイクロサービス / パフォーマンスのボトルネック", "요청 하나가 여러 서비스를 거침 → 서비스 간 구간별 시간 필요", "A"],
@@ -10571,12 +10577,11 @@ var PROBLEMS = [
 },
 {
   id: 902,
-  title: "컨테이너 웹 앱을 글로벌 LB 뒤에 + SSL 인증서, 앱에 인증 개발 시간 없음·SSL 오프로드·관리형 선호 → GKE + Cloud Load Balancing(GKE Ingress) + Google 관리형 인증서 + IAP(추정, 채점 전)",
+  title: "컨테이너 웹 앱을 글로벌 LB 뒤에 + SSL 인증서, 앱에 인증 개발 시간 없음·SSL 오프로드·관리형 선호 → GKE + Cloud Load Balancing(GKE Ingress) + Google 관리형 인증서 + IAP",
   added: "2026-11-09",
   tags: ["IAP", "GKE Ingress", "Cloud Load Balancing", "Google 관리형 SSL 인증서", "NGINX Ingress", "cert-manager"],
   mine: "B",
   correct: "A",
-  pending: true,
   section: ["1.2", "1.1"],
   freq: "high",
   freqNote: "IAP(1.2)와 부하 분산기 용도(1.1)는 시험 가이드에 직접 나오는 high 항목이고 4세트 Q27(IAP)과 이어집니다. <b>“인증 코드 없이 + SSL 오프로드 + 관리형 = 외부 Application LB(GKE Ingress) + Google 관리형 인증서 + IAP”</b>를 가져가면 됩니다.",
@@ -10590,6 +10595,13 @@ var PROBLEMS = [
     C: { en: "GKE でアプリケーションをホストし、cert-manager をデプロイして SSL 証明書を管理する。", ko: "GKE에서 애플리케이션을 호스팅하고, cert-manager를 배포해서 SSL 인증서를 관리한다." },
     D: { en: "Compute Engine でアプリケーションをホストし、アプリケーションの Cloud Endpoints を構成する。", ko: "Compute Engine에서 애플리케이션을 호스팅하고, 애플리케이션의 Cloud Endpoints를 구성한다." }
   },
+  explanation: {
+    A: { en: "A は正解です。最も多くのマネージド サービス（GKE、IAP、CLB と Google マネージド証明書）が使用されるためです。", ko: "A는 정답입니다. 가장 많은 관리형 서비스(GKE, IAP, Cloud Load Balancing과 Google 관리형 인증서)를 사용하기 때문입니다." },
+    B: { en: "B は不正解です。NGINX Ingress は SSL 証明書ローテーションを処理しません。", ko: "B는 오답입니다. NGINX Ingress는 SSL 인증서 교체를 처리하지 않습니다." },
+    C: { en: "C は不正解です。cert-manager は SSL 証明書ローテーションのみを処理し、アプリケーションの認証は処理しません。", ko: "C는 오답입니다. cert-manager는 SSL 인증서 교체만 처리하고 애플리케이션 인증은 처리하지 않습니다." },
+    D: { en: "D は不正解です。技術的には Compute Engine でコンテナを実行することも可能ですが、コンテナに GKE を使用するソリューションがより適しています。", ko: "D는 오답입니다. 기술적으로는 Compute Engine에서 컨테이너를 실행할 수도 있지만, 컨테이너에는 GKE를 쓰는 솔루션이 더 적합합니다." }
+  },
+  refs: ["https://cloud.google.com/iap/docs/enabling-kubernetes-howto", "https://cloud.google.com/community/tutorials/nginx-ingress-gke", "https://cloud.google.com/kubernetes-engine/docs/how-to/managed-certs", "https://cloud.google.com/endpoints/docs/openapi/get-started-compute-engine-docker", "https://cloud.google.com/certificate-authority-service/docs/cert-manager"],
   keywords: [
     ["グローバル ロードバランサ / SSL 証明書", "GKE Ingress가 만드는 <mark>외부 Application Load Balancer(Cloud Load Balancing)</mark> + <mark>Google 관리형 SSL 인증서</mark>", "A"],
     ["アプリケーション レベルで認証を開発する時間はありません", "앱 앞단에서 Google 로그인·인가 = <mark>IAP</mark>(코드 수정 없음)", "A"],
@@ -10615,12 +10627,11 @@ var PROBLEMS = [
 },
 {
   id: 903,
-  title: "캠페인 급증 중 확인 메일을 보내는 Cloud Run functions 함수 호출에서 HTTP 500, 메일 미도달 최소화 → 송신 앱이 Pub/Sub 토픽에 게시하고 함수는 Pub/Sub로 트리거(추정, 채점 전)",
+  title: "캠페인 급증 중 확인 메일을 보내는 Cloud Run functions 함수 호출에서 HTTP 500, 메일 미도달 최소화 → 송신 앱이 Pub/Sub 토픽에 게시하고 함수는 Pub/Sub로 트리거",
   added: "2026-11-09",
   tags: ["Pub/Sub", "Cloud Run functions", "비동기 처리", "재시도", "느슨한 결합", "부하 평준화"],
   mine: "B",
   correct: "B",
-  pending: true,
   section: ["1.1", "4.2"],
   freq: "high",
   freqNote: "이벤트 기반 비동기 통합(Pub/Sub·Cloud Run functions, 1.1)은 high 항목입니다. <b>“급증·일시 오류로 요청이 사라짐 = Pub/Sub에 넣어 보관·재전달(느슨한 결합)”</b>을 가져가면 됩니다.",
@@ -10634,6 +10645,13 @@ var PROBLEMS = [
     C: { en: "リクエストが失敗した場合は 1 秒ごとに Cloud Run functions の関数の実行を再試行するように、送信側アプリケーションを構成する。", ko: "요청이 실패한 경우 1초마다 Cloud Run functions 함수 실행을 재시도하도록 송신 측 애플리케이션을 구성한다." },
     D: { en: "Memorystore にメールを書き込んでから Cloud Run functions の関数をトリガーするように、送信側アプリケーションを構成する。トリガーされた関数は、Memorystore からメールの詳細を読み取ってメールサービスに送信する。", ko: "Memorystore에 메일을 쓴 뒤 Cloud Run functions 함수를 트리거하도록 송신 측 애플리케이션을 구성한다. 트리거된 함수는 Memorystore에서 메일 세부 정보를 읽어 메일 서비스로 보낸다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。タイムアウトを延ばしても、問題は修正されません。問題は、新しい Cloud Run functions の関数インスタンスの作成を待っている間に、インバウンド トラフィックが急増してリクエストがタイムアウトすることで発生しています。", ko: "A는 오답입니다. 타임아웃을 늘려도 문제는 해결되지 않습니다. 문제는 새 Cloud Run functions 함수 인스턴스가 생성되기를 기다리는 동안 인바운드 트래픽이 급증해 요청이 타임아웃되면서 발생하고 있습니다." },
+    B: { en: "B は正解です。これで、メールを送信するマイクロサービスから Cloud Run functions が切り離されて、Cloud Run functions がそれ自体のペースでスケーリングできるようになります。", ko: "B는 정답입니다. 이렇게 하면 메일을 보내는 마이크로서비스에서 Cloud Run functions가 분리되어, Cloud Run functions가 자기 속도로 확장할 수 있게 됩니다." },
+    C: { en: "C は不正解です。アプリケーションが切り離されません。このことは可能ですが、Cloud Run functions の関数「email」をトリガーするマイクロサービスは多数あります。こうしたマイクロサービスをすべて変更すると、コードの重複が発生して開発労力がかかり、不要なコンピューティング サイクルを使用することになります。", ko: "C는 오답입니다. 애플리케이션이 분리되지 않습니다. 가능은 하지만, Cloud Run functions 함수 “email”을 트리거하는 마이크로서비스가 많습니다. 이런 마이크로서비스를 모두 바꾸면 코드 중복이 생겨 개발 노력이 들고, 불필요한 컴퓨팅 사이클을 쓰게 됩니다." },
+    D: { en: "D は不正解です。問題は解決しません。再びトラフィックが急増し、同じようなスケーリングの問題が発生します。", ko: "D는 오답입니다. 문제가 해결되지 않습니다. 다시 트래픽이 급증하면 같은 확장 문제가 발생합니다." }
+  },
+  refs: ["https://cloud.google.com/functions/docs/concepts/exec"],
   keywords: [
     ["マーケティング キャンペーン / 一部のメールが届かない", "급증 때 동기 호출이 실패하면 메일 요청이 그대로 사라짐", "B"],
     ["トリガーするサービスで HTTP 500", "호출 쪽과 함수가 직접 묶여 있음 → <mark>Pub/Sub로 분리</mark>(메시지 보관·자동 재전달)", "B"],
@@ -10661,12 +10679,11 @@ var PROBLEMS = [
 },
 {
   id: 904,
-  title: "Cloud Storage의 비공개 이미지·동영상, Google 계정 없는 익명 사용자, 앱 고유 로직으로 접근 제어 → 앱이 인증 후 읽기용 서명된 URL을 발급(추정, 채점 전)",
+  title: "Cloud Storage의 비공개 이미지·동영상, Google 계정 없는 익명 사용자, 앱 고유 로직으로 접근 제어 → 앱이 인증 후 읽기용 서명된 URL을 발급",
   added: "2026-11-09",
   tags: ["서명된 URL", "Cloud Storage", "IAP", "IAM", "Cloud Armor", "접근 제어"],
   mine: "A",
   correct: "A",
-  pending: true,
   section: ["1.2", "4.1"],
   freq: "high",
   freqNote: "Cloud Storage 접근 제어(1.2·4.1)에서 서명된 URL은 단골이고 3세트 Q43에 이어 두 번째입니다. <b>“Google 계정 없는 사용자 + 앱이 권한 판단 = 서명된 URL”</b>을 가져가면 됩니다.",
@@ -10680,6 +10697,13 @@ var PROBLEMS = [
     C: { en: "Storage オブジェクト閲覧者 IAM ロールをすべてのユーザーに付与する。ユーザーは、ウェブ アプリケーションを介して認証された後、バケットにアクセスできるようにする。", ko: "Storage 객체 뷰어 IAM 역할을 모든 사용자에게 부여한다. 사용자는 웹 애플리케이션을 통해 인증된 후 버킷에 접근할 수 있게 한다." },
     D: { en: "Google Cloud Armor を使用して、各ウェブ アプリケーション ユーザーの IP アドレスをキャッシュに保存して名前付き IP リストを作成する。ユーザーがバックエンド バケットにアクセスできるように Google Cloud Armor セキュリティ ポリシーを作成する。", ko: "Google Cloud Armor로 각 웹 애플리케이션 사용자의 IP 주소를 캐시에 저장해 이름 있는 IP 목록을 만든다. 사용자가 백엔드 버킷에 접근할 수 있도록 Google Cloud Armor 보안 정책을 만든다." }
   },
+  explanation: {
+    A: { en: "A は正解です。Cloud Storage は、画像や動画などの非構造化データを保存するように設計されています。Cloud Storage にアクセスするユーザーに Google アカウントを要求するのではなく、アプリケーション固有のロジックを使用してアクセスを制御したい場合があります。このユースケースに対処するには、ユーザーに署名付き URL を提供することで、期間限定で目的のリソースに対して読み取り、書き込み、削除ができるアクセス権をユーザーに付与します。", ko: "A는 정답입니다. Cloud Storage는 이미지나 동영상 같은 비정형 데이터를 저장하도록 설계되어 있습니다. Cloud Storage에 접근하는 사용자에게 Google 계정을 요구하지 않고, 애플리케이션 고유 로직으로 접근을 제어하고 싶을 때가 있습니다. 이 사용 사례에는 사용자에게 서명된 URL을 제공해, 기간 한정으로 대상 리소스를 읽기·쓰기·삭제할 수 있는 접근 권한을 부여합니다." },
+    B: { en: "B は不正解です。IAP では、適切な IAM アクセス権を持つユーザーのみが認証されます。このケースではユーザーは匿名です。", ko: "B는 오답입니다. IAP는 적절한 IAM 접근 권한을 가진 사용자만 인증합니다. 이 경우 사용자는 익명입니다." },
+    C: { en: "C は不正解です。不要なアクセス権が外部に付与されます。", ko: "C는 오답입니다. 불필요한 접근 권한이 외부에 부여됩니다." },
+    D: { en: "D は不正解です。不必要に複雑になり、IP アドレスが信用性の低いリソースになります。", ko: "D는 오답입니다. 불필요하게 복잡해지고, IP 주소는 신뢰성이 낮은 리소스입니다." }
+  },
+  refs: ["https://cloud.google.com/storage/docs/access-control/signed-urls#should-you-use", "https://cloud.google.com/storage/docs/access-control/making-data-public#buckets", "https://cloud.google.com/storage", "https://cloud.google.com/armor/docs/security-policy-overview#edge-policies"],
   keywords: [
     ["匿名 / Google アカウントを持っていません", "IAM·IAP는 Google ID가 전제 → B·C 탈락, Google ID 없이 접근 = <mark>서명된 URL</mark>", "A(B·C 제외)"],
     ["アプリケーション固有のロジック", "앱이 자체 로그인·권한 판단 후 해당 객체 URL만 기한부로 발급", "A"],
@@ -10706,12 +10730,11 @@ var PROBLEMS = [
 },
 {
   id: 905,
-  title: "Spanner 앱의 성능 저하를 막기 위해 커밋마다 Cloud Build로 성능 테스트, 여러 커밋이 동시에 돌 수 있음 → 빌드마다 새 Spanner 인스턴스를 만들어 데이터를 넣고 테스트 후 삭제(에뮬레이터는 성능 테스트 불가)(추정, 채점 전)",
+  title: "Spanner 앱의 성능 저하를 막기 위해 커밋마다 Cloud Build로 성능 테스트, 여러 커밋이 동시에 돌 수 있음 → 빌드마다 새 Spanner 인스턴스를 만들어 데이터를 넣고 테스트 후 삭제(에뮬레이터는 성능 테스트 불가)",
   added: "2026-11-09",
   tags: ["Spanner", "성능 테스트", "Cloud Build", "에뮬레이터", "테스트 격리", "통합 테스트"],
   mine: "D",
   correct: "C",
-  pending: true,
   section: ["2.3", "1.3"],
   freq: "mid",
   freqNote: "Cloud Build 자동 통합 테스트(2.3)와 에뮬레이터(2.1)는 시험 가이드 항목이지만, “성능 테스트는 에뮬레이터 불가” 판단은 세부라 mid입니다. <b>“성능 테스트 = 실제 서비스, 동시 실행 격리 = 빌드마다 전용 인스턴스”</b>를 가져가면 됩니다.",
@@ -10725,6 +10748,13 @@ var PROBLEMS = [
     C: { en: "ビルドごとに新しい Cloud Spanner インスタンスを作成し、必要なデータを読み込む。テストの完了後にその Cloud Spanner インスタンスを削除する。", ko: "빌드마다 새 Cloud Spanner 인스턴스를 만들고 필요한 데이터를 읽어 들인다. 테스트 완료 후 그 Cloud Spanner 인스턴스를 삭제한다." },
     D: { en: "Cloud Spanner エミュレータをローカルで起動し、必要なデータを読み込む。テストの完了後にエミュレータをシャットダウンする。", ko: "Cloud Spanner 에뮬레이터를 로컬에서 기동하고 필요한 데이터를 읽어 들인다. 테스트 완료 후 에뮬레이터를 종료한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。Cloud Build は、複数のビルドを並行して実行できます。複数の開発者が複数の commit を行うと、複数のビルドが同時に実行されて、結果に影響が出る可能性があります。", ko: "A는 오답입니다. Cloud Build는 여러 빌드를 병렬로 실행할 수 있습니다. 여러 개발자가 여러 커밋을 하면 여러 빌드가 동시에 실행되어 결과에 영향을 줄 수 있습니다." },
+    B: { en: "B は不正解です。プロジェクトの作成にはレート制限があり、組織内で高度な権限が付与されている必要もあります。", ko: "B는 오답입니다. 프로젝트 생성에는 속도 제한이 있고, 조직 안에서 높은 권한도 부여되어 있어야 합니다." },
+    C: { en: "C は正解です。パフォーマンスの問題を検出するには、テストを切り離す必要があります。", ko: "C는 정답입니다. 성능 문제를 감지하려면 테스트를 서로 분리해야 합니다." },
+    D: { en: "D は不正解です。エミュレータは実際のサービスと同じスケーラビリティ / パフォーマンスの特性を備えていません。", ko: "D는 오답입니다. 에뮬레이터는 실제 서비스와 같은 확장성·성능 특성을 갖추고 있지 않습니다." }
+  },
+  refs: ["https://cloud.google.com/spanner/docs/emulator#limitations_and_differences", "https://cloud.google.com/resource-manager/docs/creating-managing-projects?he=ja&visit_id=637834620288389033-410810515&rd=1&hl=ja#before_you_begin", "https://cloud.google.com/build/quotas#quotas"],
   keywords: [
     ["パフォーマンス テスト", "실제 Spanner의 성능을 재야 함 → 에뮬레이터는 성능·확장성이 프로덕션과 비교 불가", "D 제외"],
     ["複数の commit が同時に / テストが同時に実行", "빌드끼리 데이터·부하가 섞이지 않게 <mark>빌드마다 전용 인스턴스</mark>", "C(A 제외)"],
@@ -10750,12 +10780,11 @@ var PROBLEMS = [
 },
 {
   id: 906,
-  title: "GKE 인터넷 공개 마이크로서비스 A/B 테스트: 다운타임 0 + 프로덕션 사용자 일부로 검증 → Cloud Service Mesh + 버전 라벨이 다른 Deployment 2개 + 가중치 기반 트래픽 분할(4세트 Q38과 같은 문제)(추정, 채점 전)",
+  title: "GKE 인터넷 공개 마이크로서비스 A/B 테스트: 다운타임 0 + 프로덕션 사용자 일부로 검증 → Cloud Service Mesh + 버전 라벨이 다른 Deployment 2개 + 가중치 기반 트래픽 분할(4세트 Q38과 같은 문제)",
   added: "2026-11-09",
   tags: ["Cloud Service Mesh", "트래픽 분할", "A/B 테스트", "카나리", "GKE", "Namespace"],
   mine: "C",
   correct: "B",
-  pending: true,
   section: ["3.2", "1.1"],
   freq: "high",
   freqNote: "GKE 배포 전략(3.2)·트래픽 분할(1.1)은 high 항목이고, 4세트 Q38과 보기까지 거의 같은 문제가 공식 모의고사에 나왔습니다. <b>“일부 사용자만 새 버전 = 두 Deployment + 서비스 메시 가중치 분할”</b>을 반드시 가져가야 합니다.",
@@ -10769,6 +10798,13 @@ var PROBLEMS = [
     C: { en: "1. GKE に新しいリリース バージョンの 2 番目の Namespace を作成する。2. 必要な数の Pod で 2 番目の Namespace の Deployment 構成を作成する。3. 2 番目の Namespace に新しいコンテナ バージョンをデプロイする。4. 新しいコンテナ バージョンで Namespace にトラフィックを転送するように上り（内向き）構成を更新する。", ko: "1. GKE에 새 릴리스 버전용 두 번째 Namespace를 만든다. 2. 필요한 수의 Pod로 두 번째 Namespace의 Deployment 구성을 만든다. 3. 두 번째 Namespace에 새 컨테이너 버전을 배포한다. 4. 새 컨테이너 버전이 있는 Namespace로 트래픽을 전달하도록 인그레스(내향) 구성을 갱신한다." },
     D: { en: "1. Pod を徐々に新しいリリース バージョンに置き換えていくことで、ローリング アップデート パターンを実装する。2. ロールアウト中にユーザーの新しいサブセットを対象にアプリケーションのパフォーマンスを検証し、問題が発生した場合はロールバックする。", ko: "1. Pod를 점차 새 릴리스 버전으로 바꿔 나가는 롤링 업데이트 패턴을 구현한다. 2. 롤아웃 중에 사용자의 새 일부를 대상으로 애플리케이션 성능을 검증하고, 문제가 생기면 롤백한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。前回のリリースを残したまま、ユーザーのサブセットで新しいリリースをテストすることはできません。", ko: "A는 오답입니다. 이전 릴리스를 남겨 둔 채 사용자 일부로 새 릴리스를 테스트할 수 없습니다." },
+    B: { en: "B は正解です。Cloud Service Mesh トラフィック管理は、A/B テストの転送ルールを実装する場合に便利なツールです。関連資料: https://cloud.google.com/service-mesh/docs/service-routing/advanced-traffic-management", ko: "B는 정답입니다. Cloud Service Mesh 트래픽 관리는 A/B 테스트의 전달 규칙을 구현할 때 편리한 도구입니다. 관련 자료: https://cloud.google.com/service-mesh/docs/service-routing/advanced-traffic-management" },
+    C: { en: "C は不正解です。前回のリリースを残したまま、ユーザーのサブセットで新しいリリースをテストすることはできません。", ko: "C는 오답입니다. 이전 릴리스를 남겨 둔 채 사용자 일부로 새 릴리스를 테스트할 수 없습니다." },
+    D: { en: "D は不正解です。このデプロイのパターンでは、前回のリリースを残したまま、本番環境ユーザーのサブセットで新しいバージョンを確実にテストすることはできません。", ko: "D는 오답입니다. 이 배포 패턴으로는 이전 릴리스를 남겨 둔 채 프로덕션 사용자 일부로 새 버전을 확실하게 테스트할 수 없습니다." }
+  },
+  refs: ["https://istio.io/latest/docs/concepts/traffic-management/", "https://cloud.google.com/architecture/application-deployment-and-testing-strategies", "https://cloud.google.com/service-mesh/docs/service-routing/advanced-traffic-management"],
   keywords: [
     ["本番環境ユーザーのサブセット / A/B テスト", "일부 요청만 새 버전 = <mark>가중치 기반 트래픽 분할</mark>", "B"],
     ["ダウンタイムをゼロ", "새·구 Deployment를 동시에 띄우고 경로만 조절", "B"],
@@ -10794,12 +10830,11 @@ var PROBLEMS = [
 },
 {
   id: 907,
-  title: "IVR 세션마다 지속 gRPC 연결(1~30분), 영업시간·급여일에 급증, 비용·노력·운영 최소 → Cloud Run(gRPC 스트리밍·최대 60분 타임아웃·0까지 축소·급증 자동 확장)(추정, 채점 전)",
+  title: "IVR 세션마다 지속 gRPC 연결(1~30분), 영업시간·급여일에 급증, 비용·노력·운영 최소 → Cloud Run(gRPC 스트리밍·최대 60분 타임아웃·0까지 축소·급증 자동 확장)",
   added: "2026-11-09",
   tags: ["Cloud Run", "gRPC", "실행 플랫폼 선택", "자동 확장", "Cloud Run functions", "요청 타임아웃"],
   mine: "A",
   correct: "A",
-  pending: true,
   section: "1.1",
   freq: "high",
   freqNote: "실행 플랫폼 선택(1.1)은 가장 자주 나오는 high 항목입니다. <b>“gRPC·장시간 연결(60분 이내) + 급증·한가한 시간 + 운영 최소 = Cloud Run”</b>을 가져가면 됩니다.",
@@ -10813,6 +10848,13 @@ var PROBLEMS = [
     C: { en: "Standard モードの GKE クラスタ", ko: "Standard 모드의 GKE 클러스터" },
     D: { en: "Compute Engine", ko: "Compute Engine" }
   },
+  explanation: {
+    A: { en: "A は正解です。Cloud Run は、最大 60 分のセッションと gRPC をサポートし、ゼロにスケーリングして、オペレーター不要です。", ko: "A는 정답입니다. Cloud Run은 최대 60분 세션과 gRPC를 지원하고, 0까지 축소되며, 운영자가 필요 없습니다." },
+    B: { en: "B は不正解です。Cloud Functions は実行時間が 9 分に制限され、かつ gRPC をサポートしていません。", ko: "B는 오답입니다. Cloud Functions는 실행 시간이 9분으로 제한되고, gRPC를 지원하지 않습니다." },
+    C: { en: "C は不正解です。GKE Standard は費用が高くなり、管理オーバーヘッドが増加します。", ko: "C는 오답입니다. GKE Standard는 비용이 높아지고 관리 오버헤드가 늘어납니다." },
+    D: { en: "D は不正解です。Compute Engine は費用が高くなり、管理オーバーヘッドが増加します。", ko: "D는 오답입니다. Compute Engine은 비용이 높아지고 관리 오버헤드가 늘어납니다." }
+  },
+  refs: ["https://cloud.google.com/blog/ja/products/compute/serve-cloud-run-requests-with-grpc-not-just-http", "https://cloud.google.com/run/docs/configuring/request-timeout", "https://cloud.google.com/functions/docs/concepts/exec#timeout", "https://cloud.google.com/kubernetes-engine/pricing"],
   keywords: [
     ["永続的な gRPC 接続 / 通話時間 1～30 分", "Cloud Run은 gRPC(HTTP/2 스트리밍) 지원 + 요청 타임아웃 최대 60분", "A"],
     ["接続が中断しても再接続でき、わずかなレイテンシ", "인스턴스 교체로 연결이 끊겨도 허용 → 서버리스 가능", "A"],
@@ -10840,12 +10882,11 @@ var PROBLEMS = [
 },
 {
   id: 908,
-  title: "Cloud Storage 버킷의 특정 파일이 갱신될 때만 앱 트리거 + 여러 트리거 유형 지원 + 여러 팀원이 쉽게 변경 → Eventarc 트리거(특정 파일 감시) + 대상 Cloud Run(추정, 채점 전)",
+  title: "Cloud Storage 버킷의 특정 파일이 갱신될 때만 앱 트리거 + 여러 트리거 유형 지원 + 여러 팀원이 쉽게 변경 → Eventarc 트리거(특정 파일 감시) + 대상 Cloud Run",
   added: "2026-11-09",
   tags: ["Eventarc", "Cloud Run", "Cloud Storage 이벤트", "Cloud Run functions", "트리거", "이벤트 기반"],
   mine: "A",
   correct: "B",
-  pending: true,
   section: ["3.1", "1.1"],
   freq: "high",
   freqNote: "트리거로 Cloud Run 호출(Eventarc, 3.1)과 이벤트 기반 통합(1.1)은 high 항목입니다. <b>“여러 종류의 트리거를 바꿔 끼우며 간단히 관리 = Eventarc + Cloud Run”</b>을 가져가면 됩니다.",
@@ -10859,6 +10900,13 @@ var PROBLEMS = [
     C: { en: "アプリケーションを実行する Firebase の関数を構成し、Cloud Storage 内でオブジェクトが更新されたらトリガーされるようにする。", ko: "애플리케이션을 실행하는 Firebase 함수를 구성하고, Cloud Storage 안에서 객체가 갱신되면 트리거되게 한다." },
     D: { en: "Pub/Sub に送信されるように Cloud Storage イベントを構成する。また、Pub/Sub イベントを使用して、アプリケーションを実行する Cloud Build ジョブをトリガーする。", ko: "Cloud Storage 이벤트가 Pub/Sub로 보내지도록 구성한다. 또한 Pub/Sub 이벤트로 애플리케이션을 실행하는 Cloud Build 작업을 트리거한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。ファイル名でフィルタすることは不可能で、バケットに加えたすべての変更が送信されます。", ko: "A는 오답입니다. 파일 이름으로 필터링할 수 없고, 버킷에 가한 모든 변경이 전송됩니다." },
+    B: { en: "B は正解です。Eventarc は柔軟なフィルタをサポートし、ファイル名パターンに基づいてトリガーを作成できます。", ko: "B는 정답입니다. Eventarc는 유연한 필터를 지원해 파일 이름 패턴에 따라 트리거를 만들 수 있습니다." },
+    C: { en: "C は不正解です。ファイル名でフィルタすることは不可能で、バケットに加えたすべての変更が送信されます。", ko: "C는 오답입니다. 파일 이름으로 필터링할 수 없고, 버킷에 가한 모든 변경이 전송됩니다." },
+    D: { en: "D は不正解です。さまざまな名前でフィルタできるとはいえ、複数のレベルのトリガーが含まれるため、構成は過度に複雑になります。", ko: "D는 오답입니다. 여러 이름으로 필터링할 수는 있지만, 여러 단계의 트리거가 포함되어 구성이 지나치게 복잡해집니다." }
+  },
+  refs: ["https://cloud.google.com/eventarc/docs/event-driven-architectures", "https://cloud.google.com/eventarc/docs/overview", "https://cloud.google.com/functions/docs/calling/storage", "https://firebase.google.com/docs/functions/gcp-storage-events", "https://cloud.google.com/storage/docs/reporting-changes", "https://cloud.google.com/eventarc/docs/run/create-trigger#trigger-setup", "https://cloud.google.com/build/docs/automating-builds/create-pubsub-triggers#gcs_build_trigger"],
   keywords: [
     ["さまざまなタイプのトリガーをサポート / トリガーが変更される", "Cloud Storage·Pub/Sub·감사 로그 등 여러 이벤트 소스를 같은 방식으로 = <mark>Eventarc</mark>", "B"],
     ["特定のファイルが更新されたときにのみ", "트리거 필터(경로 패턴)로 대상 파일만 → 앱 코드에서 거르지 않음", "B"],
@@ -10885,12 +10933,11 @@ var PROBLEMS = [
 },
 {
   id: 909,
-  title: "프로덕션 GKE의 Go 앱에 BigQuery 접근 권한을 Google 권장 방식으로 → Google SA + Kubernetes SA 생성, GKE용 Workload Identity 제휴 구성, Deployment에서 KSA 참조(JSON 키를 Secret Manager·Kubernetes Secret에 두지 않음)(추정, 채점 전)",
+  title: "프로덕션 GKE의 Go 앱에 BigQuery 접근 권한을 Google 권장 방식으로 → Google SA + Kubernetes SA 생성, GKE용 Workload Identity 제휴 구성, Deployment에서 KSA 참조(JSON 키를 Secret Manager·Kubernetes Secret에 두지 않음)",
   added: "2026-11-09",
   tags: ["GKE용 Workload Identity 제휴", "서비스 계정 키", "Kubernetes 서비스 계정", "BigQuery", "Secret Manager", "GKE"],
   mine: "C",
   correct: "D",
-  pending: true,
   section: "1.2",
   freq: "high",
   freqNote: "GKE용 Workload Identity 제휴는 시험 가이드 1.2·CLAUDE.md high 기준의 인증 항목입니다. <b>“GKE Pod가 Google API에 접근 = Workload Identity(키 없음)”</b>를 가져가면 됩니다.",
@@ -10904,6 +10951,13 @@ var PROBLEMS = [
     C: { en: "BigQuery へのアクセスが許可される Google サービス アカウントを作成する。Secret Manager に Google サービス アカウント JSON キーを追加し、初期コンテナを使用して、アプリケーションが使用するシークレットにアクセスする。", ko: "BigQuery 접근이 허용된 Google 서비스 계정을 만든다. Secret Manager에 Google 서비스 계정 JSON 키를 추가하고, 초기화 컨테이너로 애플리케이션이 쓰는 시크릿에 접근한다." },
     D: { en: "Google サービス アカウントと Kubernetes サービス アカウントを作成する。GKE クラスタで Workload Identity を構成し、アプリケーションの Deployment で Kubernetes サービス アカウントを参照する。", ko: "Google 서비스 계정과 Kubernetes 서비스 계정을 만든다. GKE 클러스터에서 Workload Identity를 구성하고, 애플리케이션의 Deployment에서 Kubernetes 서비스 계정을 참조한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。これは、GKE に関して推奨されるベスト プラクティスではありません。ただし、GKE の外部で Secret Manager を使用する場合には、推奨されるアプローチです。", ko: "A는 오답입니다. 이것은 GKE에서 권장되는 모범 사례가 아닙니다. 다만 GKE 밖에서 Secret Manager를 쓸 때는 권장되는 방법입니다." },
+    B: { en: "B は不正解です。GKE ではシークレット データは難読化されるだけで、暗号化されません。そのため、このようにシークレットを保存すると、セキュリティ リスクになります。", ko: "B는 오답입니다. GKE에서 시크릿 데이터는 난독화될 뿐 암호화되지 않습니다. 그래서 이렇게 시크릿을 저장하면 보안 위험이 됩니다." },
+    C: { en: "C は不正解です。Secret Manager を使用する場合に推奨されるプロセスであり、この場合のベスト プラクティスとしては Secret Manager API を直接使用することをおすすめします（用意されているクライアント ライブラリのいずれかを使用するか、REST または gRPC ドキュメントに従います）。", ko: "C는 오답입니다. Secret Manager를 쓸 때 권장되는 절차이며, 이 경우 모범 사례로는 Secret Manager API를 직접 쓰는 것을 권장합니다(제공되는 클라이언트 라이브러리 중 하나를 쓰거나 REST·gRPC 문서를 따름)." },
+    D: { en: "D は正解です。認証情報変数を渡すことなく Google Cloud サービスを利用する場合に最善の方法です。", ko: "D는 정답입니다. 인증 정보 변수를 넘기지 않고 Google Cloud 서비스를 이용할 때 가장 좋은 방법입니다." }
+  },
+  refs: ["https://cloud.google.com/secret-manager/docs/best-practices", "https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#gcloud_1"],
   keywords: [
     ["GKE クラスタ / Google 推奨のベスト プラクティス", "GKE Pod가 Google API를 키 없이 = <mark>GKE용 Workload Identity 제휴</mark>", "D"],
     ["Kubernetes サービス アカウントを Deployment で参照", "Pod의 KSA ↔ Google SA(또는 직접 IAM 주 구성원)로 단기 토큰", "D"],
@@ -10929,12 +10983,11 @@ var PROBLEMS = [
 },
 {
   id: 910,
-  title: "꽃 주문 앱의 주문·이행·알림 마이크로서비스: 빠른 처리 + 이행용 주문 정보 수집 + 주문 유실 없음 + 비동기 → 주문 서비스 → Pub/Sub → 이행 서비스 → Firestore → Pub/Sub → 알림 서비스(3세트 Q29와 같은 문제)(추정, 채점 전)",
+  title: "꽃 주문 앱의 주문·이행·알림 마이크로서비스: 빠른 처리 + 이행용 주문 정보 수집 + 주문 유실 없음 + 비동기 → 주문 서비스 → Pub/Sub → 이행 서비스 → Firestore → Pub/Sub → 알림 서비스(3세트 Q29와 같은 문제)",
   added: "2026-11-09",
   tags: ["Pub/Sub", "Firestore", "마이크로서비스", "비동기 처리", "느슨한 결합", "이벤트 기반"],
   mine: "D",
   correct: "D",
-  pending: true,
   section: ["1.1", "1.3"],
   freq: "high",
   freqNote: "마이크로서비스 간 비동기 통합(Pub/Sub, 1.1)과 저장소 선택(1.3)은 high 항목이고, 3세트 Q29와 거의 같은 문제가 공식 모의고사에 나왔습니다. <b>“서비스 간 비동기·유실 없음 = Pub/Sub, 상태 저장 = Firestore”</b>를 가져가면 됩니다.",
@@ -10948,6 +11001,13 @@ var PROBLEMS = [
     C: { en: "注文リクエスト → 注文サービス → Firestore データベース → 注文フルフィルメント サービス → Firestore データベース → 通知サービス", ko: "주문 요청 → 주문 서비스 → Firestore 데이터베이스 → 주문 이행 서비스 → Firestore 데이터베이스 → 알림 서비스" },
     D: { en: "注文リクエスト → 注文サービス → Pub/Sub キュー → 注文フルフィルメント サービス → Firestore データベース → Pub/Sub キュー → 通知サービス", ko: "주문 요청 → 주문 서비스 → Pub/Sub 큐 → 주문 이행 서비스 → Firestore 데이터베이스 → Pub/Sub 큐 → 알림 서비스" }
   },
+  explanation: {
+    A: { en: "A は不正解です。キューイング サービスを使用しないと、サービスが中断した場合に注文が失われる可能性があります。", ko: "A는 오답입니다. 큐잉 서비스를 쓰지 않으면 서비스가 중단될 때 주문이 사라질 수 있습니다." },
+    B: { en: "B は不正解です。blob ストレージを使用して、イベントをトリガーし、注文を保存しています。各サービスで注文を確実に遂行するにあたっての負担が増え、通信が非同期でなくなります。", ko: "B는 오답입니다. blob 스토리지로 이벤트를 트리거하고 주문을 저장하고 있습니다. 각 서비스가 주문을 확실히 처리하는 부담이 늘고, 통신이 비동기가 아니게 됩니다." },
+    C: { en: "C は不正解です。NoSQL DB をキューイング サービスとして使用すると、サービス間の通信が非同期になりません。一部のサービスでは、新しい注文を受け付けるために常時ポーリングすることが必要になります。", ko: "C는 오답입니다. NoSQL DB를 큐잉 서비스로 쓰면 서비스 간 통신이 비동기가 되지 않습니다. 일부 서비스는 새 주문을 받기 위해 항상 폴링해야 합니다." },
+    D: { en: "D は正解です。サービス間通信に非同期の Pub/Sub を使用しています。また、NoSQL DB の Firestore で注文を保存することもできます。", ko: "D는 정답입니다. 서비스 간 통신에 비동기 Pub/Sub을 쓰고 있습니다. 또 NoSQL DB인 Firestore에 주문을 저장할 수도 있습니다." }
+  },
+  refs: ["https://cloud.google.com/architecture/microservices-architecture-interservice-communication", "https://cloud.google.com/community/tutorials/cloud-functions-async", "https://cloud.google.com/architecture/microservices-architecture-refactoring-monoliths#implement_interservices_communication"],
   keywords: [
     ["サービス間で注文が紛失せず / 非同期に通信", "메시지 보관·재전달 + 서비스 분리 = <mark>Pub/Sub</mark>", "D"],
     ["フルフィルメントに必要な注文情報を収集", "주문 상태·정보 저장 = <mark>Firestore</mark>", "D"],
@@ -10974,12 +11034,11 @@ var PROBLEMS = [
 },
 {
   id: 911,
-  title: "Java 웹 서버가 사용자 대신 Cloud Storage API 호출, 사용자 본인의 Google ID로 인증 → OAuth 2.0 승인 코드 흐름: 동의 화면·SSO 로그인 → 앱이 승인 코드 수신 → 서버에서 액세스 토큰으로 교환 → 토큰으로 API 호출(추정, 채점 전)",
+  title: "Java 웹 서버가 사용자 대신 Cloud Storage API 호출, 사용자 본인의 Google ID로 인증 → OAuth 2.0 승인 코드 흐름: 동의 화면·SSO 로그인 → 앱이 승인 코드 수신 → 서버에서 액세스 토큰으로 교환 → 토큰으로 API 호출",
   added: "2026-11-09",
   tags: ["OAuth 2.0", "승인 코드 흐름", "액세스 토큰", "동의 화면", "Cloud Storage API", "사용자 인증"],
   mine: "D",
   correct: "D",
-  pending: true,
   section: "1.2",
   freq: "high",
   freqNote: "서비스 인증(OAuth 2.0)은 시험 가이드 1.2에 이름이 나오는 high 항목입니다. <b>“사용자 대신 Google API 호출 = OAuth 2.0 승인 코드 → 서버에서 액세스 토큰 교환”</b>을 가져가면 됩니다.",
@@ -10993,6 +11052,13 @@ var PROBLEMS = [
     C: { en: "1. ユーザーがアプリケーションにアクセスしたら、リクエストされた権限のリストが記載された OAuth 同意画面を提示して、SSO で Google アカウントにログインするように求める。2. ユーザーがログインして同意したら、アプリケーションが Google サーバーから認証コードを受け取る。3. Google サーバーがユーザーに認証コードを返す。この認証コードは、ブラウザの Cookie に保存される。4. ユーザーが Cookie 内の認証コードを使用して、Cloud Storage API に対して認証を行う。", ko: "1. 사용자가 애플리케이션에 접근하면 요청 권한 목록이 적힌 OAuth 동의 화면을 보여 주고, SSO로 Google 계정에 로그인하도록 요청한다. 2. 사용자가 로그인하고 동의하면 애플리케이션이 Google 서버에서 인증 코드를 받는다. 3. Google 서버가 사용자에게 인증 코드를 돌려준다. 이 인증 코드는 브라우저 쿠키에 저장된다. 4. 사용자가 쿠키 안의 인증 코드로 Cloud Storage API에 인증한다." },
     D: { en: "1. ユーザーがアプリケーションにアクセスしたら、リクエストされた権限のリストが記載された OAuth 同意画面を提示して、SSO で Google アカウントにログインするように求める。2. ユーザーがログインして同意したら、アプリケーションが Google サーバーから認証コードを受け取る。3. アプリケーションが認証コードをアクセス トークンと交換するよう、Google サーバーにリクエストする。4. アプリケーションが Cloud Storage API の呼び出しに使用するアクセス トークンで Google サーバーが応答する。", ko: "1. 사용자가 애플리케이션에 접근하면 요청 권한 목록이 적힌 OAuth 동의 화면을 보여 주고, SSO로 Google 계정에 로그인하도록 요청한다. 2. 사용자가 로그인하고 동의하면 애플리케이션이 Google 서버에서 인증 코드를 받는다. 3. 애플리케이션이 인증 코드를 액세스 토큰과 교환하도록 Google 서버에 요청한다. 4. Google 서버가 애플리케이션이 Cloud Storage API 호출에 쓸 액세스 토큰으로 응답한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。ユーザーに直接 Google 認証情報を入力するように求めることは、ベスト プラクティスではありません。", ko: "A는 오답입니다. 사용자에게 Google 인증 정보를 직접 입력하라고 요구하는 것은 모범 사례가 아닙니다." },
+    B: { en: "B は不正解です。ユーザーに直接 Google 認証情報を入力するように求めることは、ベスト プラクティスではありません。", ko: "B는 오답입니다. 사용자에게 Google 인증 정보를 직접 입력하라고 요구하는 것은 모범 사례가 아닙니다." },
+    C: { en: "C は不正解です。ウェブ アプリケーションは、Google API とやり取りする必要があり、クライアントサイドの認証情報を使用してウェブサーバーからやり取りすることはできません。", ko: "C는 오답입니다. 웹 애플리케이션이 Google API와 통신해야 하는데, 클라이언트 쪽 인증 정보로는 웹 서버에서 통신할 수 없습니다." },
+    D: { en: "D は正解です。これは、Cloud Storage API に対してユーザーを認証する OAuth 2.0 フローについての正しい説明です（関連資料: https://developers.google.com/identity/protocols/oauth2#scenarios）。", ko: "D는 정답입니다. Cloud Storage API에 대해 사용자를 인증하는 OAuth 2.0 흐름을 올바르게 설명한 것입니다(관련 자료: https://developers.google.com/identity/protocols/oauth2#scenarios)." }
+  },
+  refs: ["https://developers.google.com/identity/protocols/oauth2#scenarios"],
   keywords: [
     ["ユーザーに代わって / 自分の Google ID", "사용자 위임 접근 = <mark>OAuth 2.0</mark>(앱은 사용자 비밀번호를 보지 않음)", "D"],
     ["OAuth 同意画面 → 認証コード → アクセス トークンと交換", "웹 서버 앱의 표준 = <mark>승인 코드 흐름</mark>(코드는 서버가 클라이언트 보안 비밀과 함께 교환)", "D"],
@@ -11019,12 +11085,11 @@ var PROBLEMS = [
 },
 {
   id: 912,
-  title: "GKE 앱이 로깅 라이브러리로 표준 출력에 기록, Cloud Logging으로 내보내며 요청별 메타데이터 포함, 가장 간단히 → 로그를 JSON 형식(구조화 로깅)으로 출력하고 메타데이터를 JSON 필드에 추가(추정, 채점 전)",
+  title: "GKE 앱이 로깅 라이브러리로 표준 출력에 기록, Cloud Logging으로 내보내며 요청별 메타데이터 포함, 가장 간단히 → 로그를 JSON 형식(구조화 로깅)으로 출력하고 메타데이터를 JSON 필드에 추가",
   added: "2026-11-09",
   tags: ["Cloud Logging", "구조화 로깅", "GKE", "표준 출력", "Fluent Bit", "로깅 에이전트"],
   mine: "A",
   correct: "A",
-  pending: true,
   section: "4.3",
   freq: "mid",
   freqNote: "로그(4.3) 영역이지만 출력 형식 선택은 세부라 mid입니다. <b>“GKE·Cloud Run은 표준 출력이 이미 Cloud Logging으로 감 → 메타데이터는 JSON 한 줄(구조화 로그)로”</b>를 가져가면 됩니다.",
@@ -11038,6 +11103,13 @@ var PROBLEMS = [
     C: { en: "各 GKE ノードに Fluent Bit エージェントをインストールし、エージェントが /var/log からすべてのログをエクスポートできるようにする。", ko: "각 GKE 노드에 Fluent Bit 에이전트를 설치하고, 에이전트가 /var/log에서 모든 로그를 내보낼 수 있게 한다." },
     D: { en: "ログを CSV 形式で出力するようにアプリケーションを更新し、必要なメタデータを CSV に追加する。", ko: "로그를 CSV 형식으로 출력하도록 애플리케이션을 갱신하고, 필요한 메타데이터를 CSV에 추가한다." }
   },
+  explanation: {
+    A: { en: "A は正解です。Cloud Logging にリッチ形式を取り込むには、これが最も簡単な方法です。GKE は stdout に送信されたログを Cloud Logging に自動的に転送します。適切な JSON 形式である限り、Cloud Logging はリッチ メッセージを取り込みます。", ko: "A는 정답입니다. Cloud Logging에 풍부한 형식을 넣는 가장 간단한 방법입니다. GKE는 stdout으로 보낸 로그를 Cloud Logging에 자동으로 전달합니다. 올바른 JSON 형식이기만 하면 Cloud Logging은 풍부한 메시지를 받아들입니다." },
+    B: { en: "B は不正解です。ライブラリを置き換えて、GKE のログ エクスポート機能が自動的に提供する追加情報（Pod 名など）を複製するには、余分な作業が大量に発生します。", ko: "B는 오답입니다. 라이브러리를 바꾸고, GKE 로그 내보내기 기능이 자동으로 제공하는 추가 정보(Pod 이름 등)를 다시 만들려면 불필요한 작업이 많이 생깁니다." },
+    C: { en: "C は不正解です。GKE ファイル システムに直接書き込む Pod（通常、特別な / 特権 Pod）でのみ必要な作業です。", ko: "C는 오답입니다. GKE 파일 시스템에 직접 쓰는 Pod(보통 특수·권한 있는 Pod)에서만 필요한 작업입니다." },
+    D: { en: "D は不正解です。Cloud Logging は、CSV の取り込みをサポートしていません。", ko: "D는 오답입니다. Cloud Logging은 CSV 수집을 지원하지 않습니다." }
+  },
+  refs: ["https://cloud.google.com/blog/ja/products/management-tools/using-logging-your-apps-running-kubernetes-engine", "https://cloud.google.com/logging/docs/structured-logging#special-payload-fields"],
   keywords: [
     ["GKE / 標準出力", "GKE 기본 로깅 에이전트가 컨테이너 stdout·stderr를 이미 Cloud Logging으로 보냄", "A"],
     ["各リクエストのメタデータを含める", "stdout에 <mark>JSON 한 줄</mark> → Cloud Logging이 jsonPayload 필드로 파싱(구조화 로그)", "A"],
@@ -11064,15 +11136,14 @@ var PROBLEMS = [
 },
 {
   id: 913,
-  title: "Cloud Shell 사용 중, 새 방침으로 임시(에페메럴) 디스크에 기밀 정보 저장 금지, 코드 변경 최소 → Compute Engine 인스턴스의 영구 디스크에 사용자 데이터 저장(파일 시스템 그대로)(추정, 채점 전)",
+  title: "Cloud Shell 사용 중, 새 방침으로 임시(에페메럴) 디스크에 기밀 정보 저장 금지, 코드 변경 최소 → Compute Engine 인스턴스의 영구 디스크에 사용자 데이터 저장(파일 시스템 그대로)",
   added: "2026-11-09",
   tags: ["Cloud Shell", "영구 디스크", "Compute Engine", "Cloud Storage", "에페메럴 디스크", "개발 환경"],
   mine: "C",
   correct: "B",
-  pending: true,
   section: "2.1",
   freq: "mid",
-  freqNote: "Cloud Shell은 시험 가이드 2.1에 이름이 나오지만, 홈 디스크의 120일 삭제 같은 세부 동작을 묻는 문제라 mid입니다. <b>“Cloud Shell 홈은 에페메럴 VM의 5GB 디스크, 120일 미접속 시 삭제”</b>와 “코드 변경 최소 = 파일 시스템 유지”를 가져가면 됩니다. 이 문제는 추정 확신도가 다른 문제보다 낮습니다.",
+  freqNote: "Cloud Shell은 시험 가이드 2.1에 이름이 나오지만, 홈 디스크의 120일 삭제 같은 세부 동작을 묻는 문제라 mid입니다. <b>“Cloud Shell 홈은 에페메럴 VM의 5GB 디스크, 120일 미접속 시 삭제”</b>와 “코드 변경 최소 = 파일 시스템 유지”를 가져가면 됩니다. 추정 확신도가 낮았지만 공식 정답도 B였습니다(공식 해설: “最も手軽な方法”).",
   question: {
     en: "あなたは金融機関に勤務するデベロッパーです。Cloud Shell を使用して、Google Cloud サービスとやり取りしています。最近、会社の新しい方針により、エフェメラル ディスクに機密情報を保存できなくなりました。そのため、ユーザーデータ用に新しいストレージ ソリューションを実装する必要がありますが、コードの変更を最小限に抑えたいと考えています。どこにユーザーデータを保存すればよいですか。",
     ko: "당신은 금융 기관에 근무하는 개발자입니다. Cloud Shell을 사용해 Google Cloud 서비스와 주고받고 있습니다. 최근 회사의 새 방침으로 에페메럴(임시) 디스크에 기밀 정보를 저장할 수 없게 되었습니다. 그래서 사용자 데이터용 새 스토리지 솔루션을 구현해야 하지만, 코드 변경은 최소한으로 억제하고 싶습니다. 어디에 사용자 데이터를 저장해야 합니까?"
@@ -11083,6 +11154,13 @@ var PROBLEMS = [
     C: { en: "Cloud Storage バケットにユーザーデータを保存する。", ko: "Cloud Storage 버킷에 사용자 데이터를 저장한다." },
     D: { en: "BigQuery テーブルにユーザーデータを保存する。", ko: "BigQuery 테이블에 사용자 데이터를 저장한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。開発者が定期的にログインしないと、ディスクが削除されることがあります。", ko: "A는 오답입니다. 개발자가 정기적으로 로그인하지 않으면 디스크가 삭제될 수 있습니다." },
+    B: { en: "B は正解です。今回の目的を達成するには、最も手軽な方法です。", ko: "B는 정답입니다. 이번 목적을 달성하는 가장 손쉬운 방법입니다." },
+    C: { en: "C は不正解です。アプリケーションの更新が必要になります。", ko: "C는 오답입니다. 애플리케이션 업데이트가 필요해집니다." },
+    D: { en: "D は不正解です。BigQuery ストレージは、非構造化ファイルではなく、リレーショナル データまたは JSON データに最適です。", ko: "D는 오답입니다. BigQuery 스토리지는 비정형 파일이 아니라 관계형 데이터나 JSON 데이터에 적합합니다." }
+  },
+  refs: ["https://cloud.google.com/shell/docs/quotas-limits##inactivity"],
   keywords: [
     ["Cloud Shell / エフェメラル ディスク", "Cloud Shell은 에페메럴 VM, $HOME 5GB 디스크도 120일 미접속 시 자동 삭제 → 방침상 사용 불가", "A 제외"],
     ["コードの変更を最小限", "지금 코드는 로컬 파일에 읽고 씀 → 같은 파일 시스템 방식을 유지하는 <mark>영구 디스크</mark>", "B"],
@@ -11108,12 +11186,11 @@ var PROBLEMS = [
 },
 {
   id: 914,
-  title: "Cloud Run functions 코드의 단위 테스트, 특정 SA만 배포 권한, 테스트 통과 전에는 배포 불가 → Cloud Build가 그 SA로 단위 테스트 실행 → 통과하면 Cloud Build가 배포(추정, 채점 전)",
+  title: "Cloud Run functions 코드의 단위 테스트, 특정 SA만 배포 권한, 테스트 통과 전에는 배포 불가 → Cloud Build가 그 SA로 단위 테스트 실행 → 통과하면 Cloud Build가 배포",
   added: "2026-11-09",
   tags: ["Cloud Build", "단위 테스트", "서비스 계정", "Cloud Run functions", "CI/CD", "배포 게이트"],
   mine: "D",
   correct: "D",
-  pending: true,
   section: ["2.3", "2.2"],
   freq: "high",
   freqNote: "Cloud Build 자동 테스트(2.3)와 CI/CD(2.2)는 high 항목이고 3세트 Q22·Q44와 같은 원리입니다. <b>“테스트 통과해야 배포 = 같은 Cloud Build에서 테스트 단계 → 배포 단계(배포 권한 SA로)”</b>를 가져가면 됩니다.",
@@ -11127,6 +11204,13 @@ var PROBLEMS = [
     C: { en: "単体テストを実行するように Cloud Build を構成する。コードがテストに合格したら、開発者が Cloud Run functions の関数をデプロイする。", ko: "단위 테스트를 실행하도록 Cloud Build를 구성한다. 코드가 테스트에 합격하면 개발자가 Cloud Run functions 함수를 배포한다." },
     D: { en: "特定のサービス アカウントをビルド エージェントとして使用して、単体テストを実行するように Cloud Build を構成する。コードがテストに合格すると、Cloud Build が Cloud Run functions の関数をデプロイする。", ko: "특정 서비스 계정을 빌드 에이전트로 사용해 단위 테스트를 실행하도록 Cloud Build를 구성한다. 코드가 테스트에 합격하면 Cloud Build가 Cloud Run functions 함수를 배포한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。特定のサービス アカウントをビルド エージェントとして使用することなく、コードをデプロイするために必要な権限が付与されることはありません。", ko: "A는 오답입니다. 특정 서비스 계정을 빌드 에이전트로 쓰지 않으면 코드 배포에 필요한 권한이 부여되지 않습니다." },
+    B: { en: "B は不正解です。テストする前にコードをデプロイしています。", ko: "B는 오답입니다. 테스트하기 전에 코드를 배포하고 있습니다." },
+    C: { en: "C は不正解です。あなたがすべてのコードをテストしていても、コードをデプロイする責任を担う開発者は、失敗したコードを Cloud Build にデプロイできます。また Cloud Build には、特定のサービス アカウントをビルド エージェントとして使用せずに、コードをデプロイできる権限はありません。", ko: "C는 오답입니다. 당신이 모든 코드를 테스트하더라도, 배포를 맡은 개발자는 실패한 코드를 Cloud Build로 배포할 수 있습니다. 또 Cloud Build에는 특정 서비스 계정을 빌드 에이전트로 쓰지 않고 코드를 배포할 권한이 없습니다." },
+    D: { en: "D は正解です。同じ Cloud Build が単体テストを実行してコードをデプロイするため、承認済みのコードのみがデプロイされるようになります。また、特定のサービス アカウントをビルド エージェントとして使用しているため、Cloud Build には適切な権限が付与されます。", ko: "D는 정답입니다. 같은 Cloud Build가 단위 테스트를 실행하고 코드를 배포하므로 승인된 코드만 배포됩니다. 또 특정 서비스 계정을 빌드 에이전트로 쓰므로 Cloud Build에 적절한 권한이 부여됩니다." }
+  },
+  refs: ["https://cloud.google.com/functions/docs/testing/test-cicd", "https://cloud.google.com/functions/docs/testing/test-basics", "https://cloud.google.com/community/tutorials/cloudbuild-test-runner"],
   keywords: [
     ["テストに合格しなければデプロイできない", "같은 빌드에서 <mark>테스트 단계 → 배포 단계</mark>(테스트 실패 시 빌드 중단 → 배포 안 됨)", "D"],
     ["特定のサービス アカウントにのみデプロイ権限", "Cloud Build가 그 SA로 실행 → 사람은 배포 권한 없음", "D"],
@@ -11153,12 +11237,11 @@ var PROBLEMS = [
 },
 {
   id: 915,
-  title: "Cloud Build로 Python 앱을 Cloud Run에 배포(pip install → docker build → push → run deploy), 배포 시간 최적화·불필요한 단계 회피 → Docker 빌드 단계에 --cache-from 추가(1세트 Q38과 같은 정답)(추정, 채점 전)",
+  title: "Cloud Build로 Python 앱을 Cloud Run에 배포(pip install → docker build → push → run deploy), 배포 시간 최적화·불필요한 단계 회피 → Docker 빌드 단계에 --cache-from 추가(1세트 Q38과 같은 정답)",
   added: "2026-11-09",
   tags: ["Cloud Build", "Docker", "--cache-from", "레이어 캐시", "Artifact Registry", "Cloud Run"],
   mine: "A",
   correct: "A",
-  pending: true,
   section: "2.2",
   freq: "high",
   freqNote: "Cloud Build + Artifact Registry로 컨테이너 빌드(2.2)는 시험 가이드에 직접 나오는 high 항목입니다. <b>“Docker 빌드가 느림·같은 레이어 반복 = --cache-from(이전 이미지를 캐시로)”</b>를 가져가면 됩니다.",
@@ -11173,6 +11256,13 @@ var PROBLEMS = [
     C: { en: "Cloud Run インスタンスと同じリージョンにある Cloud Storage バケットに、イメージ アーティファクトを保存する。", ko: "Cloud Run 인스턴스와 같은 리전에 있는 Cloud Storage 버킷에 이미지 아티팩트를 저장한다." },
     D: { en: "Artifact Registry にコンテナを push するステップを削除する。", ko: "Artifact Registry에 컨테이너를 push하는 단계를 삭제한다." }
   },
+  explanation: {
+    A: { en: "A は正解です。キャッシュに保存されたイメージを指定することは、後続のビルドを迅速化するために適しています（https://cloud.google.com/build/docs/speeding-up-builds#using_a_cached_docker_image）。", ko: "A는 정답입니다. 캐시에 저장된 이미지를 지정하는 것은 이후 빌드를 빠르게 하는 데 적합합니다(https://cloud.google.com/build/docs/speeding-up-builds#using_a_cached_docker_image)." },
+    B: { en: "B は不正解です。VPC 内のプライベート ワーカープールで Cloud Build を実行しても、ビルドタスクは速くなりません。このケースでは特にそうです。コード リポジトリも Cloud Run も VPC でホストされていないためです。", ko: "B는 오답입니다. VPC 안의 비공개 작업자 풀에서 Cloud Build를 실행해도 빌드 작업은 빨라지지 않습니다. 이 경우는 특히 그렇습니다. 코드 저장소도 Cloud Run도 VPC에서 호스팅되지 않기 때문입니다." },
+    C: { en: "C は不正解です。Cloud Run では、有効な Artifact Registry にコンテナ イメージが存在する必要があります。", ko: "C는 오답입니다. Cloud Run은 유효한 Artifact Registry에 컨테이너 이미지가 있어야 합니다." },
+    D: { en: "D は不正解です。Cloud Run では、有効な Artifact Registry にコンテナ イメージが存在する必要があります。", ko: "D는 오답입니다. Cloud Run은 유효한 Artifact Registry에 컨테이너 이미지가 있어야 합니다." }
+  },
+  refs: ["https://cloud.google.com/build/docs/speeding-up-builds", "https://cloud.google.com/build/docs/building/build-python"],
   keywords: [
     ["デプロイ時間を最適化 / 不要なステップを回避", "매 빌드마다 모든 레이어를 처음부터 다시 만드는 것이 낭비 → 이전 이미지 레이어 재사용", "A"],
     ["Docker ビルドステップに --cache-from", "Artifact Registry의 이전 이미지를 캐시로 지정 → 바뀌지 않은 레이어 건너뜀", "A"],
@@ -11199,12 +11289,11 @@ var PROBLEMS = [
 },
 {
   id: 916,
-  title: "Pub/Sub 메시지를 구독자가 순서대로 처리하는 앱의 단위 테스트를 비용 효율적·신뢰성 있게 → Pub/Sub 에뮬레이터 사용(추정, 채점 전)",
+  title: "Pub/Sub 메시지를 구독자가 순서대로 처리하는 앱의 단위 테스트를 비용 효율적·신뢰성 있게 → Pub/Sub 에뮬레이터 사용",
   added: "2026-11-09",
   tags: ["Pub/Sub 에뮬레이터", "단위 테스트", "메시지 순서 지정", "모의 객체", "테스트 비용"],
   mine: "C",
   correct: "C",
-  pending: true,
   section: ["2.1", "2.3"],
   freq: "high",
   freqNote: "시험 가이드 2.1이 “ローカル単体テストのための … エミュレート”를 직접 적고 있어 high입니다. <b>“Pub/Sub를 쓰는 코드의 단위 테스트를 싸고 믿을 만하게 = Pub/Sub 에뮬레이터”</b>를 가져가면 됩니다.",
@@ -11218,6 +11307,13 @@ var PROBLEMS = [
     C: { en: "Pub/Sub エミュレータを使用する。", ko: "Pub/Sub 에뮬레이터를 사용한다." },
     D: { en: "サブスクリプションにテスターによるフィルタを追加する。", ko: "구독에 테스터별 필터를 추가한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。追加の費用がかかります。", ko: "A는 오답입니다. 추가 비용이 듭니다." },
+    B: { en: "B は不正解です。疑似では Pub/Sub の動作がシミュレートされません。", ko: "B는 오답입니다. 모의(목) 객체로는 Pub/Sub의 동작이 시뮬레이션되지 않습니다." },
+    C: { en: "C は正解です。追加費用なしでテストを切り離すことができます。", ko: "C는 정답입니다. 추가 비용 없이 테스트를 분리할 수 있습니다." },
+    D: { en: "D は不正解です。追加の費用がかかります。", ko: "D는 오답입니다. 추가 비용이 듭니다." }
+  },
+  refs: ["https://cloud.google.com/pubsub/docs/emulator"],
   keywords: [
     ["単体テスト / 費用対効果", "실제 Pub/Sub 비용·네트워크 없이 로컬에서 = <mark>Pub/Sub 에뮬레이터</mark>(시험 가이드 2.1 그대로)", "C"],
     ["順序どおりに処理 / 信頼性", "에뮬레이터는 순서 지정 키 등 실제 API 동작을 재현 → 직접 만든 모의 객체보다 신뢰성 높음", "C(B 제외)"],
@@ -11225,7 +11321,7 @@ var PROBLEMS = [
   ],
   keywordNote: "일본어 표기: エミュレータ(공식), 単体テスト, 疑似フレームワーク(문제집, 모의 객체 프레임워크), メッセージの順序指定(공식), パブリッシュ / サブスクライバー.",
   whyWrong: "",
-  whyRight: "<p>시험 가이드 2.1은 “로컬 앱 개발과 <b>로컬 단위 테스트</b>를 위해 gcloud CLI로 Google Cloud 서비스를 에뮬레이트”를 출제 항목으로 직접 적고 있습니다.</p>\n<ul><li><mark>비용</mark>: 에뮬레이터는 로컬(또는 CI 컨테이너)에서 돌아 Pub/Sub 요금·프로젝트 리소스가 없음</li><li><mark>신뢰성</mark>: 실제 Pub/Sub API를 그대로 흉내 내므로 순서 지정 키 같은 동작을 클라이언트 라이브러리 그대로 검증할 수 있고, 테스트마다 깨끗한 상태로 띄울 수 있음</li></ul>\n<p>B(모의 프레임워크)도 단위 테스트에서 흔하지만, 순서 처리 같은 Pub/Sub 동작을 직접 흉내 내야 해서 실제와 어긋날 위험이 있습니다. 확신도는 중간입니다(공식 정답 확인 필요).</p>\n<p><b>기존 문제와 비교</b>: 1세트 Q34(로컬 통합 테스트 = 에뮬레이터 + PUBSUB_EMULATOR_HOST), 3세트 Q26(에뮬레이터 테스트 격리), 4세트 Q3·Q20(에뮬레이터로 연동·오류 재현)과 같은 계열입니다. 반대로 공식 Q5처럼 <b>성능</b> 테스트에는 에뮬레이터를 쓰지 않습니다.</p>",
+  whyRight: "<p>시험 가이드 2.1은 “로컬 앱 개발과 <b>로컬 단위 테스트</b>를 위해 gcloud CLI로 Google Cloud 서비스를 에뮬레이트”를 출제 항목으로 직접 적고 있습니다.</p>\n<ul><li><mark>비용</mark>: 에뮬레이터는 로컬(또는 CI 컨테이너)에서 돌아 Pub/Sub 요금·프로젝트 리소스가 없음</li><li><mark>신뢰성</mark>: 실제 Pub/Sub API를 그대로 흉내 내므로 순서 지정 키 같은 동작을 클라이언트 라이브러리 그대로 검증할 수 있고, 테스트마다 깨끗한 상태로 띄울 수 있음</li></ul>\n<p>B(모의 프레임워크)도 단위 테스트에서 흔하지만, 순서 처리 같은 Pub/Sub 동작을 직접 흉내 내야 해서 실제와 어긋날 위험이 있습니다. 공식 해설도 “추가 비용 없이 테스트를 분리할 수 있다”며 에뮬레이터를 정답으로 했습니다.</p>\n<p><b>기존 문제와 비교</b>: 1세트 Q34(로컬 통합 테스트 = 에뮬레이터 + PUBSUB_EMULATOR_HOST), 3세트 Q26(에뮬레이터 테스트 격리), 4세트 Q3·Q20(에뮬레이터로 연동·오류 재현)과 같은 계열입니다. 반대로 공식 Q5처럼 <b>성능</b> 테스트에는 에뮬레이터를 쓰지 않습니다.</p>",
   others: {
     A: "테스터마다 실제 토픽·구독을 만들면 요금·리소스 정리 부담이 생기고, 네트워크에 의존해 테스트가 불안정해집니다.",
     B: "모의 객체는 빠르지만 순서 지정 같은 Pub/Sub 동작을 직접 흉내 내야 해 실제 동작과 어긋날 수 있습니다(신뢰성 요건에 약함).",
@@ -11243,12 +11339,11 @@ var PROBLEMS = [
 },
 {
   id: 917,
-  title: "프로덕션 사용자로 새 버전 테스트 + 사용자 OS에 따라 새 버전으로 보낼 사용자를 제어 + 빠른 롤백 → Cloud Service Mesh로 GKE에 배포하고 User-Agent 헤더 기반 트래픽 분할(추정, 채점 전)",
+  title: "프로덕션 사용자로 새 버전 테스트 + 사용자 OS에 따라 새 버전으로 보낼 사용자를 제어 + 빠른 롤백 → Cloud Service Mesh로 GKE에 배포하고 User-Agent 헤더 기반 트래픽 분할",
   added: "2026-11-09",
   tags: ["Cloud Service Mesh", "헤더 기반 라우팅", "User-Agent", "트래픽 분할", "Cloud Run 리비전 태그", "카나리"],
   mine: "A",
   correct: "C",
-  pending: true,
   section: ["3.2", "1.1"],
   freq: "high",
   freqNote: "트래픽 분할(1.1)·GKE 배포(3.2)는 high 항목이고, 4세트 Q38·공식 Q6에 이어 세 번째입니다. <b>“비율이 아니라 요청 속성(OS·헤더·쿠키)으로 나눔 = 서비스 메시 헤더 기반 라우팅”</b>을 가져가면 됩니다.",
@@ -11262,6 +11357,13 @@ var PROBLEMS = [
     C: { en: "Cloud Service Mesh を使用して GKE にアプリケーションをデプロイする。トラフィック分割を使用して、ユーザー エージェント ヘッダーに基づいてユーザー トラフィックのサブセットを新しいバージョンに転送する。", ko: "Cloud Service Mesh를 사용해 GKE에 애플리케이션을 배포한다. 트래픽 분할을 사용해 User-Agent 헤더에 따라 사용자 트래픽의 일부를 새 버전으로 보낸다." },
     D: { en: "Cloud Run にアプリケーションをデプロイする。事前定義された重み付けに基づいてユーザー トラフィックのサブセットをリビジョンのリストに転送する。", ko: "Cloud Run에 애플리케이션을 배포한다. 미리 정한 가중치에 따라 사용자 트래픽의 일부를 리비전 목록으로 보낸다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。リビジョンタグは単なる Cloud Run ラベルであり、ユーザーにリンクしません。", ko: "A는 오답입니다. 리비전 태그는 단순한 Cloud Run 라벨일 뿐 사용자와 연결되지 않습니다." },
+    B: { en: "B は不正解です。重み付け分割には柔軟性がなく、ユーザーはランダムに選択されます。", ko: "B는 오답입니다. 가중치 분할은 유연성이 없고, 사용자는 무작위로 선택됩니다." },
+    C: { en: "C は正解です。最も詳細に制御でき、どのユーザータイプを新しいバージョンに送るかを選択できます。", ko: "C는 정답입니다. 가장 세밀하게 제어할 수 있고, 어떤 유형의 사용자를 새 버전으로 보낼지 고를 수 있습니다." },
+    D: { en: "D は不正解です。リビジョンは静的であるため、ユーザーに関連付けられていません。", ko: "D는 오답입니다. 리비전은 정적이어서 사용자와 연결되어 있지 않습니다." }
+  },
+  refs: ["https://cloud.google.com/architecture/implementing-deployment-and-testing-strategies-on-gke", "https://cloud.google.com/architecture/application-deployment-and-testing-strategies", "https://cloud.google.com/run/docs/rollouts-rollbacks-traffic-migration#tags", "https://cloud.google.com/appengine/docs/standard/python3/splitting-traffic", "https://istio.io/latest/docs/reference/config/networking/virtual-service/#HTTPMatchRequest"],
   keywords: [
     ["各ユーザーのオペレーティング システムに基づいて制御", "OS는 요청의 <mark>User-Agent 헤더</mark>에 들어 있음 → 헤더 조건으로 라우팅", "C"],
     ["Cloud Service Mesh + ユーザー エージェント ヘッダー(C)", "VirtualService match(headers: user-agent) → 새 버전 subset, 롤백은 규칙만 되돌림", "C"],
@@ -11287,12 +11389,11 @@ var PROBLEMS = [
 },
 {
   id: 918,
-  title: "한 도메인의 API 경로 3개(/students·/teachers·/classes)가 각각 다른 함수를 호출 → Cloud Run functions 함수 3개를 HTTPS 부하 분산기의 백엔드 서비스 3개로 공개(URL 맵 경로 라우팅)(추정, 채점 전)",
+  title: "한 도메인의 API 경로 3개(/students·/teachers·/classes)가 각각 다른 함수를 호출 → Cloud Run functions 함수 3개를 HTTPS 부하 분산기의 백엔드 서비스 3개로 공개(URL 맵 경로 라우팅)",
   added: "2026-11-09",
   tags: ["Application Load Balancer", "URL 맵", "서버리스 NEG", "Cloud Run functions", "경로 기반 라우팅", "API"],
   mine: "A",
   correct: "A",
-  pending: true,
   section: "1.1",
   freq: "high",
   freqNote: "부하 분산기 용도와 API 설계(1.1)는 high 항목입니다. <b>“한 도메인 아래 경로마다 다른 서버리스 백엔드 = 외부 Application LB + URL 맵 + 서버리스 NEG”</b>를 가져가면 됩니다.",
@@ -11306,6 +11407,13 @@ var PROBLEMS = [
     C: { en: "HTTPS ロードバランサを使用して公開されるバックエンド サービスとして、Cloud Run functions の関数を 1 つ作成する。", ko: "HTTPS 부하 분산기로 공개되는 백엔드 서비스로서 Cloud Run functions 함수를 1개 만든다." },
     D: { en: "直接公開される Cloud Run functions の関数を 3 つ作成する。", ko: "직접 공개되는 Cloud Run functions 함수를 3개 만든다." }
   },
+  explanation: {
+    A: { en: "A は正解です。カスタム ドメインで複数の異なるパスを処理するには、HTTPS ロードバランサが必要です。", ko: "A는 정답입니다. 커스텀 도메인에서 서로 다른 여러 경로를 처리하려면 HTTPS 부하 분산기가 필요합니다." },
+    B: { en: "B は不正解です。Cloud Run functions の関数ごとに 1 つのエントリ ポイントしか許可されません。", ko: "B는 오답입니다. Cloud Run functions 함수마다 진입점은 하나만 허용됩니다." },
+    C: { en: "C は不正解です。Cloud Run functions の関数ごとにエントリ ポイントは 1 つに限られるため、Cloud Run functions の関数が 3 つ必要になります。ただし、Cloud Run functions の関数でカスタム ドメインを使用することはできません。", ko: "C는 오답입니다. Cloud Run functions 함수마다 진입점이 하나로 제한되므로 함수가 3개 필요합니다. 또한 Cloud Run functions 함수에서는 커스텀 도메인을 쓸 수 없습니다." },
+    D: { en: "D は不正解です。Cloud Run functions の関数では、カスタム ドメインもパスも保持することができません。", ko: "D는 오답입니다. Cloud Run functions 함수는 커스텀 도메인도 경로도 가질 수 없습니다." }
+  },
+  refs: ["https://cloud.google.com/api-gateway/docs/architecture-overview#components", "https://cloud.google.com/endpoints/docs/openapi/architecture-overview"],
   keywords: [
     ["それぞれ異なる関数を呼び出す", "경로마다 다른 함수 = 함수 3개(B·C의 1개 탈락)", "A(B·C 제외)"],
     ["yourcompany.com/students 等(1 つのドメイン + パス)", "한 도메인의 경로를 나눠 보내려면 <mark>외부 Application LB의 URL 맵</mark>", "A"],
@@ -11332,12 +11440,11 @@ var PROBLEMS = [
 },
 {
   id: 919,
-  title: "Pub/Sub 토픽의 메시지를 실시간 처리, 다른 시스템과 독립, 새 메시지가 올 때만 컴퓨팅 비용, 가장 단순 → Cloud Run functions + Pub/Sub 트리거(추정, 채점 전)",
+  title: "Pub/Sub 토픽의 메시지를 실시간 처리, 다른 시스템과 독립, 새 메시지가 올 때만 컴퓨팅 비용, 가장 단순 → Cloud Run functions + Pub/Sub 트리거",
   added: "2026-11-09",
   tags: ["Cloud Run functions", "Pub/Sub 트리거", "이벤트 기반", "서버리스", "pull 구독", "비용"],
   mine: "A",
   correct: "A",
-  pending: true,
   section: "1.1",
   freq: "high",
   freqNote: "이벤트 기반 통합(Pub/Sub·Cloud Run functions, 1.1)은 high 항목입니다. <b>“메시지 올 때만 비용 + 가장 단순 = Cloud Run functions Pub/Sub 트리거”</b>를 가져가면 됩니다.",
@@ -11351,6 +11458,13 @@ var PROBLEMS = [
     C: { en: "Compute Engine にアプリケーションをデプロイする。Pub/Sub push サブスクリプションを使用して、トピック内の新しいメッセージを処理する。", ko: "Compute Engine에 애플리케이션을 배포한다. Pub/Sub push 구독으로 토픽의 새 메시지를 처리한다." },
     D: { en: "GKE にアプリケーションをデプロイする。Pub/Sub API を使用して、Pub/Sub トピックに対する pull サブスクリプションを作成し、トピックからメッセージを読み取る。", ko: "GKE에 애플리케이션을 배포한다. Pub/Sub API로 Pub/Sub 토픽에 대한 pull 구독을 만들고 토픽에서 메시지를 읽는다." }
   },
+  explanation: {
+    A: { en: "A は正解です。Pub/Sub トリガーを備えた Cloud Run functions は、新しいメッセージが到着すると直ちに動作します（Push）。費用が発生するのは、新しいメッセージがトピックに到着した場合のみです。", ko: "A는 정답입니다. Pub/Sub 트리거를 갖춘 Cloud Run functions는 새 메시지가 도착하면 즉시 동작합니다(push). 비용은 새 메시지가 토픽에 도착했을 때만 발생합니다." },
+    B: { en: "B は不正解です。リクエストに存在する PubSubMessage を使用する必要があります。このアプローチでクライアント ライブラリを使用すると、処理が重複する可能性があります。", ko: "B는 오답입니다. 요청에 들어 있는 PubSubMessage를 써야 합니다. 이 방식에서 클라이언트 라이브러리를 쓰면 처리가 중복될 수 있습니다." },
+    C: { en: "C は不正解です。メッセージが到着したときのコンピューティング処理時間の分だけ費用を支払うことが要件の一つです。また、このアプローチは複雑です。", ko: "C는 오답입니다. 메시지가 도착했을 때의 컴퓨팅 처리 시간만큼만 비용을 내는 것이 요건 중 하나입니다. 또 이 방식은 복잡합니다." },
+    D: { en: "D は不正解です。メッセージが到着したときのコンピューティング処理時間の分だけ費用を支払うことが要件の一つです。また、このアプローチは複雑です。", ko: "D는 오답입니다. 메시지가 도착했을 때의 컴퓨팅 처리 시간만큼만 비용을 내는 것이 요건 중 하나입니다. 또 이 방식은 복잡합니다." }
+  },
+  refs: ["https://cloud.google.com/scheduler/docs/tut-pub-sub", "https://cloud.google.com/compute/all-pricing", "https://cloud.google.com/kubernetes-engine/pricing"],
   keywords: [
     ["新しいメッセージが到着したときにしかコンピューティング費用がかからない", "메시지가 없으면 0으로 축소되는 서버리스 = <mark>Cloud Run functions</mark>", "A"],
     ["最もシンプル", "<mark>Pub/Sub 트리거</mark> 하나로 메시지가 함수 인수로 전달됨(구독 관리 불필요)", "A"],
@@ -11377,12 +11491,11 @@ var PROBLEMS = [
 },
 {
   id: 920,
-  title: "GKE 앱의 Deployment·Service 2개를 경로로 구분, 온프레미스 클라이언트가 Cloud Interconnect 경유 단일 IP로 접근(2개) → GatewayClass gke-l7-rilb(내부 Application LB) Gateway 생성 + 두 Service를 참조하는 HTTPRoute(추정, 채점 전)",
+  title: "GKE 앱의 Deployment·Service 2개를 경로로 구분, 온프레미스 클라이언트가 Cloud Interconnect 경유 단일 IP로 접근(2개) → GatewayClass gke-l7-rilb(내부 Application LB) Gateway 생성 + 두 Service를 참조하는 HTTPRoute",
   added: "2026-11-09",
   tags: ["GKE Gateway API", "gke-l7-rilb", "HTTPRoute", "내부 Application Load Balancer", "Cloud Interconnect", "경로 기반 라우팅"],
   mine: "AC",
   correct: "AF",
-  pending: true,
   guess: true,
   section: ["3.2", "1.1"],
   freq: "mid",
@@ -11399,6 +11512,15 @@ var PROBLEMS = [
     E: { en: "両方の Deployment に一致する Service を selector で作成する。", ko: "두 Deployment에 모두 일치하는 Service를 selector로 만든다." },
     F: { en: "両方の Service を参照する HTTPRoute を作成する。", ko: "두 Service를 참조하는 HTTPRoute를 만든다." }
   },
+  explanation: {
+    A: { en: "A は正解です。内部 HTTP ロードバランサは、内部で（相互接続を介して）アクセスされる HTTP アプリケーションに最も適しています。", ko: "A는 정답입니다. 내부 HTTP 부하 분산기는 내부에서(Interconnect를 통해) 접근하는 HTTP 애플리케이션에 가장 적합합니다." },
+    B: { en: "B は不正解です。内部 Service では URL ベースの転送はできません。", ko: "B는 오답입니다. 내부 Service로는 URL 기반 전달을 할 수 없습니다." },
+    C: { en: "C は不正解です。Deployment ごとにロードバランサが必要になるため、IP が 2 つになります。", ko: "C는 오답입니다. Deployment마다 부하 분산기가 필요해 IP가 2개가 됩니다." },
+    D: { en: "D は不正解です。NodePort ではすべてのノードでポートが開かれます（2 番目の Deployment があればポート数は倍になります）。", ko: "D는 오답입니다. NodePort는 모든 노드에서 포트를 엽니다(두 번째 Deployment가 있으면 포트 수가 두 배가 됩니다)." },
+    E: { en: "E は不正解です。両方の Deployment を選択すると、クライアントはそのいずれかの Deployment にランダムにヒットします。", ko: "E는 오답입니다. 두 Deployment를 모두 선택하면 클라이언트는 그중 하나에 무작위로 닿습니다." },
+    F: { en: "F は正解です。2 つの Deployment が動作するパスに応じて、各 Deployment を単一の IP にマッピングできます。この単一のフロントエンドによって、両方の Deployment に対して単一の IP が公開されます。", ko: "F는 정답입니다. 두 Deployment가 동작하는 경로에 따라 각 Deployment를 하나의 IP에 매핑할 수 있습니다. 이 단일 프런트엔드가 두 Deployment에 대해 하나의 IP를 공개합니다." }
+  },
+  refs: ["https://cloud.google.com/kubernetes-engine/docs/concepts/gateway-api", "https://cloud.google.com/kubernetes-engine/docs/concepts/service#types-of-service", "https://cloud.google.com/kubernetes-engine/docs/how-to/deploying-gateways#store-route", "https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service"],
   keywords: [
     ["オンプレミス / Cloud Interconnect", "VPC 내부로 들어오는 트래픽 → <mark>내부</mark> 부하 분산기", "A"],
     ["単一の IP + 異なる HTTP パス", "L7 경로 라우팅 하나의 IP = 내부 Application LB = GatewayClass <mark>gke-l7-rilb</mark>", "A"],
@@ -11426,12 +11548,11 @@ var PROBLEMS = [
 },
 {
   id: 921,
-  title: "GKE 클러스터 내부 마이크로서비스: 서비스마다 특정 레플리카 수 + 레플리카 수와 무관하게 일관된 주소로 서로 호출 → 각 서비스를 Deployment로 배포하고 Service로 공개, Service DNS 이름으로 호출(추정, 채점 전)",
+  title: "GKE 클러스터 내부 마이크로서비스: 서비스마다 특정 레플리카 수 + 레플리카 수와 무관하게 일관된 주소로 서로 호출 → 각 서비스를 Deployment로 배포하고 Service로 공개, Service DNS 이름으로 호출",
   added: "2026-11-09",
   tags: ["GKE", "Deployment", "Service", "클러스터 DNS", "Pod", "Ingress"],
   mine: "C",
   correct: "A",
-  pending: true,
   section: "3.2",
   freq: "high",
   freqNote: "GKE 배포(3.2)의 기본 개념이라 high입니다. <b>“레플리카 수 지정 = Deployment, 일관된 내부 주소 = Service(DNS 이름)”</b>를 가져가면 됩니다.",
@@ -11445,6 +11566,13 @@ var PROBLEMS = [
     C: { en: "各マイクロサービスを Pod としてデプロイする。Service を使用してクラスタで Pod を公開する。Service の DNS 名を使用して、クラスタ内の他のマイクロサービスから特定のマイクロサービスをアドレス指定する。", ko: "각 마이크로서비스를 Pod로 배포한다. Service로 클러스터에서 Pod를 공개한다. Service의 DNS 이름으로 클러스터 안의 다른 마이크로서비스에서 특정 마이크로서비스를 주소 지정한다." },
     D: { en: "各マイクロサービスを Pod としてデプロイする。Ingress を使用してクラスタで Pod を公開する。クラスタ内の他のマイクロサービスから Pod をアドレス指定するために Ingress の IP アドレスを使用する。", ko: "각 마이크로서비스를 Pod로 배포한다. Ingress로 클러스터에서 Pod를 공개한다. 클러스터 안의 다른 마이크로서비스에서 Pod를 주소 지정하기 위해 Ingress의 IP 주소를 쓴다." }
   },
+  explanation: {
+    A: { en: "A が正解です。Service はクラスタ内部に DNS エントリを持っており、他のマイクロサービスはそれを使用して、Service のターゲットとなっている Deployment の各 Pod をアドレス指定できます。", ko: "A가 정답입니다. Service는 클러스터 내부에 DNS 항목을 가지며, 다른 마이크로서비스는 이를 사용해 Service의 대상인 Deployment의 각 Pod를 지정할 수 있습니다." },
+    B: { en: "B は不正解です。Ingress は外部または内部の HTTP(S) ロードバランサを使用して Service を公開し、直接 Deployment には適用されません。", ko: "B는 오답입니다. Ingress는 외부 또는 내부 HTTP(S) 부하 분산기로 Service를 공개하며, Deployment에 직접 적용되지 않습니다." },
+    C: { en: "C は不正解です。Pod はマイクロサービスの単一インスタンスであり、Deployment が複数のレプリカで構成される場合があります。", ko: "C는 오답입니다. Pod는 마이크로서비스의 단일 인스턴스이고, Deployment는 여러 복제본으로 구성될 수 있습니다." },
+    D: { en: "D は不正解です。B と C の両方の誤りが組み合わされています。", ko: "D는 오답입니다. B와 C의 잘못이 모두 합쳐져 있습니다." }
+  },
+  refs: ["https://cloud.google.com/kubernetes-engine/docs/concepts/service"],
   keywords: [
     ["特定の数のレプリカ", "replicas 수를 유지·조정하는 컨트롤러 = <mark>Deployment</mark>(Pod 단독 C·D 탈락)", "A(C·D 제외)"],
     ["一貫した方法でアドレス指定(レプリカ数に関係なく)", "Pod IP는 바뀜 → 고정 가상 IP·DNS 이름 = <mark>Service</mark>", "A"],
@@ -11469,12 +11597,11 @@ var PROBLEMS = [
 },
 {
   id: 922,
-  title: "GKE 컨테이너 앱에 Secret 추가, Kubernetes API 서버 호출로 Secret이 노출되지 않게 → Secret Manager에 저장 + Google SA·KSA + Workload Identity로 읽기(Kubernetes Secret·애플리케이션 레이어 암호화 아님)(추정, 채점 전)",
+  title: "GKE 컨테이너 앱에 Secret 추가, Kubernetes API 서버 호출로 Secret이 노출되지 않게 → Secret Manager에 저장 + Google SA·KSA + Workload Identity로 읽기(Kubernetes Secret·애플리케이션 레이어 암호화 아님)",
   added: "2026-11-09",
   tags: ["Secret Manager", "GKE용 Workload Identity 제휴", "Kubernetes Secret", "애플리케이션 레이어 Secret 암호화", "Cloud KMS", "GKE"],
   mine: "A",
   correct: "D",
-  pending: true,
   section: "1.2",
   freq: "high",
   freqNote: "시크릿 보관(Secret Manager·Workload Identity, 1.2)은 high 항목이고 4세트 Q15·공식 Q9와 이어집니다. <b>“Kubernetes API로 Secret이 보이면 안 됨 = Kubernetes 밖(Secret Manager)에 두고 Workload Identity로 읽기”</b>를 가져가면 됩니다.",
@@ -11488,6 +11615,13 @@ var PROBLEMS = [
     C: { en: "Cloud KMS に Secret を格納する。Cloud KMS から Secret を読み取るために Google サービス アカウントを作成する。サービス アカウント キーを JSON 形式でエクスポートしてその JSON ファイルを Cloud KMS から Secret を読み取ることができる ConfigMap Volume としてコンテナにマウントする。", ko: "Cloud KMS에 Secret을 저장한다. Cloud KMS에서 Secret을 읽기 위해 Google 서비스 계정을 만든다. 서비스 계정 키를 JSON 형식으로 내보내 그 JSON 파일을 Cloud KMS에서 Secret을 읽을 수 있는 ConfigMap Volume으로 컨테이너에 마운트한다." },
     D: { en: "Secret を Secret Manager に格納する。Secret Manager から Secret を読み取るための Google サービス アカウントを作成する。コンテナを実行するための Kubernetes サービス アカウントを作成する。Workload Identity を使用して Google サービス アカウントとして認証する。", ko: "Secret을 Secret Manager에 저장한다. Secret Manager에서 Secret을 읽기 위한 Google 서비스 계정을 만든다. 컨테이너를 실행하기 위한 Kubernetes 서비스 계정을 만든다. Workload Identity로 Google 서비스 계정으로 인증한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。Kubernetes Secret は文字列をエンコードするのみであるため、Secret を読み取ることができる誰もがそれをデコードできます。", ko: "A는 오답입니다. Kubernetes Secret은 문자열을 인코딩할 뿐이라, Secret을 읽을 수 있는 사람은 누구나 디코딩할 수 있습니다." },
+    B: { en: "B は不正解です。GKE アプリケーションレイヤで Secret を暗号化しても、Secret はやはり Kubernetes API サーバーからの base64 エンコードされた文字列として提示されます。", ko: "B는 오답입니다. GKE 애플리케이션 레이어에서 Secret을 암호화해도, Secret은 여전히 Kubernetes API 서버에서 base64로 인코딩된 문자열로 제공됩니다." },
+    C: { en: "C は不正解です。Cloud KMS は実際の Secret ではなく暗号鍵の格納に使用されます。また、Google サービス アカウント キーを Volume として渡すとしていますが、Secret を読み取ることができる誰もがこれを読み取ることができます。", ko: "C는 오답입니다. Cloud KMS는 실제 Secret이 아니라 암호 키를 저장하는 데 씁니다. 또 Google 서비스 계정 키를 볼륨으로 넘긴다고 했는데, Secret을 읽을 수 있는 사람은 누구나 이것을 읽을 수 있습니다." },
+    D: { en: "D は正解です。これにより、Secret を安全に格納するサービスと、Workload Identity で安全に Secret を取得するアプローチが提供されます。", ko: "D는 정답입니다. Secret을 안전하게 저장하는 서비스와, Workload Identity로 Secret을 안전하게 가져오는 방법이 제공됩니다." }
+  },
+  refs: ["https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity", "https://cloud.google.com/kms/docs", "https://kubernetes.io/docs/concepts/configuration/secret/", "https://cloud.google.com/secret-manager/docs/overview"],
   keywords: [
     ["Kubernetes API サーバーへの呼び出しによって Secret が公開されることを防ぐ", "Kubernetes Secret은 API로 읽힘(권한만 있으면 kubectl get secret) → <mark>Kubernetes 밖</mark>에 저장해야 함", "A·B 제외"],
     ["Secret Manager + Workload Identity(D)", "비밀은 <mark>Secret Manager</mark>, 접근은 키 없는 <mark>Workload Identity</mark>로 IAM 제어", "D"],
@@ -11513,12 +11647,11 @@ var PROBLEMS = [
 },
 {
   id: 923,
-  title: "Istio(AuthorizationPolicy·NetworkPolicy·mTLS) 적용 GKE에서 두 Pod 간 특정 URL의 HTTP 요청만 실패, 다른 URL은 성공 → 원인은 AuthorizationPolicy가 특정 경로를 차단(추정, 채점 전)",
+  title: "Istio(AuthorizationPolicy·NetworkPolicy·mTLS) 적용 GKE에서 두 Pod 간 특정 URL의 HTTP 요청만 실패, 다른 URL은 성공 → 원인은 AuthorizationPolicy가 특정 경로를 차단",
   added: "2026-11-09",
   tags: ["Istio", "AuthorizationPolicy", "NetworkPolicy", "mTLS", "Cloud Service Mesh", "문제 해결"],
   mine: "C",
   correct: "C",
-  pending: true,
   section: ["1.2", "4.3"],
   freq: "mid",
   freqNote: "서비스 간 보안 통신(Cloud Service Mesh·네트워크 정책, 1.2)은 시험 가이드 항목이지만 정책 계층 구분은 세부라 mid입니다. <b>“URL(경로)별로만 실패 = L7 정책(AuthorizationPolicy), Pod 간 전부 실패 = L3/L4(NetworkPolicy)”</b>를 가져가면 됩니다.",
@@ -11532,6 +11665,13 @@ var PROBLEMS = [
     C: { en: "クラスタの AuthorizationPolicy によって、アプリケーション内で特定のパスの HTTP リクエストがブロックされている。", ko: "클러스터의 AuthorizationPolicy에 의해 애플리케이션 안에서 특정 경로의 HTTP 요청이 차단되고 있다." },
     D: { en: "クラスタで mTLS が制約なしモードに設定されているものの、Pod のサイドカー プロキシによって、暗号化されていないトラフィックが書式なしテキスト形式で送信されている。", ko: "클러스터에서 mTLS가 제약 없음(permissive) 모드로 설정되어 있는데도, Pod의 사이드카 프록시가 암호화되지 않은 트래픽을 평문으로 보내고 있다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。Kubernetes NetworkPolicy のリソースでは、選択されたパスではなく、Pod のグループ間の HTTP トラフィックをブロックできます。(https://kubernetes.io/docs/concepts/services-networking/network-policies/).", ko: "A는 오답입니다. Kubernetes NetworkPolicy 리소스는 선택한 경로가 아니라 Pod 그룹 간의 HTTP 트래픽을 차단할 수 있습니다(https://kubernetes.io/docs/concepts/services-networking/network-policies/)." },
+    B: { en: "B は不正解です。クライアントの Pod がサーバーと通信するために使用するポートが誤っていると、Pod のリクエストはすべての URL パスで失敗します。", ko: "B는 오답입니다. 클라이언트 Pod가 서버와 통신하는 포트가 잘못되었다면 모든 URL 경로에서 요청이 실패합니다." },
+    C: { en: "C は正解です。Istio 認可ポリシーによって、Pod 間で特定の URL パスについて HTTP メソッドをブロックできます（https://istio.io/latest/docs/tasks/security/authorization/authz-http/）。", ko: "C는 정답입니다. Istio 인가 정책으로 Pod 간 특정 URL 경로에 대한 HTTP 메서드를 차단할 수 있습니다(https://istio.io/latest/docs/tasks/security/authorization/authz-http/)." },
+    D: { en: "D は不正解です。Istio を使用した mTLS 構成によって HTTP リクエストの失敗は発生しません。PERMISSIVE モード（デフォルト構成）では、サービスは平文と mTLS 暗号化トラフィックの両方を受け入れることができます（https://istio.io/latest/docs/tasks/security/authentication/mtls-migration/）。", ko: "D는 오답입니다. Istio의 mTLS 구성으로 HTTP 요청이 실패하지는 않습니다. PERMISSIVE 모드(기본 구성)에서는 서비스가 평문과 mTLS 암호화 트래픽을 모두 받을 수 있습니다(https://istio.io/latest/docs/tasks/security/authentication/mtls-migration/)." }
+  },
+  refs: ["https://istio.io/latest/docs/tasks/security/authorization/authz-http/", "https://kubernetes.io/docs/concepts/services-networking/network-policies/", "https://istio.io/latest/docs/tasks/security/authentication/mtls-migration/"],
   keywords: [
     ["特定の URL だけ失敗 / 他の URL は成功", "같은 Pod·같은 포트인데 경로만 다름 → <mark>L7(HTTP 경로)</mark>를 보는 정책", "C"],
     ["Istio AuthorizationPolicy", "HTTP 메서드·경로·주체로 허용·거부(L7) → 특정 경로 차단 가능", "C"],
@@ -11558,12 +11698,11 @@ var PROBLEMS = [
 },
 {
   id: 924,
-  title: "GKE 마이크로서비스 일부가 여러 Google Cloud API 접근, Google 권장 인증(2개) → 클러스터에 Workload Identity 사용 설정 + roles/iam.workloadIdentityUser로 Google SA와 Kubernetes SA 바인딩(추정, 채점 전)",
+  title: "GKE 마이크로서비스 일부가 여러 Google Cloud API 접근, Google 권장 인증(2개) → 클러스터에 Workload Identity 사용 설정 + roles/iam.workloadIdentityUser로 Google SA와 Kubernetes SA 바인딩",
   added: "2026-11-09",
   tags: ["GKE용 Workload Identity 제휴", "roles/iam.workloadIdentityUser", "Kubernetes 서비스 계정", "노드 서비스 계정", "서비스 계정 키"],
   mine: "BE",
   correct: "BE",
-  pending: true,
   section: "1.2",
   freq: "high",
   freqNote: "GKE용 Workload Identity 제휴(1.2)는 high 항목이고 공식 Q9·Q22에 이어 세 번째입니다. <b>“Workload Identity 사용 설정 + workloadIdentityUser로 KSA↔GSA 바인딩”</b>을 세트로 가져가면 됩니다.",
@@ -11578,6 +11717,14 @@ var PROBLEMS = [
     D: { en: "Google サービス アカウント キーを Secret Manager に格納する。", ko: "Google 서비스 계정 키를 Secret Manager에 저장한다." },
     E: { en: "gcloud で roles/iam.workloadIdentityUser を使用して、Google サービス アカウントと Kubernetes サービス アカウントをバインドする。", ko: "gcloud에서 roles/iam.workloadIdentityUser를 사용해 Google 서비스 계정과 Kubernetes 서비스 계정을 바인딩한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。機能する場合もありますが、すべてのサービスが同じサービス アカウントを使用するため、権限の区別や詳細なロギングを実現できません。", ko: "A는 오답입니다. 동작할 수도 있지만, 모든 서비스가 같은 서비스 계정을 쓰므로 권한 구분이나 상세한 로깅을 할 수 없습니다." },
+    B: { en: "B と E はともに、GKE と Google サービス アカウントを接続するため、GKE は Google サービス アカウントでサービスを認証できます。", ko: "B와 E는 함께 GKE와 Google 서비스 계정을 연결하므로, GKE가 Google 서비스 계정으로 서비스를 인증할 수 있습니다." },
+    C: { en: "C は不正解です。この方法は可能であるものの、Workload Identity では推奨されません。サービス アカウントのキーのローテーションが必須であるためです。", ko: "C는 오답입니다. 가능은 하지만 Workload Identity에서는 권장되지 않습니다. 서비스 계정 키 교체가 필수이기 때문입니다." },
+    D: { en: "D は不正解です。この方法は可能であるものの、Workload Identity では推奨されません。サービス アカウントのキーのローテーションが必須であるためです。", ko: "D는 오답입니다. 가능은 하지만 Workload Identity에서는 권장되지 않습니다. 서비스 계정 키 교체가 필수이기 때문입니다." },
+    E: { en: "B と E はともに、GKE と Google サービス アカウントを接続するため、GKE は Google サービス アカウントでサービスを認証できます。", ko: "B와 E는 함께 GKE와 Google 서비스 계정을 연결하므로, GKE가 Google 서비스 계정으로 서비스를 인증할 수 있습니다." }
+  },
+  refs: ["https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity", "https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_existing_cluster"],
   keywords: [
     ["一部のサービスが Google Cloud API にアクセス", "서비스(Pod)마다 다른 권한 → Pod 단위 ID = <mark>Workload Identity</mark>", "B"],
     ["Google 推奨のベスト プラクティス", "키 없음 + 최소 권한 → 클러스터 사용 설정(B) + KSA↔GSA 바인딩(E)", "B·E"],
@@ -11605,12 +11752,11 @@ var PROBLEMS = [
 },
 {
   id: 925,
-  title: "GKE의 스테이트리스 분산 서비스를 자동 확장, 2주 안에 최소 변경으로 → 수평 Pod 자동 확장(HPA)을 CPU 부하 기준으로 배포(추정, 채점 전)",
+  title: "GKE의 스테이트리스 분산 서비스를 자동 확장, 2주 안에 최소 변경으로 → 수평 Pod 자동 확장(HPA)을 CPU 부하 기준으로 배포",
   added: "2026-11-09",
   tags: ["HPA", "수평 Pod 자동 확장", "VPA", "CPU 사용률", "커스텀 지표", "GKE"],
   mine: "C",
   correct: "C",
-  pending: true,
   section: "3.2",
   freq: "high",
   freqNote: "HPA(3.2)는 CLAUDE.md high 기준 항목입니다. <b>“스테이트리스 + 최소 변경 = HPA(CPU), 큐 길이 같은 업무 지표가 필요하면 커스텀·외부 지표 HPA”</b>를 가져가면 됩니다.",
@@ -11624,6 +11770,13 @@ var PROBLEMS = [
     C: { en: "水平 Pod 自動スケーリングをデプロイして、CPU の負荷に基づいてスケーリングする。", ko: "수평 Pod 자동 확장을 배포해 CPU 부하에 따라 확장한다." },
     D: { en: "水平 Pod 自動スケーリングをデプロイして、カスタム指標に基づいてスケーリングする。", ko: "수평 Pod 자동 확장을 배포해 커스텀 지표에 따라 확장한다." }
   },
+  explanation: {
+    A: { en: "A. 不正解: この方法は、分散アプリケーションでは機能しません。", ko: "A. 오답: 이 방법은 분산 애플리케이션에서는 동작하지 않습니다." },
+    B: { en: "B. 不正解: この方法は機能しますが、Cloud Monitoring のインテグレーションと、場合によってはアプリケーションの変更が必要になります。また、分散アプリケーションでは機能しません。", ko: "B. 오답: 이 방법은 동작하지만 Cloud Monitoring 연동과, 경우에 따라 애플리케이션 변경이 필요합니다. 또 분산 애플리케이션에서는 동작하지 않습니다." },
+    C: { en: "C. 正解: 最小限のコード変更で要件を満たすことができます。", ko: "C. 정답: 최소한의 코드 변경으로 요건을 충족할 수 있습니다." },
+    D: { en: "D. 不正解: この方法は機能しますが、Cloud Monitoring のインテグレーションと、場合によってはアプリケーションの変更が必要になります。", ko: "D. 오답: 이 방법은 동작하지만 Cloud Monitoring 연동과, 경우에 따라 애플리케이션 변경이 필요합니다." }
+  },
+  refs: ["https://cloud.google.com/kubernetes-engine/docs/how-to/vertical-pod-autoscaling", "https://cloud.google.com/kubernetes-engine/docs/concepts/verticalpodautoscaler", "https://cloud.google.com/kubernetes-engine/docs/tutorials/custom-metrics-autoscaling"],
   keywords: [
     ["ステートレスな分散型サービス", "Pod를 늘려 처리량을 나누는 구조 → <mark>수평</mark> 확장(HPA)", "C(A·B 제외)"],
     ["最小限の変更 / 2 週間以内", "CPU 지표는 기본 제공 → 앱 수정·지표 파이프라인 불필요", "C(D 제외)"],
@@ -11650,12 +11803,11 @@ var PROBLEMS = [
 },
 {
   id: 926,
-  title: "30분 무조작 시 로그아웃되는 세션 + 재로그인 후에도 남아야 하는 장바구니(Google 권장) → 세션 = Memorystore for Redis, 장바구니 = Firestore(추정, 채점 전)",
+  title: "30분 무조작 시 로그아웃되는 세션 + 재로그인 후에도 남아야 하는 장바구니(Google 권장) → 세션 = Memorystore for Redis, 장바구니 = Firestore",
   added: "2026-11-10",
   tags: ["Memorystore", "Firestore", "세션 관리", "TTL", "장바구니", "세션 어피니티", "저장소 선택"],
   mine: "D",
   correct: "D",
-  pending: true,
   section: "1.3",
   freq: "high",
   freqNote: "저장소 선택(1.3)은 CLAUDE.md high 기준이고, 같은 문제가 1세트 Q41로도 나왔습니다. <b>“사라져도 되는 세션 = Memorystore(TTL), 남아야 하는 장바구니 = Firestore”</b>를 가져가면 됩니다.",
@@ -11669,6 +11821,13 @@ var PROBLEMS = [
     C: { en: "セッションとショッピング カートの情報を BigQuery に保存する。", ko: "세션과 장바구니 정보를 BigQuery에 저장한다." },
     D: { en: "Memorystore for Redis にセッション情報を保存し、ショッピング カート情報を Firestore に保存する。", ko: "Memorystore for Redis에 세션 정보를 저장하고, 장바구니 정보를 Firestore에 저장한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。ローカルメモリはプロセスが終了するときに失われるため、カート情報が失われます。", ko: "A는 오답입니다. 로컬 메모리는 프로세스가 끝날 때 사라지므로 카트 정보가 사라집니다." },
+    B: { en: "B は不正解です。セッション情報のために Cloud Storage バケットにアクセスすることは、低速でコストが高くなります。これは Google Cloud のベスト プラクティスではありません。", ko: "B는 오답입니다. 세션 정보 때문에 Cloud Storage 버킷에 접근하는 것은 느리고 비용이 높습니다. 이는 Google Cloud 모범 사례가 아닙니다." },
+    C: { en: "C は不正解です。BigQuery ではカートとセッションに対する頻繁な更新を処理できません。", ko: "C는 오답입니다. BigQuery는 카트와 세션에 대한 잦은 갱신을 처리할 수 없습니다." },
+    D: { en: "D は正解です。Memorystore はセッション情報を保存するソリューションとして標準的かつ高速であり、Firestore はショッピング カートのような小規模な構造化データに最適です。ユーザーは必要に応じて新しいセッションのショッピング カートにマッピングされます。", ko: "D는 정답입니다. Memorystore는 세션 정보를 저장하는 표준적이고 빠른 솔루션이고, Firestore는 장바구니 같은 소규모 구조화 데이터에 최적입니다. 사용자는 필요에 따라 새 세션의 장바구니에 매핑됩니다." }
+  },
+  refs: ["https://cloud.google.com/memorystore", "https://cloud.google.com/datastore/docs"],
   keywords: [
     ["アクティブでない状態が 30 分続くと…自動的にログアウト", "세션은 <mark>사라져도 되는 짧은 상태</mark> → 키 TTL로 유휴 만료하는 인메모리 저장소", "D"],
     ["再びログインした場合は…ショッピング カートを使用できる", "장바구니는 세션보다 오래 <mark>남아야 하는 영구 데이터</mark> → 사용자 ID 키의 Firestore 문서", "D(A 제외)"],
@@ -11696,12 +11855,11 @@ var PROBLEMS = [
 },
 {
   id: 927,
-  title: "공개 API의 호출자 인증·할당량 적용·지표 보고, LB와 PHP 앱 사이의 빈칸 → Cloud Endpoints(ESPv2 프록시)(추정, 채점 전)",
+  title: "공개 API의 호출자 인증·할당량 적용·지표 보고, LB와 PHP 앱 사이의 빈칸 → Cloud Endpoints(ESPv2 프록시)",
   added: "2026-11-10",
   tags: ["Cloud Endpoints", "ESPv2", "API 관리", "할당량", "API 키", "IAP", "API Gateway", "Apigee"],
   mine: "C",
   correct: "B",
-  pending: true,
   section: "1.1",
   freq: "high",
   freqNote: "API 설계·관리(Apigee·API Gateway·Endpoints)는 CLAUDE.md high 기준 항목입니다. <b>“API 호출자 인증 + 할당량 + 지표 = API 관리(Endpoints·API Gateway·Apigee), 사람(사용자) 접근 제어 = IAP”</b>를 가져가면 됩니다.",
@@ -11716,6 +11874,13 @@ var PROBLEMS = [
     C: { en: "Identity-Aware Proxy", ko: "Identity-Aware Proxy" },
     D: { en: "HTTP(S) 負荷分散用 GKE Ingress", ko: "HTTP(S) 부하 분산용 GKE Ingress" }
   },
+  explanation: {
+    A: { en: "A は不正解です。Cloud Run にはこれらの機能はありません。", ko: "A는 오답입니다. Cloud Run에는 이런 기능이 없습니다." },
+    B: { en: "B は正解です。これら 3 つの機能（認証、割り当て / レート制限、指標）はすべて、Cloud Endpoints のコア機能です。", ko: "B는 정답입니다. 이 세 기능(인증, 할당량·레이트 제한, 지표)은 모두 Cloud Endpoints의 핵심 기능입니다." },
+    C: { en: "C は不正解です。IAP は認証機能のみを提供します。", ko: "C는 오답입니다. IAP는 인증 기능만 제공합니다." },
+    D: { en: "D は不正解です。GKE Ingress にはこれらの機能はありません。", ko: "D는 오답입니다. GKE Ingress에는 이런 기능이 없습니다." }
+  },
+  refs: ["https://cloud.google.com/endpoints/docs/openapi/quotas-configure", "https://cloud.google.com/endpoints/docs/openapi/monitoring-your-api"],
   keywords: [
     ["API 呼び出し元の認証", "API 키·JWT·Google ID 토큰으로 <mark>호출하는 프로그램</mark>을 확인 = API 관리 기능", "B(C 제외)"],
     ["割り当ての適用", "API 키(소비자 프로젝트)별 요청 수 할당량 = Endpoints·API Gateway·Apigee", "B"],
@@ -11743,12 +11908,11 @@ var PROBLEMS = [
 },
 {
   id: 928,
-  title: "로그를 2주마다 확인, 연 1회 감사, 7년 보존 + 비용 최소(2개) → 버킷 잠금으로 보존 정책 + 14일 지난 객체를 Coldline으로 바꾸는 수명 주기 정책(추정, 채점 전)",
+  title: "로그를 2주마다 확인, 연 1회 감사, 7년 보존 + 비용 최소(2개) → 버킷 잠금으로 보존 정책 + 14일 지난 객체를 Coldline으로 바꾸는 수명 주기 정책",
   added: "2026-11-10",
   tags: ["Cloud Storage", "수명 주기 관리", "스토리지 클래스", "Coldline", "Nearline", "보존 정책", "버킷 잠금"],
   mine: "AD",
   correct: "AD",
-  pending: true,
   section: ["1.2", "1.3"],
   freq: "high",
   freqNote: "시험 가이드 1.2 “保持ポリシーの使用とロック”·“オブジェクトのライフサイクル管理”에 이름이 나오는 항목입니다. <b>“N년 보존 강제 = 보존 정책 + 버킷 잠금, 접근 빈도로 클래스 = 수명 주기 정책(Nearline 월 1회·Coldline 분기 1회·Archive 연 1회 이하)”</b>를 가져가면 됩니다.",
@@ -11763,6 +11927,14 @@ var PROBLEMS = [
     D: { en: "14 日以上経過したオブジェクトのストレージ クラスを Coldline に設定するライフサイクル管理ポリシーを作成する", ko: "14일 이상 지난 객체의 스토리지 클래스를 Coldline으로 설정하는 수명 주기 관리 정책을 만든다." },
     E: { en: "14 日以上経過したオブジェクトのストレージ クラスを Nearline に設定するライフサイクル管理ポリシーを作成する。", ko: "14일 이상 지난 객체의 스토리지 클래스를 Nearline으로 설정하는 수명 주기 관리 정책을 만든다." }
   },
+  explanation: {
+    A: { en: "A は正解です。バケットロック機能を使用すると、必要な保持ポリシーを適用できます。", ko: "A는 정답입니다. 버킷 잠금 기능을 쓰면 필요한 보존 정책을 적용할 수 있습니다." },
+    B: { en: "B は不正解です。ストレージ クラスはライフサイクル管理ポリシーで設定する必要があります。", ko: "B는 오답입니다. 스토리지 클래스는 수명 주기 관리 정책으로 설정해야 합니다." },
+    C: { en: "C は不正解です。JWT は認証に使用できますが、オブジェクトのライフサイクルの設定には使用できません。", ko: "C는 오답입니다. JWT는 인증에 쓸 수 있지만 객체 수명 주기 설정에는 쓸 수 없습니다." },
+    D: { en: "D は正解です。ライフサイクル管理ポリシーによってストレージ クラスが変更され、費用が最小限に抑えられます。", ko: "D는 정답입니다. 수명 주기 관리 정책으로 스토리지 클래스가 바뀌어 비용이 최소화됩니다." },
+    E: { en: "E は不正解です。データへのアクセスが年 1 回のみであれば、Archive Storage または Coldline Storage のほうが Nearline Storage よりも経済的です。", ko: "E는 오답입니다. 데이터 접근이 1년에 한 번뿐이라면 Archive Storage나 Coldline Storage가 Nearline Storage보다 경제적입니다." }
+  },
+  refs: ["https://cloud.google.com/storage/docs/bucket-lock", "https://cloud.google.com/storage/docs/lifecycle"],
   keywords: [
     ["少なくとも 7 年間保存", "보존 기간 동안 삭제·덮어쓰기 금지 → <mark>보존 정책(保持ポリシー) + 버킷 잠금</mark>", "A"],
     ["2 週間ごとにログを調べる", "처음 14일은 자주 봄 → Standard에 두고, 14일이 지나면 차가운 클래스로", "D·E"],
@@ -11791,12 +11963,11 @@ var PROBLEMS = [
 },
 {
   id: 929,
-  title: "규제로 모든 객체를 생성 후 7년 이상 접근 가능, 3년 지나면 연 1회 미만 접근, 비용 최적화(2개) → 7년 보존 정책 + 3년 후 Archive로 옮기는 수명 주기 정책(추정, 채점 전)",
+  title: "규제로 모든 객체를 생성 후 7년 이상 접근 가능, 3년 지나면 연 1회 미만 접근, 비용 최적화(2개) → 7년 보존 정책 + 3년 후 Archive로 옮기는 수명 주기 정책",
   added: "2026-11-10",
   tags: ["Cloud Storage", "보존 정책", "수명 주기 관리", "Archive Storage", "스토리지 클래스", "객체 버전 관리", "IAM Conditions"],
   mine: "AD",
   correct: "AD",
-  pending: true,
   section: ["1.2", "1.3"],
   freq: "high",
   freqNote: "시험 가이드 1.2 “保持ポリシーの使用とロック”·“オブジェクトのライフサイクル管理” 항목으로, 바로 앞 Q28과 같은 유형입니다. <b>“N년 접근 보장 = 보존 정책, 연 1회 미만 접근 = 수명 주기로 Archive”</b>를 가져가면 됩니다.",
@@ -11811,6 +11982,14 @@ var PROBLEMS = [
     D: { en: "バケットでオブジェクトのライフサイクル ポリシーを作成し、3 年が経過したオブジェクトを Standard Storage から Archive Storage に移行する。", ko: "버킷에 객체 수명 주기 정책을 만들어, 3년이 지난 객체를 Standard Storage에서 Archive Storage로 옮긴다." },
     E: { en: "バケット内の各オブジェクトの経過期間をチェックし、3 年が経過したオブジェクトを Archive Storage クラスの 2 つ目のバケットに移行する Cloud Run function を実装する。Cloud Scheduler を使用して、Cloud Run function を毎日トリガーする。", ko: "버킷 안 각 객체의 경과 기간을 확인해, 3년이 지난 객체를 Archive Storage 클래스의 두 번째 버킷으로 옮기는 Cloud Run function을 구현한다. Cloud Scheduler로 Cloud Run function을 매일 트리거한다." }
   },
+  explanation: {
+    A: { en: "A は正解です。Cloud Storage には保持ライフサイクル ルールを構成するオプションがあります。", ko: "A는 정답입니다. Cloud Storage에는 보존 수명 주기 규칙을 구성하는 옵션이 있습니다." },
+    B: { en: "B は不正解です。データの保持要件を実装する方法としてはおすすめしません。", ko: "B는 오답입니다. 데이터 보존 요건을 구현하는 방법으로는 권장하지 않습니다." },
+    C: { en: "C は不正解です。オブジェクトの作成後 7 年の間にオブジェクトが削除されないことが保証されません。", ko: "C는 오답입니다. 객체 생성 후 7년 동안 객체가 삭제되지 않는다는 것이 보장되지 않습니다." },
+    D: { en: "D は正解です。ストレージ ライフサイクル ポリシーを実装する場合、Standard から Archive ティアに移行する方法が最も簡単であり、推奨されます。", ko: "D는 정답입니다. 스토리지 수명 주기 정책을 구현할 때 Standard에서 Archive 등급으로 옮기는 방법이 가장 간단하고 권장됩니다." },
+    E: { en: "E は不正解です。2 つのストレージ ティアにオブジェクトを格納するために、2 つのバケットは必要ありません。", ko: "E는 오답입니다. 두 스토리지 등급에 객체를 저장하는 데 버킷 2개가 필요하지 않습니다." }
+  },
+  refs: ["https://cloud.google.com/storage/docs/bucket-lock"],
   keywords: [
     ["作成されてから 7 年以上アクセスできる(規制要件)", "생성 후 7년간 삭제·교체 금지 → <mark>버킷 보존 정책(7년)</mark>", "A"],
     ["3 年以上前…1 年に 1 回未満", "연 1회 미만 접근 → <mark>Archive Storage</mark>(최소 보관 365일)", "D"],
@@ -11838,12 +12017,11 @@ var PROBLEMS = [
 },
 {
   id: 930,
-  title: "트래픽이 없는 날이 대부분, 가끔 큰 스파이크, 자동 확장·축소 + 비용 최소 → Firestore + Cloud Run(둘 다 0까지·사용량 과금)(추정, 채점 전)",
+  title: "트래픽이 없는 날이 대부분, 가끔 큰 스파이크, 자동 확장·축소 + 비용 최소 → Firestore + Cloud Run(둘 다 0까지·사용량 과금)",
   added: "2026-11-10",
   tags: ["Cloud Run", "Firestore", "0으로 축소", "플랫폼 선택", "자동 확장", "GKE Autopilot", "MIG", "Cloud SQL"],
   mine: "A",
   correct: "A",
-  pending: true,
   section: ["1.1", "1.3"],
   freq: "high",
   freqNote: "실행 플랫폼 선택(1.1)과 저장소 선택(1.3)은 CLAUDE.md high 기준 항목입니다. <b>“트래픽 0인 날이 많음 + 스파이크 + 비용 최소 = 0까지 축소하는 서버리스 조합(Cloud Run + Firestore)”</b>를 가져가면 됩니다.",
@@ -11857,6 +12035,13 @@ var PROBLEMS = [
     C: { en: "Cloud SQL をデータベースとしてアプリケーションを構築する。そのアプリケーションを GKE Autopilot クラスタにデプロイする。", ko: "Cloud SQL을 데이터베이스로 애플리케이션을 구축한다. 그 애플리케이션을 GKE Autopilot 클러스터에 배포한다." },
     D: { en: "Firestore をデータベースとしてアプリケーションを構築する。そのアプリケーションを Compute Engine マネージド インスタンス グループにデプロイし、自動スケーリングを適用する。", ko: "Firestore를 데이터베이스로 애플리케이션을 구축한다. 그 애플리케이션을 Compute Engine 관리형 인스턴스 그룹에 배포하고 자동 확장을 적용한다." }
   },
+  explanation: {
+    A: { en: "A は正解です。Cloud Run はゼロへのスケーリングをサポートしています。さらに、Firestore の費用はストレージのみです。そのため、トラフィックがない場合は運用の費用はゼロです。", ko: "A는 정답입니다. Cloud Run은 0으로의 축소를 지원합니다. 또 Firestore 비용은 스토리지뿐입니다. 그래서 트래픽이 없을 때 운영 비용은 0입니다." },
+    B: { en: "B は不正解です。GKE はゼロへのスケーリングを行いません。", ko: "B는 오답입니다. GKE는 0까지 축소하지 않습니다." },
+    C: { en: "C は不正解です。GKE はゼロへのスケーリングを行いません。さらに、Cloud SQL の実行に関連する費用が発生します。", ko: "C는 오답입니다. GKE는 0까지 축소하지 않습니다. 또 Cloud SQL 실행에 따른 비용이 발생합니다." },
+    D: { en: "D は不正解です。Compute Engine はゼロへのスケーリングを行わないインスタンスを管理します。少なくとも 1 つのインスタンスが実行されている必要があります。", ko: "D는 오답입니다. Compute Engine은 0까지 축소하지 않는 인스턴스를 관리합니다. 적어도 인스턴스 하나는 실행되어 있어야 합니다." }
+  },
+  refs: ["https://cloud.google.com/serverless-options", "https://cloud.google.com/appengine/docs/the-appengine-environments", "https://cloud.google.com/run"],
   keywords: [
     ["ほとんどの日はトラフィックがなく", "유휴 시간이 대부분 → <mark>0까지 축소</mark>해 아무것도 안 낼 수 있어야 함", "A"],
     ["大きいスパイク / 予測できない", "요청 기반으로 초 단위 확장 = Cloud Run", "A(D 제외)"],
@@ -11885,12 +12070,11 @@ var PROBLEMS = [
 },
 {
   id: 931,
-  title: "여러 오픈소스 OS 컨테이너 이미지를 게시할 때 CVE 스캔, 개발 속도 영향 없이 + 관리형 → Artifact Registry 이미지 취약점 스캔(Container Analysis API → Artifact Analysis)(추정, 채점 전)",
+  title: "여러 오픈소스 OS 컨테이너 이미지를 게시할 때 CVE 스캔, 개발 속도 영향 없이 + 관리형 → Artifact Registry 이미지 취약점 스캔(Container Analysis API → Artifact Analysis)",
   added: "2026-11-10",
   tags: ["Artifact Analysis", "Container Analysis API", "Container Scanning API", "Artifact Registry", "취약점 스캔", "CVE"],
   mine: "A",
   correct: "A",
-  pending: true,
   section: ["1.2", "2.1"],
   freq: "high",
   freqNote: "CI/CD(Artifact Registry)와 보안은 CLAUDE.md high 기준이고, 같은 유형이 1세트 Q40·3세트 Q4로도 나왔습니다. <b>“이미지 push 때 CVE 자동 스캔 + 관리형 = Artifact Registry + Artifact Analysis(옛 Container Analysis)”</b>를 가져가면 됩니다.",
@@ -11904,6 +12088,13 @@ var PROBLEMS = [
     C: { en: "商用サポートされていないベースイメージを開発環境で使用することを禁止する。", ko: "상용 지원되지 않는 베이스 이미지를 개발 환경에서 사용하는 것을 금지한다." },
     D: { en: "Cloud Monitoring を使用して Cloud Build の出力を確認し、脆弱性のあるバージョンが使用されているかどうかを判断する。", ko: "Cloud Monitoring으로 Cloud Build 출력을 확인해, 취약한 버전이 사용되고 있는지 판단한다." }
   },
+  explanation: {
+    A: { en: "A は正解です。Container Analysis API により、Debian、Ubuntu、Alpine、Red Hat Enterprise Edition、National Vulnerability Database の各ソースの CVE のイメージ スキャンが可能になります。", ko: "A는 정답입니다. Container Analysis API로 Debian, Ubuntu, Alpine, Red Hat Enterprise Edition, National Vulnerability Database 각 출처의 CVE에 대해 이미지 스캔을 할 수 있습니다." },
+    B: { en: "B は不正解です。この方法は機能する場合もありますが、マネージド サービスの条件を満たしていません。", ko: "B는 오답입니다. 동작할 수도 있지만 관리형 서비스라는 조건을 충족하지 않습니다." },
+    C: { en: "C は不正解です。この方法は機能しますが、アジャイル ソフトウェア開発の文化に反しており、進捗を妨げる可能性があります。", ko: "C는 오답입니다. 동작은 하지만 애자일 소프트웨어 개발 문화에 어긋나 진행을 방해할 수 있습니다." },
+    D: { en: "D は不正解です。Cloud Monitoring ではログをスキャンできても、脆弱性に関する分析情報は得られません。", ko: "D는 오답입니다. Cloud Monitoring으로 로그를 스캔할 수는 있어도 취약점에 관한 분석 정보는 얻을 수 없습니다." }
+  },
+  refs: ["https://cloud.google.com/container-registry/docs/get-image-vulnerabilities#viewing_vulnerabilities_and_other_occurrences", "https://cloud.google.com/container-registry/docs/container-analysis"],
   keywords: [
     ["イメージがパブリッシュされるとき…CVE のスキャン", "Artifact Registry에 <mark>push하면 자동 스캔</mark>(OS 패키지 CVE)", "A"],
     ["さまざまなオープンソースの OS", "Debian·Ubuntu·Alpine·RHEL 등 여러 OS 패키지를 지원하는 관리형 스캐너", "A(C 제외)"],
@@ -11931,12 +12122,11 @@ var PROBLEMS = [
 },
 {
   id: 932,
-  title: "Cloud Build CI 파이프라인(Python 컨테이너 빌드·테스트·push)이 예상보다 느림, 빌드 시간 단축(2개) → 더 높은 CPU의 빌드 VM(머신 유형) + --cache-from으로 이미지 캐시(추정, 채점 전)",
+  title: "Cloud Build CI 파이프라인(Python 컨테이너 빌드·테스트·push)이 예상보다 느림, 빌드 시간 단축(2개) → 더 높은 CPU의 빌드 VM(머신 유형) + --cache-from으로 이미지 캐시",
   added: "2026-11-10",
   tags: ["Cloud Build", "--cache-from", "머신 유형", "빌드 고속화", "Dockerfile", "Artifact Registry"],
   mine: "AC",
   correct: "AC",
-  pending: true,
   section: "2.1",
   freq: "high",
   freqNote: "Cloud Build(2.1)는 CLAUDE.md high 기준이고, --cache-from은 1세트 Q38·공식 모의고사 Q15에 이어 세 번째입니다. <b>“빌드가 느림 = 고 CPU 머신 유형 + --cache-from(+ Kaniko 캐시, 업로드 파일 줄이기)”</b>를 가져가면 됩니다.",
@@ -11952,6 +12142,14 @@ var PROBLEMS = [
     D: { en: "ビルドファイル内のベースイメージを ubuntu:latest に変更し、パッケージ マネージャー ユーティリティを使用して Python 3.7 をインストールする。", ko: "빌드 파일의 베이스 이미지를 ubuntu:latest로 바꾸고, 패키지 관리자 유틸리티로 Python 3.7을 설치한다." },
     E: { en: "Cloud Storage にアプリケーション ソースコードを保存し、gsutil を使用してソースコードをダウンロードするようにパイプラインを構成する。", ko: "Cloud Storage에 애플리케이션 소스 코드를 저장하고, gsutil로 소스 코드를 내려받도록 파이프라인을 구성한다." }
   },
+  explanation: {
+    A: { en: "A は正解です。高 CPU 仮想マシンタイプにすると短時間でビルドできるようになります。", ko: "A는 정답입니다. 고 CPU 가상 머신 유형으로 하면 짧은 시간에 빌드할 수 있습니다." },
+    B: { en: "B は不正解です。VM に Container Registry をデプロイしてもビルドは高速になりません。", ko: "B는 오답입니다. VM에 Container Registry를 배포해도 빌드는 빨라지지 않습니다." },
+    C: { en: "C は正解です。以降のステップで、テストとレジストリへの push のために同じコンテナが使用されます。", ko: "C는 정답입니다. 이후 단계에서 테스트와 레지스트리 push에 같은 컨테이너가 사용됩니다." },
+    D: { en: "D は不正解です。Ubuntu コンテナ イメージは python:3.7-alpine イメージよりもはるかに大きくなります。", ko: "D는 오답입니다. Ubuntu 컨테이너 이미지는 python:3.7-alpine 이미지보다 훨씬 큽니다." },
+    E: { en: "E は不正解です、Cloud Storage にアプリケーション ソースコードを保存しても、アプリケーションをビルドする時間は短縮されません。", ko: "E는 오답입니다. Cloud Storage에 애플리케이션 소스 코드를 저장해도 애플리케이션 빌드 시간은 줄지 않습니다." }
+  },
+  refs: ["https://cloud.google.com/cloud-build/docs/speeding-up-builds", "https://cloud.google.com/build/docs/optimize-builds/increase-vcpu-for-builds"],
   keywords: [
     ["ビルド時間を短縮", "Cloud Build 공식 “빌드 고속화 모범 사례”의 항목을 고르는 문제", "A·C"],
     ["CPU 割り当てを増やす(A)", "빌드 구성 <code>options.machineType</code>(예: <code>E2_HIGHCPU_8</code>)로 <mark>더 큰 머신 유형</mark> 선택", "A"],
@@ -11980,12 +12178,11 @@ var PROBLEMS = [
 },
 {
   id: 933,
-  title: "Cloud Run 앱이 로그를 로컬 파일에 씀, Cloud Logging으로 보내면서 유지보수할 코드 최소 → 언어 기본 로거로 stdout·stderr에 쓰기(Cloud Run이 자동 수집)(Cloud Logging 라이브러리 아님)(추정, 채점 전)",
+  title: "Cloud Run 앱이 로그를 로컬 파일에 씀, Cloud Logging으로 보내면서 유지보수할 코드 최소 → 언어 기본 로거로 stdout·stderr에 쓰기(Cloud Run이 자동 수집)(Cloud Logging 라이브러리 아님)",
   added: "2026-11-10",
   tags: ["Cloud Logging", "Cloud Run", "stdout", "stderr", "로깅 라이브러리", "구조화 로깅"],
   mine: "A",
   correct: "B",
-  pending: true,
   section: "4.3",
   freq: "high",
   freqNote: "관측 가능성(Logging)은 CLAUDE.md high 기준이고, 같은 축(표준 출력 vs Logging API)이 2세트 Q7·3세트 Q10·공식 모의고사 Q12에 나왔습니다. <b>“Cloud Run·GKE에서 코드 최소로 Cloud Logging = stdout·stderr(필요하면 JSON 한 줄)”</b>를 가져가면 됩니다.",
@@ -11999,6 +12196,13 @@ var PROBLEMS = [
     C: { en: "ログファイルを www.mycompany.com/logs に公開する。ブラウザを使用してファイルを手動でダウンロードして Cloud Storage にアップロードする。", ko: "로그 파일을 www.mycompany.com/logs에 공개한다. 브라우저로 파일을 수동으로 내려받아 Cloud Storage에 업로드한다." },
     D: { en: "cron を使用して、ログファイルを 1 日に 1 回 Cloud Storage にコピーするジョブをスケジュールする。", ko: "cron을 사용해 로그 파일을 하루에 한 번 Cloud Storage에 복사하는 작업을 예약한다." }
   },
+  explanation: {
+    A: { en: "A. 不正解です。ライブラリを使用することは技術的には可能ですが、保守するコードが大量になります。", ko: "A. 오답입니다. 라이브러리를 쓰는 것은 기술적으로 가능하지만 유지보수할 코드가 많아집니다." },
+    B: { en: "B. 正解です。Cloud Run は stdout と stderr 経由で Cloud Logging に直接的に統合されます。", ko: "B. 정답입니다. Cloud Run은 stdout과 stderr를 통해 Cloud Logging과 직접 통합됩니다." },
+    C: { en: "C. 不正解です。このタスクは手動で実行することが必要になります。さらに、これは最も安全なアプローチではありません。", ko: "C. 오답입니다. 이 작업은 수동으로 실행해야 합니다. 게다가 가장 안전한 방법도 아닙니다." },
+    D: { en: "D. 不正解です。データを Cloud Storage バケットにコピーすることはできますが、これを行ってもログデータを Cloud Logging 内に格納するという目標には役立ちません。", ko: "D. 오답입니다. 데이터를 Cloud Storage 버킷에 복사할 수는 있지만, 로그 데이터를 Cloud Logging에 저장한다는 목표에는 도움이 되지 않습니다." }
+  },
+  refs: ["https://cloud.google.com/run/docs/logging#container-logs", "https://cloud.google.com/logging/docs/reference/libraries"],
   keywords: [
     ["Cloud Run でホスト", "Cloud Run은 컨테이너의 <mark>stdout·stderr를 자동으로 Cloud Logging에 보냄</mark>(에이전트·설정 불필요)", "B"],
     ["保守する必要があるコードの量を最小化", "언어 기본 로거의 출력 대상만 바꿈 → Google 라이브러리 의존성·인증·버전 관리 없음", "B(A 제외)"],
@@ -12025,12 +12229,11 @@ var PROBLEMS = [
 },
 {
   id: 934,
-  title: "외부(공개) IP가 없는 Compute Engine 인스턴스에서 Cloud Storage API 호출 → 서브넷에서 비공개 Google 액세스 사용 설정(限定公開の Google アクセス → プライベート Google アクセス)(추정, 채점 전)",
+  title: "외부(공개) IP가 없는 Compute Engine 인스턴스에서 Cloud Storage API 호출 → 서브넷에서 비공개 Google 액세스 사용 설정(限定公開の Google アクセス → プライベート Google アクセス)",
   added: "2026-11-10",
   tags: ["비공개 Google 액세스", "Private Google Access", "Compute Engine", "Cloud Storage", "VPC", "외부 IP"],
   mine: "D",
   correct: "D",
-  pending: true,
   section: ["1.2", "4.1"],
   freq: "mid",
   freqNote: "네트워크 설정 자체는 PCD 중심이 아니지만, “외부 IP 없는 VM·Pod에서 Google API 호출”은 보안 설계(1.2)·서비스 연동(4.1)에서 자주 나오는 고정 패턴입니다. <b>“외부 IP 없음 + Google API = 비공개 Google 액세스, 인터넷의 다른 곳까지 = Cloud NAT”</b>를 가져가면 됩니다.",
@@ -12044,6 +12247,13 @@ var PROBLEMS = [
     C: { en: "共有 VPC ネットワークを使用する", ko: "공유 VPC 네트워크를 사용한다" },
     D: { en: "限定公開の Google アクセスを使用する", ko: "비공개 Google 액세스를 사용한다" }
   },
+  explanation: {
+    A: { en: "A は不正解です。キャリア ピアリングは、サービス プロバイダ経由で Google Workspace などの Google アプリケーションにアクセスし、エンタープライズ クラスのネットワーク サービスによってインフラストラクチャを Google に接続するためのものです。", ko: "A는 오답입니다. 캐리어 피어링은 서비스 제공업체를 거쳐 Google Workspace 같은 Google 애플리케이션에 접근하고, 엔터프라이즈급 네트워크 서비스로 인프라를 Google에 연결하기 위한 것입니다." },
+    B: { en: "B は不正解です。VPC ネットワーク ピアリングは、異なる VPC ネットワーク内のワークロードがプライベート（RFC 1918）空間で通信できるように、VPC ネットワークをピアリングするためのものです。トラフィックは Google のネットワーク内に留まり、公共のインターネットを経由することはありません。", ko: "B는 오답입니다. VPC 네트워크 피어링은 서로 다른 VPC 네트워크의 워크로드가 비공개(RFC 1918) 공간에서 통신하도록 VPC 네트워크를 피어링하는 것입니다. 트래픽은 Google 네트워크 안에 머물고 공용 인터넷을 거치지 않습니다." },
+    C: { en: "C は不正解です。共有 VPC は、組織内の複数のプロジェクトから共通の VPC ネットワークにリソースを接続し、そのネットワークの内部 IP を使用して安全で効率的な相互通信を行うためのものです。", ko: "C는 오답입니다. 공유 VPC는 조직 안 여러 프로젝트의 리소스를 공통 VPC 네트워크에 연결하고, 그 네트워크의 내부 IP로 안전하고 효율적으로 서로 통신하기 위한 것입니다." },
+    D: { en: "D は正解です。限定公開の Google アクセスは各サブネットワークで使用できます。これを有効にすると、外部 IP アドレスがなくても、サブネットワーク内のインスタンスからパブリック Google API エンドポイントと通信できます。", ko: "D는 정답입니다. 비공개 Google 액세스는 서브네트워크마다 쓸 수 있습니다. 이를 사용 설정하면 외부 IP 주소가 없어도 서브네트워크 안의 인스턴스가 공개 Google API 엔드포인트와 통신할 수 있습니다." }
+  },
+  refs: ["https://cloud.google.com/compute/docs/private-google-access/private-google-access", "https://cloud.google.com/vpc/docs/shared-vpc", "https://cloud.google.com/vpc/docs/vpc-peering", "https://cloud.google.com/interconnect/docs/how-to/carrier-peering"],
   keywords: [
     ["パブリック IP アドレスのない Compute Engine", "내부 IP만 있는 VM은 기본적으로 Google API 공개 엔드포인트에 못 감", "D"],
     ["Cloud Storage API を呼び出す", "목적지가 <mark>Google API·서비스</mark> → 서브넷의 <mark>비공개 Google 액세스</mark>", "D"],
@@ -12071,12 +12281,11 @@ var PROBLEMS = [
 },
 {
   id: 935,
-  title: "로컬에선 빠른데 Compute Engine에 배포하면 성능이 크게 떨어짐, 최소 변경으로 진단 → Cloud Profiler로 시간이 가장 오래 걸리는 함수 파악(Cloud Debugger는 지원 종료)(추정, 채점 전)",
+  title: "로컬에선 빠른데 Compute Engine에 배포하면 성능이 크게 떨어짐, 최소 변경으로 진단 → Cloud Profiler로 시간이 가장 오래 걸리는 함수 파악(Cloud Debugger는 지원 종료)",
   added: "2026-11-10",
   tags: ["Cloud Profiler", "플레임 그래프", "Cloud Debugger", "성능 진단", "Compute Engine", "Cloud Logging"],
   mine: "C",
   correct: "C",
-  pending: true,
   section: "4.3",
   freq: "high",
   freqNote: "관측 가능성(4.3)은 CLAUDE.md high 기준이고, Profiler는 1세트 Q50에 이어 두 번째입니다. <b>“코드의 어느 함수가 느린가·CPU를 먹는가 = Profiler, 서비스 간 어디서 지연 = Trace”</b>를 가져가면 됩니다.",
@@ -12090,6 +12299,13 @@ var PROBLEMS = [
     C: { en: "Cloud Profiler を使用して、アプリケーションのどの関数に最も時間がかかっているのかを判断する。", ko: "Cloud Profiler를 사용해, 애플리케이션의 어느 함수에 가장 시간이 걸리는지 판단한다." },
     D: { en: "アプリケーションにロギング コマンドを追加し、Cloud Logging を使用して、レイテンシの問題がどこで発生しているのかを確認する。", ko: "애플리케이션에 로깅 명령을 추가하고, Cloud Logging을 사용해 지연 문제가 어디서 발생하는지 확인한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。自分のマシンでは動作したのに Google Cloud では動作しないと主張しても有用性はありません。", ko: "A는 오답입니다. 내 컴퓨터에서는 됐는데 Google Cloud에서는 안 된다고 주장해도 쓸모가 없습니다." },
+    B: { en: "B は不正解です。デバッガのスナップショットでは、ある時点のアプリケーションの状況を確認できるのみです。", ko: "B는 오답입니다. 디버거 스냅숏으로는 어느 한 시점의 애플리케이션 상황만 확인할 수 있습니다." },
+    C: { en: "C は正解です。関数ごとのレイテンシと、レイテンシの履歴情報が提供されます。", ko: "C는 정답입니다. 함수별 지연 시간과 지연 시간의 이력 정보가 제공됩니다." },
+    D: { en: "D は不正解です。有効ではありますが、必要な作業量が多くなり、明確で最適な選択肢ではありません。", ko: "D는 오답입니다. 유효하긴 하지만 필요한 작업량이 많아 명확하고 최적인 선택지가 아닙니다." }
+  },
+  refs: ["https://cloud.google.com/profiler/docs/"],
   keywords: [
     ["パフォーマンスが大幅に低下", "실행 환경에서 <mark>어느 함수가 시간·CPU를 쓰는지</mark> 봐야 함 → Cloud Profiler", "C"],
     ["変更は最小限", "Profiler는 에이전트(라이브러리) 시작 코드 몇 줄, 오버헤드 낮아 운영 중 상시 실행 가능", "C(D 제외)"],
@@ -12117,12 +12333,11 @@ var PROBLEMS = [
 },
 {
   id: 936,
-  title: "Cloud Run → Memorystore for Redis 연결 실패로 502 Bad Gateway, 원인은? → 서버리스 VPC 액세스 커넥터를 Cloud Run 서비스와 다른 리전에 구성(커넥터는 같은 리전이어야 함)(추정, 채점 전)",
+  title: "Cloud Run → Memorystore for Redis 연결 실패로 502 Bad Gateway, 원인은? → 서버리스 VPC 액세스 커넥터를 Cloud Run 서비스와 다른 리전에 구성(커넥터는 같은 리전이어야 함)",
   added: "2026-11-10",
   tags: ["Serverless VPC Access", "서버리스 VPC 액세스 커넥터", "Memorystore", "Cloud Run", "리전", "502", "Direct VPC egress"],
   mine: "B",
   correct: "B",
-  pending: true,
   guess: true,
   section: ["1.1", "4.1"],
   freq: "mid",
@@ -12137,6 +12352,13 @@ var PROBLEMS = [
     C: { en: "DevOps チームによるインフラストラクチャの更新中に、Cloud Run と Memorystore の間の接続を許可するファイアウォール ルールが削除された。", ko: "DevOps 팀의 인프라 업데이트 중에, Cloud Run과 Memorystore 사이의 연결을 허용하는 방화벽 규칙이 삭제되었다." },
     D: { en: "Cloud Run サービスとは異なるリージョンの、異なるサブネットのサーバーレス VPC アクセス コネクタを使用するようにアプリケーションを構成した。", ko: "Cloud Run 서비스와 다른 리전의, 다른 서브넷의 서버리스 VPC 액세스 커넥터를 사용하도록 애플리케이션을 구성했다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。Cloud Run はサーバーレス VPC コネクタ経由で Memorystore に接続します。プライベート ネットワークで接続するため、パブリック アドレスは必要ありません。", ko: "A는 오답입니다. Cloud Run은 서버리스 VPC 커넥터를 거쳐 Memorystore에 연결합니다. 비공개 네트워크로 연결하므로 공개 주소는 필요하지 않습니다." },
+    B: { en: "B は正解です。すべてのコンポーネントが同じリージョンにある必要があります。", ko: "B는 정답입니다. 모든 구성 요소가 같은 리전에 있어야 합니다." },
+    C: { en: "C は不正解です。Cloud Run と Memorystore の接続に必要なのはサーバーレス VPN コネクタのみです。", ko: "C는 오답입니다. Cloud Run과 Memorystore 연결에 필요한 것은 서버리스 VPN(원문 그대로, VPC의 오기로 보임) 커넥터뿐입니다." },
+    D: { en: "D は不正解です。サーバーレス VPC コネクタは、VPC とは関連しない重複しないサブネットを使用して構成されます。", ko: "D는 오답입니다. 서버리스 VPC 커넥터는 VPC와 관련 없는, 겹치지 않는 서브넷을 사용해 구성됩니다." }
+  },
+  refs: ["https://cloud.google.com/memorystore/docs/redis/redis-overview#connecting", "https://cloud.google.com/memorystore/docs/redis/connect-redis-instance-cloud-run", "https://cloud.google.com/vpc/docs/configure-serverless-vpc-access#creating_a_connector"],
   keywords: [
     ["Cloud Run と Memorystore for Redis", "Memorystore는 <mark>VPC 내부 IP로만</mark> 접근 → Cloud Run은 서버리스 VPC 액세스 커넥터(또는 Direct VPC egress)가 필요", "B"],
     ["Memorystore に接続されていない", "연결 경로(커넥터) 구성 오류를 찾는 문제", "B"],
@@ -12147,7 +12369,7 @@ var PROBLEMS = [
   ],
   keywordNote: "일본어 표기: サーバーレス VPC アクセス コネクタ, ダイレクト VPC 下り（外向き）(Direct VPC egress), Memorystore for Redis(영어 그대로), 502 Bad Gateway.",
   whyWrong: "",
-  whyRight: "<p>Memorystore for Redis는 <b>공개 IP가 없고 VPC 내부 IP로만</b> 접근합니다. Cloud Run은 VPC 밖에서 돌므로 VPC로 들어가는 길이 필요합니다.</p>\n<div class=\"tbl\"><table><thead><tr><th>방법</th><th>조건</th></tr></thead><tbody><tr><td>서버리스 VPC 액세스 커넥터</td><td>커넥터는 <mark>Cloud Run 서비스와 같은 리전</mark>에 만들고, 자기 전용 /28 서브넷을 씀. 서비스에 <code>--vpc-connector</code>로 연결</td></tr><tr><td>Direct VPC egress(현재 권장)</td><td>커넥터 없이 서비스가 같은 리전의 서브넷에 직접 연결(<code>--network --subnet</code>)</td></tr></tbody></table></div>\n<p>커넥터를 다른 리전에 만들면 Cloud Run이 쓸 수 없어 VPC 경로가 없고, Redis 연결이 실패해 앱이 오류를 내며 502가 납니다.</p>\n<p><b>B와 D의 차이</b>: 둘 다 “다른 리전”이지만, D는 “앱(코드)이 커넥터를 쓰도록 구성”이라는 잘못된 전제(커넥터는 Cloud Run 서비스 설정)와 “다른 서브넷”이라는 무관한 조건이 섞여 있습니다. 커넥터는 원래 앱 서브넷과 다른 전용 서브넷을 쓰므로 서브넷 차이는 원인이 아닙니다. 그래서 순수한 원인 하나만 담은 B가 답으로 보입니다(<b>확신도 중간</b>).</p>\n<p><b>기존 문제와 비교</b>: 커넥터로 Cloud SQL 비공개 IP에 가는 <button class=\"qref\" data-id=\"314\">3세트 Q14</button>, <button class=\"qref\" data-id=\"4\">Q4</button>와 같은 경로 문제입니다. 세션 = Memorystore는 <button class=\"qref\" data-id=\"926\">공식 모의고사 Q26</button>.</p>",
+  whyRight: "<p>Memorystore for Redis는 <b>공개 IP가 없고 VPC 내부 IP로만</b> 접근합니다. Cloud Run은 VPC 밖에서 돌므로 VPC로 들어가는 길이 필요합니다.</p>\n<div class=\"tbl\"><table><thead><tr><th>방법</th><th>조건</th></tr></thead><tbody><tr><td>서버리스 VPC 액세스 커넥터</td><td>커넥터는 <mark>Cloud Run 서비스와 같은 리전</mark>에 만들고, 자기 전용 /28 서브넷을 씀. 서비스에 <code>--vpc-connector</code>로 연결</td></tr><tr><td>Direct VPC egress(현재 권장)</td><td>커넥터 없이 서비스가 같은 리전의 서브넷에 직접 연결(<code>--network --subnet</code>)</td></tr></tbody></table></div>\n<p>커넥터를 다른 리전에 만들면 Cloud Run이 쓸 수 없어 VPC 경로가 없고, Redis 연결이 실패해 앱이 오류를 내며 502가 납니다.</p>\n<p><b>B와 D의 차이</b>: 둘 다 “다른 리전”이지만, D는 “앱(코드)이 커넥터를 쓰도록 구성”이라는 잘못된 전제(커넥터는 Cloud Run 서비스 설정)와 “다른 서브넷”이라는 무관한 조건이 섞여 있습니다. 커넥터는 원래 앱 서브넷과 다른 전용 서브넷을 쓰므로 서브넷 차이는 원인이 아닙니다. 그래서 순수한 원인 하나만 담은 B가 답으로 보입니다(공식 해설: “모든 구성 요소가 같은 리전에 있어야 한다”, D는 “커넥터는 VPC와 관련 없는 겹치지 않는 서브넷으로 구성”).</p>\n<p><b>기존 문제와 비교</b>: 커넥터로 Cloud SQL 비공개 IP에 가는 <button class=\"qref\" data-id=\"314\">3세트 Q14</button>, <button class=\"qref\" data-id=\"4\">Q4</button>와 같은 경로 문제입니다. 세션 = Memorystore는 <button class=\"qref\" data-id=\"926\">공식 모의고사 Q26</button>.</p>",
   others: {
     A: "Memorystore for Redis는 원래 공개 IP 없이 VPC 내부 IP만 가지므로 정상 구성이고, 원인이 될 수 없습니다.",
     C: "VPC는 기본적으로 이그레스를 허용하고, Memorystore는 Google 서비스 제작자 네트워크(비공개 서비스 액세스)에 있어 사용자가 만든 “허용 규칙”이 원래 필요하지 않습니다. 이그레스 거부 규칙을 추가한 경우가 아니면 원인이 되지 않습니다.",
@@ -12164,12 +12386,11 @@ var PROBLEMS = [
 },
 {
   id: 937,
-  title: "모놀리스를 GKE 마이크로서비스로 이전, 공유 파일 시스템의 구성 파일을 여러 인스턴스가 읽고 씀, 이전 작업 최소·코드 재작성 없음 → Filestore를 NFS PersistentVolume(ReadWriteMany)으로 마운트(ConfigMap은 읽기 전용)(추정, 채점 전)",
+  title: "모놀리스를 GKE 마이크로서비스로 이전, 공유 파일 시스템의 구성 파일을 여러 인스턴스가 읽고 씀, 이전 작업 최소·코드 재작성 없음 → Filestore를 NFS PersistentVolume(ReadWriteMany)으로 마운트(ConfigMap은 읽기 전용)",
   added: "2026-11-10",
   tags: ["Filestore", "NFS", "PersistentVolume", "ReadWriteMany", "ConfigMap", "Cloud Storage FUSE", "영구 디스크", "GKE 이전"],
   mine: "D",
   correct: "C",
-  pending: true,
   guess: true,
   section: ["3.2", "4.1"],
   freq: "mid",
@@ -12184,6 +12405,13 @@ var PROBLEMS = [
     C: { en: "新しい Filestore インスタンスを作成し、その Volume を nfs PersistentVolume としてマウントする。", ko: "새 Filestore 인스턴스를 만들고, 그 볼륨을 nfs PersistentVolume으로 마운트한다." },
     D: { en: "構成ファイルのコンテンツを格納するための新しい ConfigMap と volumeMount を作成する。", ko: "구성 파일 내용을 저장하기 위한 새 ConfigMap과 volumeMount를 만든다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。Cloud Storage FUSE は同時実行とファイルのロックをサポートしていません。", ko: "A는 오답입니다. Cloud Storage FUSE는 동시 실행과 파일 잠금을 지원하지 않습니다." },
+    B: { en: "B は不正解です。永続ディスク PersistentVolume は読み取り / 書き込み（複数回）ではありません。読み取り / 書き込み（1 回）か、読み取り（複数回）にのみできます。", ko: "B는 오답입니다. 영구 디스크 PersistentVolume은 ReadWriteMany가 아닙니다. ReadWriteOnce나 ReadOnlyMany만 가능합니다." },
+    C: { en: "C は正解です。GKE でのファイルシステム アクセスで使用できる、マネージド読み取り / 書き込み（複数回）ストレージ オプションとして、これのみがサポートされます。", ko: "C는 정답입니다. GKE에서 파일 시스템 접근에 쓸 수 있는 관리형 ReadWriteMany 스토리지 옵션으로는 이것만 지원됩니다." },
+    D: { en: "D は不正解です。ConfigMap に Pod から書き込むことはできません。", ko: "D는 오답입니다. Pod에서 ConfigMap에 쓸 수 없습니다." }
+  },
+  refs: ["https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes", "https://cloud.google.com/filestore/docs/accessing-fileshares", "https://cloud.google.com/storage/docs/gcs-fuse"],
   keywords: [
     ["共有ファイル システム", "지금 NFS 같은 공유 파일 시스템을 씀 → 그대로 옮길 곳 = <mark>Filestore(관리형 NFS)</mark>", "C"],
     ["複数のインスタンスが…読み取りと書き込み", "여러 Pod가 동시에 <mark>읽기·쓰기</mark> = ReadWriteMany(RWX) 볼륨", "C(B·D 제외)"],
@@ -12213,12 +12441,11 @@ var PROBLEMS = [
 },
 {
   id: 938,
-  title: "인증 서비스 → 감사 서비스 이벤트를 Pub/Sub로 분리(각자 VM 풀), 대량 메시지·효율적 확장 → 토픽 1개 + pull 구독 1개(감사 VM 전체가 같은 구독을 나눠 처리)(추정, 채점 전)",
+  title: "인증 서비스 → 감사 서비스 이벤트를 Pub/Sub로 분리(각자 VM 풀), 대량 메시지·효율적 확장 → 토픽 1개 + pull 구독 1개(감사 VM 전체가 같은 구독을 나눠 처리)",
   added: "2026-11-10",
   tags: ["Pub/Sub", "pull 구독", "push 구독", "토픽 설계", "구독 설계", "작업 분산", "Compute Engine MIG"],
   mine: "A",
   correct: "A",
-  pending: true,
   guess: true,
   section: ["1.1", "4.1"],
   freq: "high",
@@ -12234,6 +12461,14 @@ var PROBLEMS = [
     D: { en: "認証サービス インスタンスごとに 1 つの Pub/Sub トピックを作成する。トピックごとに 1 つの pull サブスクリプションを作成する。", ko: "인증 서비스 인스턴스마다 Pub/Sub 토픽을 1개씩 만든다. 토픽마다 pull 구독을 1개씩 만든다." },
     E: { en: "認証サービス インスタンスごとに 1 つの Pub/Sub トピックを作成する。トピックごとに 1 つの push サブスクリプションを作成する。", ko: "인증 서비스 인스턴스마다 Pub/Sub 토픽을 1개씩 만든다. 토픽마다 push 구독을 1개씩 만든다." }
   },
+  explanation: {
+    A: { en: "A は正解です。これは最も柔軟にスケーリングできる方法で、認証サービスと監査サービスを負荷に応じて独立してサイズ設定できます。", ko: "A는 정답입니다. 가장 유연하게 확장할 수 있는 방법으로, 인증 서비스와 감사 서비스를 부하에 따라 독립적으로 크기 조정할 수 있습니다." },
+    B: { en: "B は不正解です。サブスクリプションごとにコピーが作成され、メッセージが重複します。", ko: "B는 오답입니다. 구독마다 사본이 만들어져 메시지가 중복됩니다." },
+    C: { en: "C は不正解です。システムをスケーリングできるものの、push サブスクリプションは、大量のメッセージの処理には適していません。", ko: "C는 오답입니다. 시스템을 확장할 수는 있지만 push 구독은 대량 메시지 처리에 적합하지 않습니다." },
+    D: { en: "D は不正解です。システムをスケーリングできるものの、それぞれの監査サービスがすべてのサブスクリプションをリッスンすることになります。", ko: "D는 오답입니다. 시스템을 확장할 수는 있지만 각 감사 서비스가 모든 구독을 수신해야 합니다." },
+    E: { en: "E は不正解です。システムをスケーリングできるものの、それぞれの監査サービスがすべてのサブスクリプションをリッスンすることが必要になります。さらに、push サブスクリプションは、大量のメッセージの処理には適していません。", ko: "E는 오답입니다. 시스템을 확장할 수는 있지만 각 감사 서비스가 모든 구독을 수신해야 합니다. 게다가 push 구독은 대량 메시지 처리에 적합하지 않습니다." }
+  },
+  refs: ["https://cloud.google.com/pubsub/docs/subscriber#push-subscription"],
   keywords: [
     ["認証サービスから監査サービスに", "보내는 쪽 1종류, 받는 쪽 1종류 → <mark>토픽 1개</mark>(인스턴스 수와 무관)", "A·B·C(D·E 제외)"],
     ["監査サービスの VM プール", "같은 구독에 붙은 여러 구독자가 메시지를 <mark>나눠 받음</mark>(경쟁 소비자) → 구독 1개", "A(B 제외)"],
@@ -12262,12 +12497,11 @@ var PROBLEMS = [
 },
 {
   id: 939,
-  title: "이전 막바지에 폐지 예정 웹 API(Python 3.x)를 현대화, 월말 피크 자동 확장 + 잦은 새 버전 배포 + 비용·작업·운영 최소 → 코드를 현대화해 Cloud Run에 배포(추정, 채점 전)",
+  title: "이전 막바지에 폐지 예정 웹 API(Python 3.x)를 현대화, 월말 피크 자동 확장 + 잦은 새 버전 배포 + 비용·작업·운영 최소 → 코드를 현대화해 Cloud Run에 배포",
   added: "2026-11-10",
   tags: ["Cloud Run", "플랫폼 선택", "App Engine 가변형", "GKE", "Compute Engine", "현대화", "자동 확장"],
   mine: "B",
   correct: "B",
-  pending: true,
   section: "1.1",
   freq: "high",
   freqNote: "실행 플랫폼 선택(1.1)은 CLAUDE.md high 기준으로, 공식 모의고사 Q7·Q30에 이어 세 번째 Cloud Run 선택 문제입니다. <b>“HTTP API + 자동 확장 + 빠른 배포 + 비용·운영 최소 = Cloud Run”</b>을 가져가면 됩니다.",
@@ -12281,6 +12515,13 @@ var PROBLEMS = [
     C: { en: "モダナイズしたアプリケーションを n1-standard-1 Compute Engine インスタンスにデプロイする。", ko: "현대화한 애플리케이션을 n1-standard-1 Compute Engine 인스턴스에 배포한다." },
     D: { en: "GKE でのコンテナとして実行されるようにアプリケーションを作り直すことを開発チームに依頼する。", ko: "GKE에서 컨테이너로 실행되도록 애플리케이션을 다시 만들어 달라고 개발팀에 요청한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。このアプローチはすべての要件を満たしますが、費用が最小ではありません。App Engine フレキシブルでは、常に 1 つ以上のインスタンスがオンラインになります。", ko: "A는 오답입니다. 이 방법은 모든 요건을 충족하지만 비용이 최소가 아닙니다. App Engine 가변형 환경에서는 항상 인스턴스가 하나 이상 온라인 상태입니다." },
+    B: { en: "B は正解です。Cloud Run はすべての要件を満たします。従量課金制で、0 インスタンスから自動スケーリングするように設計され、秒単位でデプロイできます。", ko: "B는 정답입니다. Cloud Run은 모든 요건을 충족합니다. 사용량 과금이고, 인스턴스 0개에서 자동 확장하도록 설계되었으며, 초 단위로 배포할 수 있습니다." },
+    C: { en: "C は不正解です。解決策にはなりますが、要件をすべて満たすわけではありません。単一インスタンスは自動的にスケーリングしません。さらに、すべての要件を満たすには、追加の作業と継続的なサーバー管理や設定などが必要になります。", ko: "C는 오답입니다. 해결책은 되지만 요건을 모두 충족하지는 않습니다. 단일 인스턴스는 자동으로 확장되지 않습니다. 또 모든 요건을 충족하려면 추가 작업과 지속적인 서버 관리·설정 등이 필요합니다." },
+    D: { en: "D は不正解です。要件をすべて満たしますが、費用や作業が最小ではありません。", ko: "D는 오답입니다. 요건은 모두 충족하지만 비용과 작업이 최소가 아닙니다." }
+  },
+  refs: ["https://cloud.google.com/appengine/docs/flexible", "https://cloud.google.com/appengine/docs/the-appengine-environments", "https://cloud.google.com/run/docs/overview/what-is-cloud-run"],
   keywords: [
     ["毎月末…自動スケーリング", "평소엔 적고 월말에 급증 → 요청 기반 자동 확장 + <mark>0까지 축소</mark>", "B(C 제외)"],
     ["新しいバージョンをすばやくデプロイ", "<code>gcloud run deploy --source</code>로 빌드·배포, 리비전·트래픽 분할로 즉시 전환·롤백", "B"],
@@ -12308,12 +12549,11 @@ var PROBLEMS = [
 },
 {
   id: 940,
-  title: "클라이언트 라이브러리 없는 언어로 REST API 직접 호출, Cloud Run의 연결된 서비스 계정을 인증 ID로 → 메타데이터 서버에서 액세스 토큰을 받아 Authorization 헤더(Bearer)로 전달(추정, 채점 전)",
+  title: "클라이언트 라이브러리 없는 언어로 REST API 직접 호출, Cloud Run의 연결된 서비스 계정을 인증 ID로 → 메타데이터 서버에서 액세스 토큰을 받아 Authorization 헤더(Bearer)로 전달",
   added: "2026-11-10",
   tags: ["메타데이터 서버", "액세스 토큰", "서비스 계정", "Cloud Run", "REST API", "ADC", "GOOGLE_APPLICATION_CREDENTIALS", "API 키"],
   mine: "C",
   correct: "B",
-  pending: true,
   guess: true,
   section: ["1.2", "4.2"],
   freq: "high",
@@ -12328,6 +12568,13 @@ var PROBLEMS = [
     C: { en: "GOOGLE_APPLICATION_CREDENTIALS 環境変数の値として、サービス アカウントの API キーを使用する。", ko: "GOOGLE_APPLICATION_CREDENTIALS 환경 변수의 값으로 서비스 계정의 API 키를 사용한다." },
     D: { en: "gcloud auth application-default print-access-token の値を、スタートアップ時に GOOGLE_APPLICATION_CREDENTIALS 環境変数にパスが設定されたファイルに保存する。", ko: "gcloud auth application-default print-access-token의 값을, 시작 시 GOOGLE_APPLICATION_CREDENTIALS 환경 변수에 경로가 설정된 파일에 저장한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。API キーは認可トークンとは異なり、HTTP リクエストの Authorization ヘッダーで渡された場合は考慮されません。", ko: "A는 오답입니다. API 키는 인가 토큰과 달리, HTTP 요청의 Authorization 헤더로 넘겨도 고려되지 않습니다." },
+    B: { en: "B は正解です。メタデータ サーバーから取得して HTTP リクエストの Authorization ヘッダーで Google Cloud に渡したアクセス トークンは、サービス アカウントとして正常に認証に利用できます。", ko: "B는 정답입니다. 메타데이터 서버에서 받아 HTTP 요청의 Authorization 헤더로 Google Cloud에 넘긴 액세스 토큰은 서비스 계정으로서 정상적으로 인증에 쓸 수 있습니다." },
+    C: { en: "C は不正解です。GOOGLE_APPLICATION_CREDENTIALS には、API キーの値ではなく、アクセス トークンを含むファイルの名前を設定する必要があります。", ko: "C는 오답입니다. GOOGLE_APPLICATION_CREDENTIALS에는 API 키 값이 아니라 액세스 토큰(원문 그대로, 실제로는 자격 증명 JSON)을 담은 파일 이름을 설정해야 합니다." },
+    D: { en: "D は不正解です。GOOGLE_APPLICATION_CREDENTIALS は、アクセス トークンではなく、API キーを含むファイルを参照するために使用されます。", ko: "D는 오답입니다. GOOGLE_APPLICATION_CREDENTIALS는 액세스 토큰이 아니라 API 키(원문 그대로, 실제로는 서비스 계정 키 JSON)를 담은 파일을 가리키는 데 씁니다." }
+  },
+  refs: ["https://developers.google.com/identity/protocols/oauth2?#4.-send-the-access-token-to-an-api.", "https://cloud.google.com/run/docs/container-contract#metadata-server", "https://cloud.google.com/run/docs/securing/service-identity"],
   keywords: [
     ["Cloud クライアント ライブラリに対応していない", "ADC를 자동으로 해 주는 라이브러리가 없음 → 토큰을 <mark>직접</mark> 받아야 함", "B(C·D 제외)"],
     ["REST API 呼び出し", "요청마다 <code>Authorization: Bearer ACCESS_TOKEN</code> 헤더 필요", "B"],
@@ -12354,12 +12601,11 @@ var PROBLEMS = [
 },
 {
   id: 941,
-  title: "Cloud Run 웹 앱이 계정 도메인과 관계없이 각 사용자의 Google Drive에 파일 쓰기 → OAuth 클라이언트 ID + drive.file 스코프로 사용자마다 액세스 토큰 받기(도메인 전체 위임 아님)(추정, 채점 전)",
+  title: "Cloud Run 웹 앱이 계정 도메인과 관계없이 각 사용자의 Google Drive에 파일 쓰기 → OAuth 클라이언트 ID + drive.file 스코프로 사용자마다 액세스 토큰 받기(도메인 전체 위임 아님)",
   added: "2026-11-10",
   tags: ["OAuth 2.0", "OAuth 클라이언트 ID", "스코프", "drive.file", "도메인 전체 위임", "서비스 계정", "Google Drive API"],
   mine: "C",
   correct: "C",
-  pending: true,
   guess: true,
   section: "1.2",
   freq: "mid",
@@ -12374,6 +12620,13 @@ var PROBLEMS = [
     C: { en: "OAuth クライアント ID と https://www.googleapis.com/auth/drive.file スコープを使用して、 各ユーザーのアクセス トークンを取得する。", ko: "OAuth 클라이언트 ID와 https://www.googleapis.com/auth/drive.file 스코프를 사용해 각 사용자의 액세스 토큰을 받는다." },
     D: { en: "サービス アカウントと https://www.googleapis.com/auth/drive.file スコープを使用して、署名付き JSON Web Token（JWT）を生成する。", ko: "서비스 계정과 https://www.googleapis.com/auth/drive.file 스코프를 사용해 서명된 JSON 웹 토큰(JWT)을 생성한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。OAuth クライアント ID にはドメイン全体の権限を付与できません。", ko: "A는 오답입니다. OAuth 클라이언트 ID에는 도메인 전체 권한을 부여할 수 없습니다." },
+    B: { en: "B は不正解です。機能するユーザーが限定されます（委任されたドメイン全体の権限を付与した元のドメインのユーザーのみ）。", ko: "B는 오답입니다. 동작하는 사용자가 한정됩니다(도메인 전체 권한을 위임한 원래 도메인의 사용자만)." },
+    C: { en: "C は正解です。OAuth 2.0 ウェブ認可はすべてのユーザーに対して機能する一方、ドメイン委任は単一のドメインに対してのみ機能します。", ko: "C는 정답입니다. OAuth 2.0 웹 인가는 모든 사용자에게 동작하는 반면, 도메인 위임은 단일 도메인에만 동작합니다." },
+    D: { en: "D は不正解です。ユーザーのドライブには書き込まれません。また、署名付き JWT を使用して Drive API に対して認証することはできません。", ko: "D는 오답입니다. 사용자의 드라이브에는 쓰이지 않습니다. 또 서명된 JWT로 Drive API에 인증할 수 없습니다." }
+  },
+  refs: ["https://developers.google.com/identity/protocols/OAuth2"],
   keywords: [
     ["そのユーザーのドライブに書き込む", "데이터 주인이 <mark>사용자 본인</mark> → 사용자의 동의를 받은 OAuth 액세스 토큰 필요", "C(D 제외)"],
     ["アカウント ドメインがどれであるかに関係なく", "여러 조직·개인 Gmail 사용자 → 한 도메인 관리자가 주는 <mark>도메인 전체 위임</mark>은 불가", "C(A·B 제외)"],
@@ -12400,12 +12653,11 @@ var PROBLEMS = [
 },
 {
   id: 942,
-  title: "전 세계 사용자의 대량 투표를 30분마다 주제별 집계 + 향후 분석용으로 보존 → Pub/Sub로 게시 → Dataflow 파이프라인(30분 윈도 집계)으로 집계값·원본 투표를 BigQuery에 → Looker Studio(옛 Google データポータル)(추정, 채점 전)",
+  title: "전 세계 사용자의 대량 투표를 30분마다 주제별 집계 + 향후 분석용으로 보존 → Pub/Sub로 게시 → Dataflow 파이프라인(30분 윈도 집계)으로 집계값·원본 투표를 BigQuery에 → Looker Studio(옛 Google データポータル)",
   added: "2026-11-10",
   tags: ["Pub/Sub", "Dataflow", "BigQuery", "Looker Studio", "스트리밍 집계", "윈도", "Cloud Run functions"],
   mine: "B",
   correct: "B",
-  pending: true,
   section: ["1.3", "4.1"],
   freq: "mid",
   freqNote: "PCD 범위에서는 1.3 “分析と AI / ML ワークロードのための BigQuery へのデータの書き込み”에 해당합니다. Dataflow 세부는 PDE 영역이라 <b>“대량 이벤트 수집 + 주기 집계 + 분석 보존 = Pub/Sub → Dataflow → BigQuery”</b> 정석 파이프라인만 가져가면 됩니다.",
@@ -12419,6 +12671,13 @@ var PROBLEMS = [
     C: { en: "Pub/Sub に票をパブリッシュした後、Cloud Run functions を使用して集計値と票を Cloud Storage に挿入し、結果を Google データポータルで表示する。", ko: "Pub/Sub에 표를 게시한 뒤, Cloud Run functions로 집계값과 표를 Cloud Storage에 삽입하고, 결과를 Google 데이터 포털에서 표시한다." },
     D: { en: "Firebase でモバイル ユーザーを認証し、票を直接 Firestore にパブリッシュする。その後、票を CSV ファイルにエクスポートしてから、レポートのためにスプレッドシートにインポートする。", ko: "Firebase로 모바일 사용자를 인증하고, 표를 직접 Firestore에 게시한다. 그 후 표를 CSV 파일로 내보낸 다음, 보고를 위해 스프레드시트로 가져온다." }
   },
+  explanation: {
+    A: { en: "A. 不正解です。Memorystore は永続的なデータストアではないため、投票が失われる可能性があります。", ko: "A. 오답입니다. Memorystore는 영구 데이터 저장소가 아니라 투표가 사라질 수 있습니다." },
+    B: { en: "B. 正解です。Pub/Sub では、1 秒あたり数百万件のレコードを取り込むことができ、メッセージの配信も保証されています。Dataflow は、トピック別にグループ化されたウィンドウ内の票を集計できます。分析には BigQuery を使用することが推奨されます。", ko: "B. 정답입니다. Pub/Sub은 초당 수백만 건의 레코드를 받을 수 있고 메시지 전달도 보장됩니다. Dataflow는 주제별로 묶은 윈도 안의 표를 집계할 수 있습니다. 분석에는 BigQuery를 쓰는 것이 권장됩니다." },
+    C: { en: "C. 不正解です。Cloud Run functions でウィンドウ処理とグループ化を行うには、中間データストアに状態を保存する必要があります。また、元データを blob ストアに保存すると、データポータルでの分析が非効率になります。", ko: "C. 오답입니다. Cloud Run functions로 윈도 처리와 그룹화를 하려면 중간 데이터 저장소에 상태를 저장해야 합니다. 또 원본 데이터를 blob 저장소에 두면 데이터 포털(현 Looker Studio)에서의 분석이 비효율적입니다." },
+    D: { en: "D. 不正解です。Google スプレッドシートで実行できるグループ化および分析オペレーションには制限があります。", ko: "D. 오답입니다. Google 스프레드시트에서 할 수 있는 그룹화·분석 작업에는 제한이 있습니다." }
+  },
+  refs: ["https://cloud.google.com/pubsub/docs/publisher", "https://cloud.google.com/dataflow/docs/concepts/streaming-pipelines#windows", "https://cloud.google.com/functions", "https://cloud.google.com/memorystore/", "https://cloud.google.com/bigquery/docs/visualize-data-studio"],
   keywords: [
     ["非常に多くの投票(世界中)", "급증하는 쓰기를 받아 줄 버퍼 → <mark>Pub/Sub</mark>", "B·C"],
     ["30 分ごとに…集計", "스트리밍 <mark>윈도 집계</mark>(30분 고정 윈도) = Dataflow", "B(C 제외)"],
@@ -12446,12 +12705,11 @@ var PROBLEMS = [
 },
 {
   id: 943,
-  title: "Cloud Build로 함수 배포 → 테스트 → 삭제(정리)하는데 테스트 실패 시 삭제가 안 됨 → 테스트 단계는 결과를 파일(/workspace)에 쓰고 0 반환, 삭제 뒤에 파일을 검사해 실패시키는 단계 추가(환경 변수는 단계 간 유지 안 됨)(추정, 채점 전)",
+  title: "Cloud Build로 함수 배포 → 테스트 → 삭제(정리)하는데 테스트 실패 시 삭제가 안 됨 → 테스트 단계는 결과를 파일(/workspace)에 쓰고 0 반환, 삭제 뒤에 파일을 검사해 실패시키는 단계 추가(환경 변수는 단계 간 유지 안 됨)",
   added: "2026-11-10",
   tags: ["Cloud Build", "빌드 단계", "종료 코드", "/workspace", "waitFor", "allowFailure", "Cloud Run functions", "정리 단계"],
   mine: "B",
   correct: "C",
-  pending: true,
   guess: true,
   section: ["2.2", "2.3"],
   freq: "mid",
@@ -12466,6 +12724,13 @@ var PROBLEMS = [
     C: { en: "Cloud Build ステップで Cloud Run functions 関数の結果をファイルに書き込み、0 を返すようにする。そのファイルに予想どおりの結果が含まれるかどうかを確認し、期待される結果でない場合は失敗とするステップを、Cloud Run functions 関数の削除の後に追加する。", ko: "Cloud Build 단계에서 Cloud Run functions 함수의 결과를 파일에 쓰고 0을 반환하게 한다. 그 파일에 예상한 결과가 들어 있는지 확인해, 기대한 결과가 아니면 실패로 처리하는 단계를 Cloud Run functions 함수 삭제 뒤에 추가한다." },
     D: { en: "Cloud Build ステップで結果を「result」という環境変数に設定し、0 を返すようにする。その環境変数に予想どおりの結果が含まれるかどうかを確認する最後のステップを、Cloud Run functions 関数の削除の後に追加する。", ko: "Cloud Build 단계에서 결과를 “result”라는 환경 변수에 설정하고 0을 반환하게 한다. 그 환경 변수에 예상한 결과가 들어 있는지 확인하는 마지막 단계를 Cloud Run functions 함수 삭제 뒤에 추가한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。Cloud Run functions 関数を削除すると、テストできません。", ko: "A는 오답입니다. Cloud Run functions 함수를 삭제하면 테스트할 수 없습니다." },
+    B: { en: "B は不正解です。Cloud Build の waitFor はステップを同期するために使用します。あるステップで waitFor 内の直前のステップが特定され、直前のステップが失敗した場合、Cloud Build 全体が機能しなくなり、関数は削除されません。", ko: "B는 오답입니다. Cloud Build의 waitFor는 단계를 동기화하는 데 씁니다. 어떤 단계의 waitFor에 직전 단계가 지정되어 있고 그 직전 단계가 실패하면, Cloud Build 전체가 멈춰 함수는 삭제되지 않습니다." },
+    C: { en: "C は正解です。Cloud Build 内にはステップ間で共有される永続ファイル システムがあります。正しい方法は次のとおりです。(1) Cloud Run functions 関数をデプロイする。(2) Cloud Run functions 関数の呼び出し結果をファイルに保存する。(3) Cloud Run functions 関数を削除する。\nファイルの内容をテストする。(4) ステップ 2 が失敗なく行われるようになるので、ステップ 3 が実行され、ステップ 4 でビルド全体の結果が判明します。", ko: "C는 정답입니다. Cloud Build 안에는 단계 간에 공유되는 영구 파일 시스템이 있습니다. 올바른 방법은 다음과 같습니다. (1) Cloud Run functions 함수를 배포한다. (2) 함수 호출 결과를 파일에 저장한다. (3) 함수를 삭제한다.\n파일 내용을 테스트한다. (4) 단계 2가 실패 없이 끝나므로 단계 3이 실행되고, 단계 4에서 빌드 전체 결과가 정해집니다." },
+    D: { en: "D は不正解です。環境変数は、ステップが実行されるコンテナ内にローカルに存在します。ステップが完了すると、コンテナは破棄されて環境変数も一緒になくなります。したがって、その環境変数は以後のステップでは使用できず、個別のステップ間の連携に利用することはできなくなります。", ko: "D는 오답입니다. 환경 변수는 단계가 실행되는 컨테이너 안에만 존재합니다. 단계가 끝나면 컨테이너가 폐기되어 환경 변수도 함께 사라집니다. 따라서 이후 단계에서 쓸 수 없고, 단계 간 연계에 이용할 수 없습니다." }
+  },
+  refs: ["https://cloud.google.com/cloud-build/docs/configuring-builds/configure-build-step-order", "https://cloud.google.com/cloud-build/docs/configuring-builds/create-basic-configuration", "https://cloud.google.com/cloud-build/docs/build-config"],
   keywords: [
     ["テストに失敗すると関数が削除されない", "단계가 <mark>0이 아닌 종료 코드</mark>로 끝나면 Cloud Build는 <mark>빌드를 즉시 중단</mark> → 뒤의 삭제 단계가 실행되지 않음", "C"],
     ["結果をファイルに書き込み、0 を返す(C)", "테스트 단계는 항상 성공으로 끝내 삭제까지 진행, 결과는 <mark>/workspace 파일</mark>로 넘김", "C"],
@@ -12493,12 +12758,11 @@ var PROBLEMS = [
 },
 {
   id: 944,
-  title: "GKE 클러스터의 CPU 부하가 하루 내내 변동, 비용 최소·성능 최대로 Pod와 노드 수 자동 조정 → 클러스터 오토스케일러(노드 수) + CPU 기준 HPA(Pod 수)(추정, 채점 전)",
+  title: "GKE 클러스터의 CPU 부하가 하루 내내 변동, 비용 최소·성능 최대로 Pod와 노드 수 자동 조정 → 클러스터 오토스케일러(노드 수) + CPU 기준 HPA(Pod 수)",
   added: "2026-11-10",
   tags: ["HPA", "클러스터 오토스케일러", "GKE", "VPA", "MIG", "CPU 사용률", "자동 확장"],
   mine: "B",
   correct: "B",
-  pending: true,
   section: "3.2",
   freq: "high",
   freqNote: "GKE 배포·HPA(3.2)는 CLAUDE.md high 기준이고, 1세트 Q16·3세트 Q3·공식 모의고사 Q25와 같은 축입니다. <b>“Pod 수 = HPA, 노드 수 = 클러스터 오토스케일러(노드 풀 MIG를 직접 건드리지 않음)”</b>를 가져가면 됩니다.",
@@ -12512,6 +12776,13 @@ var PROBLEMS = [
     C: { en: "GKE クラスタでクラスタ オートスケーラーを有効にし、カスタム指標に基づいてワークロードを自動スケーリングするよう HPA を構成する。", ko: "GKE 클러스터에서 클러스터 오토스케일러를 사용 설정하고, 커스텀 지표에 따라 워크로드를 자동 확장하도록 HPA를 구성한다." },
     D: { en: "MIG を変更して自動スケーリングを有効にし、CPU 負荷に基づいてノードの最大数と最小数を構成する。また、CPU 負荷に基づいてワークロードをスケールするよう Vertical Pod Autoscaler（VPA）を構成する。", ko: "MIG를 변경해 자동 확장을 사용 설정하고, CPU 부하에 따라 노드의 최대 수와 최소 수를 구성한다. 또 CPU 부하에 따라 워크로드를 확장하도록 Vertical Pod Autoscaler(VPA)를 구성한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。GKE で作成したインスタンス グループで Compute Engine の自動スケーリング機能を使用するべきではありません。", ko: "A는 오답입니다. GKE가 만든 인스턴스 그룹에서 Compute Engine 자동 확장 기능을 쓰면 안 됩니다." },
+    B: { en: "B が正解です。Kubernetes Deployment を自動スケーリングするには、この方法がおすすめです。", ko: "B가 정답입니다. Kubernetes Deployment를 자동 확장하려면 이 방법을 권장합니다." },
+    C: { en: "C は不正解です。CPU 指標はデフォルトで有効になっており、カスタム指標は不要です。", ko: "C는 오답입니다. CPU 지표는 기본으로 사용 설정되어 있어 커스텀 지표가 필요 없습니다." },
+    D: { en: "D は不正解です。GKE で作成したインスタンス グループで Compute Engine の自動スケーリング機能を使用するべきではありません。", ko: "D는 오답입니다. GKE가 만든 인스턴스 그룹에서 Compute Engine 자동 확장 기능을 쓰면 안 됩니다." }
+  },
+  refs: ["https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler", "https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-autoscaler", "https://cloud.google.com/kubernetes-engine/docs/how-to/scaling-apps"],
   keywords: [
     ["Pod とノードの数を自動調整", "Pod 수 = <mark>HPA</mark>, 노드 수 = <mark>클러스터 오토스케일러</mark>", "B·C"],
     ["CPU 負荷が…変動", "관측된 지표가 CPU → CPU 기준 HPA(기본 제공 지표)", "B(C 제외)"],
@@ -12539,12 +12810,11 @@ var PROBLEMS = [
 },
 {
   id: 945,
-  title: "Cloud Run Java 앱의 오류가 Error Reporting에 안 보임 → 애플리케이션 오류(스택 트레이스)가 stderr에 쓰이는지 확인(Cloud Logging 경유로 자동 분석)(추정, 채점 전)",
+  title: "Cloud Run Java 앱의 오류가 Error Reporting에 안 보임 → 애플리케이션 오류(스택 트레이스)가 stderr에 쓰이는지 확인(Cloud Logging 경유로 자동 분석)",
   added: "2026-11-10",
   tags: ["Error Reporting", "stderr", "스택 트레이스", "Cloud Run", "Cloud Logging", "Java"],
   mine: "C",
   correct: "C",
-  pending: true,
   guess: true,
   section: "4.3",
   freq: "high",
@@ -12559,6 +12829,13 @@ var PROBLEMS = [
     C: { en: "アプリケーション エラーが stderr に書き込まれることを確認する。", ko: "애플리케이션 오류가 stderr에 쓰이는지 확인한다." },
     D: { en: "System.out.println を使用して例外をログに記録する。", ko: "System.out.println을 사용해 예외를 로그에 기록한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。Cloud Run でのエラーレポートに外部ライブラリは必要ありません。", ko: "A는 오답입니다. Cloud Run의 오류 보고에 외부 라이브러리는 필요 없습니다." },
+    B: { en: "B は不正解です。Error Reporting はリージョン ログバケットに格納されているログや、他のプロジェクトにルーティングされたログの分析は行いません。", ko: "B는 오답입니다. Error Reporting은 리전 로그 버킷에 저장된 로그나 다른 프로젝트로 라우팅된 로그는 분석하지 않습니다." },
+    C: { en: "C は正解です。Error Reporting で認識されるには、エラーは Cloud Run で stderr に書き込まれる必要があります。", ko: "C는 정답입니다. Error Reporting이 인식하려면 Cloud Run에서 오류가 stderr에 쓰여야 합니다." },
+    D: { en: "D は不正解です。system.out.println は stderr ではなく stdout に出力します。", ko: "D는 오답입니다. System.out.println은 stderr가 아니라 stdout으로 출력합니다." }
+  },
+  refs: ["https://cloud.google.com/error-reporting/docs/troubleshooting", "https://cloud.google.com/run/docs/error-reporting"],
   keywords: [
     ["Cloud Run", "stdout·stderr가 자동으로 Cloud Logging에 들어가고, Error Reporting은 그 로그에서 <mark>스택 트레이스</mark>를 찾아 그룹화", "C"],
     ["エラー メッセージが表示されない", "오류가 Cloud Logging에 오류(스택 트레이스) 형태로 안 들어오고 있음 → <mark>stderr</mark>로 쓰는지 확인", "C"],
@@ -12585,12 +12862,11 @@ var PROBLEMS = [
 },
 {
   id: 946,
-  title: "미국 인기 멀티플레이어 게임을 다른 리전으로 확장 + 전 세계 사용자 간 포인트 교환, VM의 MySQL이 한계 → 리전 전체의 일관성·고가용성 = Spanner(옛 Cloud Spanner)(추정, 채점 전)",
+  title: "미국 인기 멀티플레이어 게임을 다른 리전으로 확장 + 전 세계 사용자 간 포인트 교환, VM의 MySQL이 한계 → 리전 전체의 일관성·고가용성 = Spanner(옛 Cloud Spanner)",
   added: "2026-11-10",
   tags: ["Spanner", "저장소 선택", "강한 일관성", "글로벌 트랜잭션", "고가용성", "MySQL 이전", "Cloud SQL", "Bigtable"],
   mine: "C",
   correct: "C",
-  pending: true,
   section: "1.3",
   freq: "high",
   freqNote: "저장소 선택(1.3)은 CLAUDE.md high 기준이고, 3세트 Q47·4세트 Q19와 같은 Spanner 선택 유형입니다. <b>“여러 리전·전 세계 + 거래(포인트 교환) 일관성 + 고가용성 + 관계형 = Spanner”</b>를 가져가면 됩니다.",
@@ -12604,6 +12880,13 @@ var PROBLEMS = [
     C: { en: "Cloud Spanner", ko: "Cloud Spanner" },
     D: { en: "Cloud Bigtable", ko: "Cloud Bigtable" }
   },
+  explanation: {
+    A: { en: "A は不正解です。BigQuery をトランザクション データベースとして使用することはできません。", ko: "A는 오답입니다. BigQuery를 트랜잭션 데이터베이스로 쓸 수 없습니다." },
+    B: { en: "B は不正解です。Cloud SQL では複数のリージョンでの高可用性を実現できません。", ko: "B는 오답입니다. Cloud SQL로는 여러 리전에 걸친 고가용성을 실현할 수 없습니다." },
+    C: { en: "C は正解です。Cloud Spanner のみがグローバルでの整合性と可用性を実現できます。", ko: "C는 정답입니다. Cloud Spanner만이 전 세계 규모의 일관성과 가용성을 실현할 수 있습니다." },
+    D: { en: "D は不正解です。Cloud Bigtable ではグローバルでの可用性を実現できません。", ko: "D는 오답입니다. Cloud Bigtable로는 전 세계 규모의 가용성을 실현할 수 없습니다." }
+  },
+  refs: ["https://cloud.google.com/spanner"],
   keywords: [
     ["他のリージョンにも拡大 / 全世界のユーザー", "여러 리전에 걸친 하나의 DB → 멀티 리전 구성", "C(B 제외)"],
     ["ポイントを交換(ユーザー同士)", "두 사용자 잔액을 함께 바꾸는 <mark>트랜잭션</mark> → 강한 일관성 필요", "C(A·D 제외)"],
@@ -12631,12 +12914,11 @@ var PROBLEMS = [
 },
 {
   id: 947,
-  title: "대량 트래픽 Cloud Run 앱에 변경 배포 시 전체 사용자 영향이 걱정, 전 환경 부하 테스트는 비용상 피하고 빨리 배포 → 트래픽 분할로 일부 사용자부터 점진 확대(추정, 채점 전)",
+  title: "대량 트래픽 Cloud Run 앱에 변경 배포 시 전체 사용자 영향이 걱정, 전 환경 부하 테스트는 비용상 피하고 빨리 배포 → 트래픽 분할로 일부 사용자부터 점진 확대",
   added: "2026-11-10",
   tags: ["Cloud Run", "트래픽 분할", "리비전", "점진적 출시", "카나리", "부하 테스트"],
   mine: "D",
   correct: "D",
-  pending: true,
   section: "1.1",
   freq: "high",
   freqNote: "Cloud Run 트래픽 분할·리비전은 CLAUDE.md high 기준이고, 1세트 Q45와 거의 같은 문제입니다. <b>“전체 영향 걱정 + 빨리 배포 + 부하 테스트 비용 회피 = 트래픽 분할로 일부부터 점진 확대(카나리)”</b>를 가져가면 됩니다.",
@@ -12650,6 +12932,13 @@ var PROBLEMS = [
     C: { en: "ユーザーに新機能へのアクセスを許可する前に、新バージョンとしてデプロイしてスモークテストを行う。その後、全ユーザーが新機能にアクセスできるようにする。", ko: "사용자에게 새 기능 접근을 허용하기 전에 새 버전으로 배포해 스모크 테스트를 한다. 그 후 전체 사용자가 새 기능에 접근할 수 있게 한다." },
     D: { en: "トラフィック分割機能を使用して一部のユーザーに新機能をテストしてもらい、徐々にトラフィック分割を調整しつつ、最終的に全ユーザーが新機能にアクセスできるようにする。", ko: "트래픽 분할 기능을 사용해 일부 사용자에게 새 기능을 테스트하게 하고, 점차 트래픽 분할을 조정하면서 최종적으로 전체 사용자가 새 기능에 접근할 수 있게 한다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。パターン化された A/B テストの実施方法があるため、定期的に個別の負荷テストを行う必要性は小さくなります。", ko: "A는 오답입니다. 정형화된 A/B 테스트 실시 방법이 있으므로 정기적으로 별도 부하 테스트를 할 필요성은 작아집니다." },
+    B: { en: "B は不正解です。本番環境が正確にシミュレートされません。", ko: "B는 오답입니다. 프로덕션 환경이 정확하게 시뮬레이션되지 않습니다." },
+    C: { en: "C は不正解です。説明にあるとおり、スモークテストでは新機能をすぐに全ユーザーに公開することになります。", ko: "C는 오답입니다. 설명대로, 스모크 테스트 방식은 새 기능을 바로 전체 사용자에게 공개하게 됩니다." },
+    D: { en: "D は正解です。トラフィック分割により、全ユーザーに影響を与えることなく実際のユーザーによるテストを行うことができ、負荷テストの費用を削減できます。", ko: "D는 정답입니다. 트래픽 분할로 전체 사용자에게 영향을 주지 않고 실제 사용자로 테스트할 수 있어 부하 테스트 비용을 줄일 수 있습니다." }
+  },
+  refs: ["https://cloud.google.com/run/docs/rollouts-rollbacks-traffic-migration#split-traffic"],
   keywords: [
     ["全ユーザーに悪影響が及ぶことが懸念", "문제가 있어도 <mark>일부 사용자만</mark> 영향을 받게 → 영향 범위(blast radius) 축소", "D(C 제외)"],
     ["全環境での負荷テストは避け", "실제 트래픽 일부로 검증(별도 부하 테스트 불필요)", "D(A·B 제외)"],
@@ -12677,12 +12966,11 @@ var PROBLEMS = [
 },
 {
   id: 948,
-  title: "Compute Engine 웹사이트의 디자인 3종 전환율 테스트, 앱 코드 변경 불가 → Cloud Run에 배포하고 트래픽 분할 사용(리비전 3개 배포만으로는 트래픽이 최신 하나로)(추정, 채점 전)",
+  title: "Compute Engine 웹사이트의 디자인 3종 전환율 테스트, 앱 코드 변경 불가 → Cloud Run에 배포하고 트래픽 분할 사용(리비전 3개 배포만으로는 트래픽이 최신 하나로)",
   added: "2026-11-10",
   tags: ["Cloud Run", "트래픽 분할", "A/B 테스트", "리비전", "전환율", "Cloud Run functions"],
   mine: "A",
   correct: "A",
-  pending: true,
   section: "1.1",
   freq: "high",
   freqNote: "Cloud Run 트래픽 분할은 CLAUDE.md high 기준이고, 2세트 Q38(A/B 테스트 = 가중치 트래픽 분할)과 같은 유형입니다. <b>“여러 버전에 사용자를 나눠 비교 + 코드 변경 없음 = 트래픽 분할(리비전은 그 단위일 뿐)”</b>을 가져가면 됩니다.",
@@ -12696,6 +12984,13 @@ var PROBLEMS = [
     C: { en: "ウェブサイトを 3 つの個別の機能として Cloud Run functions にデプロイする。", ko: "웹사이트를 3개의 개별 함수로 Cloud Run functions에 배포한다." },
     D: { en: "ウェブサイトを Cloud Run functions にデプロイし、カスタムコードを実装して異なるデザインを表示する。", ko: "웹사이트를 Cloud Run functions에 배포하고, 커스텀 코드를 구현해 서로 다른 디자인을 표시한다." }
   },
+  explanation: {
+    A: { en: "A は正解です。この方法により、トラフィックを単一のドメインにルーティングし、割合に基づいてトラフィックを分割できます。", ko: "A는 정답입니다. 이 방법으로 트래픽을 하나의 도메인으로 라우팅하고 비율에 따라 트래픽을 분할할 수 있습니다." },
+    B: { en: "B は不正解です。ドメイン名はリビジョンに基づいて変更されます。", ko: "B는 오답입니다. 도메인 이름이 리비전마다 바뀝니다." },
+    C: { en: "C と D は不正解です。Cloud Run functions はウェブサイトのデプロイには使用できません。", ko: "C와 D는 오답입니다. Cloud Run functions는 웹사이트 배포에 쓸 수 없습니다." },
+    D: { en: "C と D は不正解です。Cloud Run functions はウェブサイトのデプロイには使用できません。", ko: "C와 D는 오답입니다. Cloud Run functions는 웹사이트 배포에 쓸 수 없습니다." }
+  },
+  refs: ["https://cloud.google.com/appengine/docs/standard/python/splitting-traffic"],
   keywords: [
     ["3 つのデザインで…コンバージョン率をテスト", "같은 시간에 사용자를 세 버전으로 <mark>나눠 보내</mark> 비교 = A/B(멀티버리언트) 테스트 → <mark>트래픽 분할</mark>", "A"],
     ["コードを変更することはできない", "분배를 앱이 아니라 플랫폼(Cloud Run)이 해야 함", "A(D 제외)"],
@@ -12721,12 +13016,11 @@ var PROBLEMS = [
 },
 {
   id: 949,
-  title: "Cloud Run으로 모든 Pub/Sub 메시지를 Cloud Storage와 BigQuery 양쪽에 쓰기, 운영 부담 최소 → 토픽 1 + push 구독 2(팬아웃) + Cloud Run 서비스 2(추정, 채점 전)",
+  title: "Cloud Run으로 모든 Pub/Sub 메시지를 Cloud Storage와 BigQuery 양쪽에 쓰기, 운영 부담 최소 → 토픽 1 + push 구독 2(팬아웃) + Cloud Run 서비스 2",
   added: "2026-11-10",
   tags: ["Pub/Sub", "팬아웃", "push 구독", "Cloud Run", "BigQuery", "Cloud Storage", "구독 설계"],
   mine: "A",
   correct: "B",
-  pending: true,
   section: ["1.1", "4.1"],
   freq: "high",
   freqNote: "이벤트 기반 통합(Pub/Sub)은 CLAUDE.md high 기준이고, 바로 앞 공식 모의고사 Q38과 짝을 이루는 문제입니다. <b>“구독마다 모든 메시지 사본(팬아웃), push 구독 하나 = 엔드포인트 하나”</b>를 가져가면 됩니다.",
@@ -12741,6 +13035,13 @@ var PROBLEMS = [
     C: { en: "トピックを 1 つ、サブスクリプションを 1 つ、Cloud Run サービスを 1 つ。（Pub/Sub Topic → Pub/Sub Push Subscription → Write to BigQuery then write to Cloud Storage）", ko: "토픽 1개, 구독 1개, Cloud Run 서비스 1개.(Pub/Sub 토픽 → Pub/Sub push 구독 → BigQuery에 쓴 뒤 Cloud Storage에 쓰기)" },
     D: { en: "トピックを 2 つ、サブスクリプションを 2 つ、Cloud Run サービスを 2 つ。（Pub/Sub Topic → Push Subscription → Write to BigQuery、Pub/Sub Topic → Push Subscription → Write to Cloud Storage）", ko: "토픽 2개, 구독 2개, Cloud Run 서비스 2개.(토픽 → push 구독 → BigQuery 쓰기, 토픽 → push 구독 → Cloud Storage 쓰기)" }
   },
+  explanation: {
+    A: { en: "A は不正解です。この場合、メッセージの半分を BigQuery に書き込み、残りの半分を Cloud Storage に書き込みます。これでは要件を満たしません。", ko: "A는 오답입니다. 이 경우 메시지의 절반은 BigQuery에, 나머지 절반은 Cloud Storage에 씁니다. 이래서는 요건을 충족하지 못합니다." },
+    B: { en: "B は正解です。各 Cloud Run サービスは、書き込むメッセージを個別に取得します。また、再試行、失敗を個別に処理できます。", ko: "B는 정답입니다. 각 Cloud Run 서비스가 쓸 메시지를 따로 받습니다. 또 재시도와 실패를 따로 처리할 수 있습니다." },
+    C: { en: "C は不正解です。1 つのシステムに対するメッセージ処理が失敗すると、BigQuery または Cloud Storage に重複して書き込む原因となる可能性があります。", ko: "C는 오답입니다. 한쪽 시스템에 대한 메시지 처리가 실패하면 BigQuery나 Cloud Storage에 중복으로 쓰는 원인이 될 수 있습니다." },
+    D: { en: "D は不正解です。メッセージ送信の料金が重複します。また、異なる 2 つのトピックにメッセージをそれぞれ送信する必要があります。これではクライアント側で費用が増し、追加のトピックを管理する必要性および複雑度も増加します。", ko: "D는 오답입니다. 메시지 전송 요금이 중복됩니다. 또 서로 다른 두 토픽에 메시지를 각각 보내야 합니다. 클라이언트 쪽 비용이 늘고, 추가 토픽을 관리해야 하는 필요성과 복잡도도 늘어납니다." }
+  },
+  refs: ["https://cloud.google.com/run/docs/triggering/pubsub-push", "https://cloud.google.com/pubsub/docs/admin"],
   keywords: [
     ["すべての…メッセージを…両方に書き込む", "같은 메시지가 <mark>두 곳 모두</mark>에 가야 함 = 팬아웃 → <mark>구독 2개</mark>(구독마다 전체 사본)", "B"],
     ["Push Subscription 1 つ → 2 サービス(A)", "push 구독은 <mark>엔드포인트 하나</mark>만 지정, 한 구독을 둘로 나누지 못함", "A 제외"],
@@ -12767,12 +13068,11 @@ var PROBLEMS = [
 },
 {
   id: 950,
-  title: "Cloud Logging의 중요 감사 로그를 거의 실시간으로 여러 프로세스가 서로 다른 분석 → Pub/Sub 대상 로그 싱크 + Pub/Sub 구독에서 읽기(프로세스마다 구독)(추정, 채점 전)",
+  title: "Cloud Logging의 중요 감사 로그를 거의 실시간으로 여러 프로세스가 서로 다른 분석 → Pub/Sub 대상 로그 싱크 + Pub/Sub 구독에서 읽기(프로세스마다 구독)",
   added: "2026-11-10",
   tags: ["로그 싱크", "Pub/Sub", "Cloud Logging", "감사 로그", "팬아웃", "실시간 분석", "Dataproc"],
   mine: "C",
   correct: "B",
-  pending: true,
   guess: true,
   section: ["4.3", "4.1"],
   freq: "high",
@@ -12787,6 +13087,13 @@ var PROBLEMS = [
     C: { en: "Cloud Logging API から直接読み取る Cloud Run function のエンドポイントを作成し、ログを Dataproc にコピーする。", ko: "Cloud Logging API에서 직접 읽는 Cloud Run function 엔드포인트를 만들고, 로그를 Dataproc에 복사한다." },
     D: { en: "Cloud Storage に対して Cloud Logging シンクを設定し、Cloud Storage バケットからログを読み取る。", ko: "Cloud Storage에 대해 Cloud Logging 싱크를 설정하고, Cloud Storage 버킷에서 로그를 읽는다." }
   },
+  explanation: {
+    A: { en: "A は不正解です。この API には読み取りに関する制限があり、複数の読み取り処理を行うソリューションには適していません。(https://cloud.google.com/logging/quotas)", ko: "A는 오답입니다. 이 API에는 읽기 제한이 있어 여러 읽기 처리를 하는 솔루션에 적합하지 않습니다(https://cloud.google.com/logging/quotas)." },
+    B: { en: "B は正解です。このソリューションはほぼリアルタイムです。（https://cloud.google.com/logging/docs/export/using_exported_logs#pubsub-availability）", ko: "B는 정답입니다. 이 솔루션은 거의 실시간입니다(https://cloud.google.com/logging/docs/export/using_exported_logs#pubsub-availability)." },
+    C: { en: "C は不正解です。これは効率的なソリューションではありません。（https://cloud.google.com/dataproc/docs/concepts/jobs/life-of-a-job）", ko: "C는 오답입니다. 효율적인 솔루션이 아닙니다(https://cloud.google.com/dataproc/docs/concepts/jobs/life-of-a-job)." },
+    D: { en: "D は不正解です。このソリューションはリアルタイムではありません。（https://cloud.google.com/logging/docs/export/using_exported_logs#gcs-availability）", ko: "D는 오답입니다. 이 솔루션은 실시간이 아닙니다(https://cloud.google.com/logging/docs/export/using_exported_logs#gcs-availability)." }
+  },
+  refs: ["https://cloud.google.com/logging/quotas", "https://cloud.google.com/logging/docs/export/using_exported_logs#pubsub-availability", "https://cloud.google.com/dataproc/docs/concepts/jobs/life-of-a-job", "https://cloud.google.com/logging/docs/export/using_exported_logs#gcs-availability"],
   keywords: [
     ["ほぼリアルタイム", "로그가 들어오는 즉시 밖으로 흘려보내기 → <mark>Pub/Sub 싱크</mark>(스트리밍)", "B(D 제외)"],
     ["複数のプロセスで異なる種類の分析", "같은 로그를 여러 소비자가 모두 받기 = <mark>팬아웃</mark> → 프로세스마다 구독", "B(A·C 제외)"],
