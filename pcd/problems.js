@@ -12305,5 +12305,51 @@ var PROBLEMS = [
   ],
   oneLine: "HTTP API를 빨리 옮겨 자동 확장하고 자주 배포하면서 운영은 최소로 = Cloud Run.",
   tip: "Python이면 Dockerfile 없이 <code>gcloud run deploy api --source .</code>로 Buildpacks 빌드·배포가 한 번에 됩니다. 월말 피크 전 콜드 스타트가 걱정되면 그 기간만 최소 인스턴스를 올렸다가 내리는 예약 작업(Cloud Scheduler)을 둘 수 있습니다."
+},
+{
+  id: 940,
+  title: "클라이언트 라이브러리 없는 언어로 REST API 직접 호출, Cloud Run의 연결된 서비스 계정을 인증 ID로 → 메타데이터 서버에서 액세스 토큰을 받아 Authorization 헤더(Bearer)로 전달(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["메타데이터 서버", "액세스 토큰", "서비스 계정", "Cloud Run", "REST API", "ADC", "GOOGLE_APPLICATION_CREDENTIALS", "API 키"],
+  mine: "C",
+  correct: "B",
+  pending: true,
+  guess: true,
+  section: ["1.2", "4.2"],
+  freq: "high",
+  freqNote: "인증·권한(서비스 계정, ADC)은 CLAUDE.md high 기준이고, 메타데이터 서버는 2세트 Q13·4세트 Q7에도 나왔습니다. <b>“라이브러리 없이 REST = 메타데이터 서버 토큰 엔드포인트 → Authorization: Bearer, 라이브러리 있으면 ADC가 같은 일을 자동으로”</b>를 가져가면 됩니다.",
+  question: {
+    en: "あなたは、Cloud クライアント ライブラリに対応していない新しいプログラミング言語でアプリケーションを開発しています。アプリケーションでは、REST API 呼び出しを作成して Google Cloud サービスを呼び出します。アプリケーションは関連するサービス アカウントを使用して Cloud Run で実行されます。Google Cloud サービス呼び出しのための認証 ID として機能するようにサービスアカウントを構成したいと考えています。どうすればよいですか。",
+    ko: "당신은 Cloud 클라이언트 라이브러리를 지원하지 않는 새 프로그래밍 언어로 애플리케이션을 개발하고 있습니다. 애플리케이션은 REST API 호출을 만들어 Google Cloud 서비스를 호출합니다. 애플리케이션은 연결된 서비스 계정을 사용해 Cloud Run에서 실행됩니다. Google Cloud 서비스 호출을 위한 인증 ID로 기능하도록 서비스 계정을 구성하려고 합니다. 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "API キーをアプリケーションに含め、その値を Authorization ヘッダーに渡す。", ko: "API 키를 애플리케이션에 포함하고, 그 값을 Authorization 헤더로 전달한다." },
+    B: { en: "メタデータ サーバーからアクセス トークンを取得し、その値を Authorization ヘッダーに渡す。", ko: "메타데이터 서버에서 액세스 토큰을 받아, 그 값을 Authorization 헤더로 전달한다." },
+    C: { en: "GOOGLE_APPLICATION_CREDENTIALS 環境変数の値として、サービス アカウントの API キーを使用する。", ko: "GOOGLE_APPLICATION_CREDENTIALS 환경 변수의 값으로 서비스 계정의 API 키를 사용한다." },
+    D: { en: "gcloud auth application-default print-access-token の値を、スタートアップ時に GOOGLE_APPLICATION_CREDENTIALS 環境変数にパスが設定されたファイルに保存する。", ko: "gcloud auth application-default print-access-token의 값을, 시작 시 GOOGLE_APPLICATION_CREDENTIALS 환경 변수에 경로가 설정된 파일에 저장한다." }
+  },
+  keywords: [
+    ["Cloud クライアント ライブラリに対応していない", "ADC를 자동으로 해 주는 라이브러리가 없음 → 토큰을 <mark>직접</mark> 받아야 함", "B(C·D 제외)"],
+    ["REST API 呼び出し", "요청마다 <code>Authorization: Bearer ACCESS_TOKEN</code> 헤더 필요", "B"],
+    ["関連するサービス アカウント / Cloud Run", "연결된 SA의 단기 토큰은 <mark>메타데이터 서버</mark>가 발급(키 없음)", "B"],
+    ["GOOGLE_APPLICATION_CREDENTIALS(C·D)", "ADC가 읽는 <b>SA 키 JSON 파일 경로</b>용 변수, 라이브러리 없으면 아무도 안 읽음", "C·D 제외"],
+    ["API キー(A·C)", "프로젝트 식별용, 서비스 계정 ID가 아님(대부분 Google Cloud API는 OAuth 토큰 필요)", "A·C 제외"]
+  ],
+  keywordNote: "일본어 표기: メタデータ サーバー, アクセス トークン, Authorization ヘッダー, サービス アカウント, アプリケーションのデフォルト認証情報（ADC）, API キー, Cloud クライアント ライブラリ.",
+  whyWrong: "<p><b>틀린 원인: B·C 사이에서 GOOGLE_APPLICATION_CREDENTIALS에 끌림.</b> “서비스 계정을 인증 ID로” → ADC 변수(C)가 익숙해서 골랐지만, 두 가지가 어긋납니다.</p>\n<ul><li><code>GOOGLE_APPLICATION_CREDENTIALS</code>에는 <b>서비스 계정 키 JSON 파일의 경로</b>를 넣습니다. “API 키”는 서비스 계정 자격 증명이 아니라 프로젝트를 식별하는 문자열이라 넣을 대상이 아닙니다.</li><li>이 변수를 읽어 토큰을 만드는 것은 <mark>클라이언트 라이브러리(ADC)</mark>입니다. 문제 첫 문장이 “라이브러리를 지원하지 않는 언어”이므로 변수를 설정해도 아무도 읽지 않습니다.</li></ul>\n<p>판단법: <b>라이브러리 있음 → ADC가 자동, 라이브러리 없음 → 메타데이터 서버에서 토큰을 직접 받아 Bearer 헤더</b>. ADC도 Cloud Run 안에서는 결국 메타데이터 서버에서 토큰을 받습니다(B는 ADC가 하는 일을 손으로 하는 것).</p>",
+  whyRight: "<p>Cloud Run(그리고 Compute Engine, GKE Workload Identity)은 연결된 서비스 계정의 <mark>단기 액세스 토큰</mark>을 메타데이터 서버에서 줍니다. 키 파일이 필요 없습니다.</p>\n<pre><code>GET http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token\nMetadata-Flavor: Google\n→ {\"access_token\":\"ya29...\",\"expires_in\":3599,\"token_type\":\"Bearer\"}\n\nGET https://storage.googleapis.com/storage/v1/b/BUCKET/o\nAuthorization: Bearer ya29...</code></pre>\n<p>토큰은 약 1시간 유효하므로 만료 전에 다시 받습니다. 대상 서비스 권한은 그 SA에 IAM 역할로 줍니다.</p>\n<p><b>기존 문제와 비교</b>: 메타데이터 서버는 <button class=\"qref\" data-id=\"213\">2세트 Q13</button>(프로젝트 ID·리전 얻기, <code>Metadata-Flavor: Google</code>)과 같은 엔드포인트입니다. 라이브러리가 있을 때는 <button class=\"qref\" data-id=\"407\">4세트 Q7</button>처럼 ADC가 연결된 SA를 자동으로 씁니다.</p>",
+  others: {
+    A: "API 키는 호출 프로젝트를 식별할 뿐 서비스 계정 ID가 아니며, 대부분의 Google Cloud API는 OAuth 액세스 토큰을 요구합니다. 앱에 키를 넣으면 유출 위험도 큽니다.",
+    D: "<code>gcloud auth application-default print-access-token</code>은 gcloud가 있는 개발 환경에서 쓰는 명령이라 Cloud Run 컨테이너에는 보통 없고, 토큰은 1시간이면 만료됩니다. 게다가 <code>GOOGLE_APPLICATION_CREDENTIALS</code>는 토큰이 아니라 키 JSON 파일 경로를 기대하며, 라이브러리가 없으면 읽히지도 않습니다."
+  },
+  rules: [
+    ["라이브러리 없는 언어로 Google API REST 호출(Cloud Run·GCE)", "메타데이터 서버 토큰 → Authorization: Bearer"],
+    ["클라이언트 라이브러리 사용", "ADC(연결된 SA 자동, 코드 변경 없음)"],
+    ["GOOGLE_APPLICATION_CREDENTIALS", "SA 키 JSON 파일 경로(가능하면 키 자체를 쓰지 않음)"],
+    ["API 키", "프로젝트 식별용, SA 인증 아님"],
+    ["다른 Cloud Run 서비스 호출(서비스 간 인증)", "메타데이터 서버의 identity 엔드포인트에서 ID 토큰(audience 지정)"]
+  ],
+  oneLine: "라이브러리가 없으면 메타데이터 서버에서 토큰을 받아 Bearer 헤더에 넣는다. GOOGLE_APPLICATION_CREDENTIALS는 라이브러리가 읽는 키 파일 경로다.",
+  tip: "Google API(Cloud Storage 등)에는 <b>액세스 토큰</b>(<code>.../token</code>), 다른 Cloud Run 서비스나 IAP 뒤 앱에는 <b>ID 토큰</b>(<code>.../identity?audience=https://SERVICE_URL</code>)을 씁니다. 두 엔드포인트를 헷갈리지 않도록 주의합니다."
 }
 ];
