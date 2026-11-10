@@ -11835,5 +11835,52 @@ var PROBLEMS = [
   ],
   oneLine: "7년 접근 보장은 보존 정책, 3년 뒤 연 1회 미만이면 수명 주기로 Archive. 함수·스케줄러·버전 관리는 군더더기다.",
   tip: "수명 주기 규칙: <code>{\"action\":{\"type\":\"SetStorageClass\",\"storageClass\":\"ARCHIVE\"},\"condition\":{\"age\":1095}}</code>(3년 ≈ 1,095일). Archive는 조회할 때 데이터 가져오기 요금이 붙으므로, 감사로 대량 조회가 예정되면 그 비용도 견적에 넣습니다. 객체별로 다른 보존이 필요하면 객체 보존 잠금(オブジェクト保持ロック)을 씁니다."
+},
+{
+  id: 930,
+  title: "트래픽이 없는 날이 대부분, 가끔 큰 스파이크, 자동 확장·축소 + 비용 최소 → Firestore + Cloud Run(둘 다 0까지·사용량 과금)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Cloud Run", "Firestore", "0으로 축소", "플랫폼 선택", "자동 확장", "GKE Autopilot", "MIG", "Cloud SQL"],
+  mine: "A",
+  correct: "A",
+  pending: true,
+  section: ["1.1", "1.3"],
+  freq: "high",
+  freqNote: "실행 플랫폼 선택(1.1)과 저장소 선택(1.3)은 CLAUDE.md high 기준 항목입니다. <b>“트래픽 0인 날이 많음 + 스파이크 + 비용 최소 = 0까지 축소하는 서버리스 조합(Cloud Run + Firestore)”</b>를 가져가면 됩니다.",
+  question: {
+    en: "Google Cloud で実行されるウェブ アプリケーションを開発しています。ほとんどの日はトラフィックがなく、それ以外の日は大きいスパイクが発生するため、着信するユーザー トラフィックのレートは予測できないと想定しています。アプリケーションが自動的にスケールアップ、スケールダウンするようにするとともに、アプリケーションの実行に伴う費用を最小化する必要があります。どうすればよいですか。",
+    ko: "Google Cloud에서 실행되는 웹 애플리케이션을 개발하고 있습니다. 대부분의 날은 트래픽이 없고, 그 밖의 날에는 큰 스파이크가 발생하므로, 들어오는 사용자 트래픽의 비율은 예측할 수 없다고 가정합니다. 애플리케이션이 자동으로 스케일 업·스케일 다운되도록 하는 동시에, 애플리케이션 실행에 드는 비용을 최소화해야 합니다. 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "Firestore をデータベースとしてアプリケーションを構築する。そのアプリケーションを Cloud Run にデプロイする。", ko: "Firestore를 데이터베이스로 애플리케이션을 구축한다. 그 애플리케이션을 Cloud Run에 배포한다." },
+    B: { en: "Firestore をデータベースとしてアプリケーションを構築する。そのアプリケーションを GKE Standard クラスタにデプロイする。", ko: "Firestore를 데이터베이스로 애플리케이션을 구축한다. 그 애플리케이션을 GKE Standard 클러스터에 배포한다." },
+    C: { en: "Cloud SQL をデータベースとしてアプリケーションを構築する。そのアプリケーションを GKE Autopilot クラスタにデプロイする。", ko: "Cloud SQL을 데이터베이스로 애플리케이션을 구축한다. 그 애플리케이션을 GKE Autopilot 클러스터에 배포한다." },
+    D: { en: "Firestore をデータベースとしてアプリケーションを構築する。そのアプリケーションを Compute Engine マネージド インスタンス グループにデプロイし、自動スケーリングを適用する。", ko: "Firestore를 데이터베이스로 애플리케이션을 구축한다. 그 애플리케이션을 Compute Engine 관리형 인스턴스 그룹에 배포하고 자동 확장을 적용한다." }
+  },
+  keywords: [
+    ["ほとんどの日はトラフィックがなく", "유휴 시간이 대부분 → <mark>0까지 축소</mark>해 아무것도 안 낼 수 있어야 함", "A"],
+    ["大きいスパイク / 予測できない", "요청 기반으로 초 단위 확장 = Cloud Run", "A(D 제외)"],
+    ["費用を最小化", "앱(Cloud Run)과 DB(Firestore) 모두 <mark>사용량 과금</mark>", "A(C 제외)"],
+    ["GKE Standard(B)", "노드 VM·클러스터 관리 수수료가 0 트래픽에도 계속 나감", "B 제외"],
+    ["Cloud SQL(C)", "인스턴스가 상시 실행되어 유휴에도 시간당 과금", "C 제외"],
+    ["マネージド インスタンス グループ(D)", "최소 1대 이상 상주, VM 기동은 분 단위라 스파이크 대응도 느림", "D 제외"]
+  ],
+  keywordNote: "일본어 표기: スケールアップ / スケールダウン, スパイク, マネージド インスタンス グループ(MIG), GKE Autopilot / GKE Standard, ゼロへのスケーリング(Cloud Run, 확인 필요).",
+  whyWrong: "",
+  whyRight: "<p>앱과 DB를 <b>둘 다</b> “안 쓰면 0원”으로 맞춘 조합이 A뿐입니다.</p>\n<div class=\"tbl\"><table><thead><tr><th>보기</th><th>앱 실행</th><th>DB</th><th>트래픽 0인 날 비용</th></tr></thead><tbody><tr><td><mark>A</mark></td><td>Cloud Run(0까지 축소, 요청 기반 초 단위 확장)</td><td>Firestore(읽기·쓰기·저장량 과금)</td><td><mark>거의 0</mark>(저장량만)</td></tr><tr><td>B</td><td>GKE Standard(노드 VM 상주)</td><td>Firestore</td><td>노드 VM + 클러스터 관리 수수료</td></tr><tr><td>C</td><td>GKE Autopilot(Pod 요청량 과금)</td><td>Cloud SQL(상시 인스턴스)</td><td>Cloud SQL 인스턴스 + 클러스터 수수료</td></tr><tr><td>D</td><td>MIG(최소 1대)</td><td>Firestore</td><td>VM 1대 이상</td></tr></tbody></table></div>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"30\">Q30</button>(예측 불가 트래픽 + 과잉 프로비저닝 최소 = Cloud Run)과 같은 판단입니다. 이번엔 DB까지 서버리스로 골라야 해서 Cloud SQL이 붙은 C가 함정입니다. Cloud Run 선택은 <button class=\"qref\" data-id=\"907\">공식 모의고사 Q7</button>에도 나왔습니다.</p>",
+  others: {
+    B: "Firestore는 맞지만 GKE Standard는 노드 VM을 직접 두므로 트래픽이 없는 날에도 노드와 클러스터 관리 수수료가 나가고, 노드 추가는 분 단위라 스파이크 대응도 느립니다.",
+    C: "Autopilot은 Pod 단위 과금이라 B보다 낫지만, Cloud SQL 인스턴스가 상시 실행되어 유휴 시간에도 과금됩니다. 클러스터 관리 수수료도 있습니다.",
+    D: "MIG 자동 확장은 VM 단위로 최소 1대 이상을 유지하고, VM 부팅이 분 단위라 갑작스러운 스파이크에 Cloud Run보다 느립니다."
+  },
+  rules: [
+    ["대부분 유휴 + 가끔 스파이크 + 비용 최소(웹 앱)", "Cloud Run(0까지 축소)"],
+    ["위와 함께 DB도 고르라", "Firestore(사용량 과금 서버리스)"],
+    ["상시 인스턴스가 필요한 DB(Cloud SQL)", "유휴에도 과금 → 비용 최소 문제에선 불리"],
+    ["쿠버네티스 API·GPU·상태 저장 등 이유가 있을 때", "GKE(Autopilot 우선)"],
+    ["VM 이미지·OS 제어가 필요할 때", "Compute Engine MIG"]
+  ],
+  oneLine: "안 쓰는 날이 대부분이면 앱은 Cloud Run, DB는 Firestore로 둘 다 0까지 내려가게 한다. 상주 노드·VM·Cloud SQL은 놀면서도 돈이 든다.",
+  tip: "스파이크 첫 요청의 콜드 스타트가 문제면 최소 인스턴스를 1로 두는 절충(그만큼 상시 과금)이나 시작 시 CPU 부스트를 씁니다. 급증 시 Firestore는 새 컬렉션에 갑자기 많은 쓰기가 몰리면 핫스팟이 생기므로 “500/50/5 규칙”(초당 500회에서 시작해 5분마다 50%씩 늘림)으로 서서히 늘리는 것이 권장됩니다."
 }
 ];
