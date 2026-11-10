@@ -12022,5 +12022,51 @@ var PROBLEMS = [
   ],
   oneLine: "Cloud Run에서는 stdout·stderr에 쓰기만 하면 Cloud Logging에 들어간다. 코드 최소면 라이브러리보다 표준 출력이다.",
   tip: "Python이면 <code>logging.basicConfig(stream=sys.stdout)</code>, Node.js면 <code>console.log(JSON.stringify({severity:'INFO', message:'...'}))</code>처럼 씁니다. JSON에 <code>logging.googleapis.com/trace</code> 필드를 넣으면 같은 요청의 로그가 Cloud Trace와 묶입니다. Cloud Run 파일 시스템은 메모리를 차지하므로 로그 파일을 쌓으면 메모리 부족으로 인스턴스가 재시작될 수도 있습니다."
+},
+{
+  id: 934,
+  title: "외부(공개) IP가 없는 Compute Engine 인스턴스에서 Cloud Storage API 호출 → 서브넷에서 비공개 Google 액세스 사용 설정(限定公開の Google アクセス → プライベート Google アクセス)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["비공개 Google 액세스", "Private Google Access", "Compute Engine", "Cloud Storage", "VPC", "외부 IP"],
+  mine: "D",
+  correct: "D",
+  pending: true,
+  section: ["1.2", "4.1"],
+  freq: "mid",
+  freqNote: "네트워크 설정 자체는 PCD 중심이 아니지만, “외부 IP 없는 VM·Pod에서 Google API 호출”은 보안 설계(1.2)·서비스 연동(4.1)에서 자주 나오는 고정 패턴입니다. <b>“외부 IP 없음 + Google API = 비공개 Google 액세스, 인터넷의 다른 곳까지 = Cloud NAT”</b>를 가져가면 됩니다.",
+  question: {
+    en: "最近開発したアプリケーションで、パブリック IP アドレスのない Compute Engine インスタンスから Cloud Storage API を呼び出す必要があります。どうすればよいですか。",
+    ko: "최근 개발한 애플리케이션에서, 공개 IP 주소가 없는 Compute Engine 인스턴스로부터 Cloud Storage API를 호출해야 합니다. 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "キャリア ピアリングを使用する", ko: "캐리어 피어링을 사용한다" },
+    B: { en: "VPC ネットワーク ピアリングを使用する", ko: "VPC 네트워크 피어링을 사용한다" },
+    C: { en: "共有 VPC ネットワークを使用する", ko: "공유 VPC 네트워크를 사용한다" },
+    D: { en: "限定公開の Google アクセスを使用する", ko: "비공개 Google 액세스를 사용한다" }
+  },
+  keywords: [
+    ["パブリック IP アドレスのない Compute Engine", "내부 IP만 있는 VM은 기본적으로 Google API 공개 엔드포인트에 못 감", "D"],
+    ["Cloud Storage API を呼び出す", "목적지가 <mark>Google API·서비스</mark> → 서브넷의 <mark>비공개 Google 액세스</mark>", "D"],
+    ["キャリア ピアリング(A)", "온프레미스가 통신사를 거쳐 Google 공개 서비스(Workspace 등)에 연결하는 것, VM과 무관", "A 제외"],
+    ["VPC ネットワーク ピアリング(B)", "VPC끼리 내부 IP로 연결, Google API 경로가 아님", "B 제외"],
+    ["共有 VPC(C)", "여러 프로젝트가 한 VPC를 공유하는 조직 구성, API 접근 문제를 풀지 않음", "C 제외"]
+  ],
+  keywordNote: "일본어 표기: 限定公開の Google アクセス(문제·옛 표기) = 현재 공식 <b>プライベート Google アクセス</b>, キャリア ピアリング, VPC ネットワーク ピアリング, 共有 VPC, パブリック IP アドレス(외부 IP アドレス).",
+  whyWrong: "",
+  whyRight: "<p><mark>비공개 Google 액세스</mark>(Private Google Access)는 <b>서브넷 단위</b> 설정으로, 그 서브넷의 외부 IP 없는 VM이 내부 IP만으로 Google API·서비스(Cloud Storage, BigQuery, Pub/Sub 등)에 접근하게 해 줍니다.</p>\n<pre><code>gcloud compute networks subnets update SUBNET \\\n  --region=REGION --enable-private-ip-google-access</code></pre>\n<p>트래픽은 Google 네트워크 안에 머물고, VM에 외부 IP를 붙이지 않아도 됩니다(공격 표면 감소).</p>\n<div class=\"tbl\"><table><thead><tr><th>목적지</th><th>외부 IP 없는 VM이 쓰는 것</th></tr></thead><tbody><tr><td>Google API·서비스</td><td><mark>비공개 Google 액세스</mark></td></tr><tr><td>인터넷의 일반 사이트(패키지 저장소 등)</td><td>Cloud NAT</td></tr><tr><td>다른 VPC</td><td>VPC 네트워크 피어링·Cloud VPN</td></tr><tr><td>Google 관리 서비스의 비공개 IP(Cloud SQL 등)</td><td>비공개 서비스 액세스·Private Service Connect</td></tr></tbody></table></div>\n<p><b>기존 문제와 비교</b>: 노트에서 이 기능이 정답인 문제는 처음입니다. <button class=\"qref\" data-id=\"417\">4세트 Q17</button>에서 “이미지를 못 받는 원인 = 네트워크(비공개 Google 액세스 미설정)”로 용어만 나왔습니다.</p>",
+  others: {
+    A: "캐리어 피어링은 온프레미스가 지원 통신사를 거쳐 Google Workspace 같은 Google 공개 서비스에 연결하는 방식입니다. Google Cloud 안의 VM에는 쓰지 않습니다.",
+    B: "VPC 네트워크 피어링은 두 VPC를 내부 IP로 잇는 것이라 Google API로 가는 경로를 만들지 않습니다.",
+    C: "공유 VPC는 호스트 프로젝트의 VPC를 서비스 프로젝트들이 함께 쓰는 조직 구성입니다. 외부 IP 없는 VM의 Google API 접근은 여전히 비공개 Google 액세스가 필요합니다."
+  },
+  rules: [
+    ["외부 IP 없는 VM·GKE 노드 → Google API(Cloud Storage 등)", "비공개 Google 액세스(서브넷 설정)"],
+    ["외부 IP 없는 VM → 인터넷 일반 사이트", "Cloud NAT"],
+    ["온프레미스 → Google API 비공개", "Cloud VPN·Interconnect + 온프레미스용 비공개 Google 액세스(private.googleapis.com)"],
+    ["VPC 간 내부 통신", "VPC 네트워크 피어링"],
+    ["여러 프로젝트가 한 VPC 공유", "공유 VPC"]
+  ],
+  oneLine: "외부 IP 없는 VM이 Google API를 부르려면 서브넷에 비공개 Google 액세스를 켠다. 인터넷은 Cloud NAT, VPC끼리는 피어링이다.",
+  tip: "VPC 서비스 제어와 함께 쓸 때는 <code>restricted.googleapis.com</code>(199.36.153.4/30)으로 DNS를 돌려 경계 안 서비스만 허용합니다. 비공개 Google 액세스는 기본 인터넷 게이트웨이 경로(0.0.0.0/0 → default-internet-gateway)가 필요하니 경로를 지웠다면 Google API 범위로 다시 만들어야 합니다. 서비스 계정·액세스 범위(IAM) 권한은 별도로 필요합니다."
 }
 ];
