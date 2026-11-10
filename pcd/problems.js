@@ -12114,5 +12114,52 @@ var PROBLEMS = [
   ],
   oneLine: "어느 함수가 느린지는 Profiler로, 어느 서비스가 느린지는 Trace로 본다. Debugger 스냅숏은 성능 도구가 아니다.",
   tip: "Profiler 결과를 로컬과 비교할 때는 같은 기간·같은 부하로 비교하고, “wall time은 큰데 CPU time은 작다”면 I/O·네트워크·잠금 대기(예: 리전이 다른 DB 호출)를 의심합니다. Compute Engine에서는 VM의 액세스 범위에 cloud-platform(또는 Profiler 범위)이 있어야 에이전트가 데이터를 보낼 수 있습니다."
+},
+{
+  id: 936,
+  title: "Cloud Run → Memorystore for Redis 연결 실패로 502 Bad Gateway, 원인은? → 서버리스 VPC 액세스 커넥터를 Cloud Run 서비스와 다른 리전에 구성(커넥터는 같은 리전이어야 함)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Serverless VPC Access", "서버리스 VPC 액세스 커넥터", "Memorystore", "Cloud Run", "리전", "502", "Direct VPC egress"],
+  mine: "B",
+  correct: "B",
+  pending: true,
+  guess: true,
+  section: ["1.1", "4.1"],
+  freq: "mid",
+  freqNote: "Cloud Run → VPC 내부 리소스(Memorystore·Cloud SQL 비공개 IP) 연결은 반복 출제되지만, 이번은 커넥터 제약(같은 리전)이라는 세부 설정 문제입니다. <b>“Memorystore는 원래 내부 IP만 → Cloud Run은 같은 리전의 커넥터(또는 Direct VPC egress)로 VPC에 들어가야 함”</b>을 가져가면 됩니다.",
+  question: {
+    en: "Cloud Run と Memorystore for Redis を使用する e コマースのウェブ アプリケーションを開発しています。このアプリにユーザーがログインすると、ユーザーの情報（セッション、名前、アドレス、好みなど）がキャッシュされ、購入手続きの際にすぐに取得できるよう保存されます。ブラウザでアプリケーションをテストすると、502 Bad Gateway のエラーが発生します。そこで、アプリケーションが Memorystore に接続されていないと判断しました。このエラーの原因は何ですか。",
+    ko: "Cloud Run과 Memorystore for Redis를 사용하는 e커머스 웹 애플리케이션을 개발하고 있습니다. 이 앱에 사용자가 로그인하면 사용자 정보(세션, 이름, 주소, 선호 등)가 캐시되어, 구매 절차 때 바로 가져올 수 있도록 저장됩니다. 브라우저에서 애플리케이션을 테스트하면 502 Bad Gateway 오류가 발생합니다. 그래서 애플리케이션이 Memorystore에 연결되지 않았다고 판단했습니다. 이 오류의 원인은 무엇입니까?"
+  },
+  options: {
+    A: { en: "Memorystore for Redis インスタンスがパブリック IP アドレスなしでデプロイされた。", ko: "Memorystore for Redis 인스턴스가 공개 IP 주소 없이 배포되었다." },
+    B: { en: "サーバーレス VPC アクセス コネクタを Cloud Run サービスとは異なるリージョンに構成した。", ko: "서버리스 VPC 액세스 커넥터를 Cloud Run 서비스와 다른 리전에 구성했다." },
+    C: { en: "DevOps チームによるインフラストラクチャの更新中に、Cloud Run と Memorystore の間の接続を許可するファイアウォール ルールが削除された。", ko: "DevOps 팀의 인프라 업데이트 중에, Cloud Run과 Memorystore 사이의 연결을 허용하는 방화벽 규칙이 삭제되었다." },
+    D: { en: "Cloud Run サービスとは異なるリージョンの、異なるサブネットのサーバーレス VPC アクセス コネクタを使用するようにアプリケーションを構成した。", ko: "Cloud Run 서비스와 다른 리전의, 다른 서브넷의 서버리스 VPC 액세스 커넥터를 사용하도록 애플리케이션을 구성했다." }
+  },
+  keywords: [
+    ["Cloud Run と Memorystore for Redis", "Memorystore는 <mark>VPC 내부 IP로만</mark> 접근 → Cloud Run은 서버리스 VPC 액세스 커넥터(또는 Direct VPC egress)가 필요", "B"],
+    ["Memorystore に接続されていない", "연결 경로(커넥터) 구성 오류를 찾는 문제", "B"],
+    ["コネクタを Cloud Run サービスとは異なるリージョン(B)", "커넥터는 <mark>서비스와 같은 리전</mark>에 있어야 함 → 다르면 VPC 경로가 없음", "B"],
+    ["パブリック IP アドレスなし(A)", "Memorystore는 원래 공개 IP가 없음 = 정상 구성", "A 제외"],
+    ["ファイアウォール ルールが削除(C)", "VPC 기본 이그레스 허용 + Memorystore는 서비스 제작자 네트워크라 별도 허용 규칙이 원래 필요 없음", "C 제외"],
+    ["アプリケーションを構成…異なるサブネット(D)", "커넥터는 Cloud Run 서비스(배포 설정)에 붙이는 것이지 앱 코드 설정이 아님, 서브넷 차이는 원인이 아님", "D 제외"]
+  ],
+  keywordNote: "일본어 표기: サーバーレス VPC アクセス コネクタ, ダイレクト VPC 下り（外向き）(Direct VPC egress), Memorystore for Redis(영어 그대로), 502 Bad Gateway.",
+  whyWrong: "",
+  whyRight: "<p>Memorystore for Redis는 <b>공개 IP가 없고 VPC 내부 IP로만</b> 접근합니다. Cloud Run은 VPC 밖에서 돌므로 VPC로 들어가는 길이 필요합니다.</p>\n<div class=\"tbl\"><table><thead><tr><th>방법</th><th>조건</th></tr></thead><tbody><tr><td>서버리스 VPC 액세스 커넥터</td><td>커넥터는 <mark>Cloud Run 서비스와 같은 리전</mark>에 만들고, 자기 전용 /28 서브넷을 씀. 서비스에 <code>--vpc-connector</code>로 연결</td></tr><tr><td>Direct VPC egress(현재 권장)</td><td>커넥터 없이 서비스가 같은 리전의 서브넷에 직접 연결(<code>--network --subnet</code>)</td></tr></tbody></table></div>\n<p>커넥터를 다른 리전에 만들면 Cloud Run이 쓸 수 없어 VPC 경로가 없고, Redis 연결이 실패해 앱이 오류를 내며 502가 납니다.</p>\n<p><b>B와 D의 차이</b>: 둘 다 “다른 리전”이지만, D는 “앱(코드)이 커넥터를 쓰도록 구성”이라는 잘못된 전제(커넥터는 Cloud Run 서비스 설정)와 “다른 서브넷”이라는 무관한 조건이 섞여 있습니다. 커넥터는 원래 앱 서브넷과 다른 전용 서브넷을 쓰므로 서브넷 차이는 원인이 아닙니다. 그래서 순수한 원인 하나만 담은 B가 답으로 보입니다(<b>확신도 중간</b>).</p>\n<p><b>기존 문제와 비교</b>: 커넥터로 Cloud SQL 비공개 IP에 가는 <button class=\"qref\" data-id=\"314\">3세트 Q14</button>, <button class=\"qref\" data-id=\"4\">Q4</button>와 같은 경로 문제입니다. 세션 = Memorystore는 <button class=\"qref\" data-id=\"926\">공식 모의고사 Q26</button>.</p>",
+  others: {
+    A: "Memorystore for Redis는 원래 공개 IP 없이 VPC 내부 IP만 가지므로 정상 구성이고, 원인이 될 수 없습니다.",
+    C: "VPC는 기본적으로 이그레스를 허용하고, Memorystore는 Google 서비스 제작자 네트워크(비공개 서비스 액세스)에 있어 사용자가 만든 “허용 규칙”이 원래 필요하지 않습니다. 이그레스 거부 규칙을 추가한 경우가 아니면 원인이 되지 않습니다.",
+    D: "커넥터는 앱 코드가 아니라 Cloud Run 서비스 배포 설정(<code>--vpc-connector</code>)으로 지정하고, 커넥터용 서브넷은 원래 별도이므로 “다른 서브넷”은 원인이 아닙니다. 리전 문제만 남기면 B와 같아 B가 더 정확합니다."
+  },
+  rules: [
+    ["Cloud Run → Memorystore·Cloud SQL 비공개 IP", "Direct VPC egress 또는 서버리스 VPC 액세스 커넥터"],
+    ["커넥터 조건", "Cloud Run 서비스와 같은 리전, 전용 /28 서브넷"],
+    ["Memorystore에 공개 IP 없음", "정상(원인 아님)"],
+    ["Cloud Run 연결 실패 원인 찾기", "먼저 리전 일치·커넥터 연결·인증(AUTH)·IP 확인"]
+  ],
+  oneLine: "Memorystore는 내부 IP뿐이라 Cloud Run은 같은 리전의 커넥터로 VPC에 들어가야 한다. 리전이 다르면 연결이 안 된다.",
+  tip: "배포 예: <code>gcloud run deploy app --vpc-connector=conn-asia --vpc-egress=private-ranges-only --region=asia-northeast1</code>(커넥터도 asia-northeast1). 새로 만든다면 Direct VPC egress(<code>--network=default --subnet=default</code>)가 비용·성능상 권장됩니다. Redis 연결 대상 IP·포트는 환경 변수(<code>REDISHOST</code>)로 넘기고, AUTH를 켰다면 Secret Manager에서 비밀번호를 가져옵니다."
 }
 ];
