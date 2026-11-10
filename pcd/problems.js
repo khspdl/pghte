@@ -11647,5 +11647,51 @@ var PROBLEMS = [
   ],
   oneLine: "GKE의 스테이트리스 분산 서비스를 최소 변경으로 빨리 자동 확장하려면 CPU 기준 수평 Pod 자동 확장(HPA)을 배포한다. VPA는 Pod 크기를, 커스텀 지표는 추가 구성을 요구한다.",
   tip: "HPA로 Pod가 늘었는데 노드가 모자라면 Pending이 되므로 클러스터 자동 확장(또는 Autopilot)을 함께 켭니다. HPA와 VPA를 같은 CPU 지표로 동시에 쓰면 서로 충돌하니 피합니다."
+},
+{
+  id: 926,
+  title: "30분 무조작 시 로그아웃되는 세션 + 재로그인 후에도 남아야 하는 장바구니(Google 권장) → 세션 = Memorystore for Redis, 장바구니 = Firestore(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Memorystore", "Firestore", "세션 관리", "TTL", "장바구니", "세션 어피니티", "저장소 선택"],
+  mine: "D",
+  correct: "D",
+  pending: true,
+  section: "1.3",
+  freq: "high",
+  freqNote: "저장소 선택(1.3)은 CLAUDE.md high 기준이고, 같은 문제가 1세트 Q41로도 나왔습니다. <b>“사라져도 되는 세션 = Memorystore(TTL), 남아야 하는 장바구니 = Firestore”</b>를 가져가면 됩니다.",
+  question: {
+    en: "自社用の e コマース プラットフォームをチームで開発しています。ユーザーはウェブサイトにログインしてショッピング カートに商品を追加します。アクティブでない状態が 30 分続くと、ユーザーは自動的にログアウトします。ユーザーが再びログインした場合は、そのユーザーのショッピング カートを使用できるようにします。Google が推奨するベスト プラクティスに沿ってユーザーのセッションとショッピング カートの情報を保存するには、どのようにしますか。",
+    ko: "자사용 e커머스 플랫폼을 팀에서 개발하고 있습니다. 사용자는 웹사이트에 로그인해 장바구니에 상품을 추가합니다. 활동이 없는 상태가 30분 계속되면 사용자는 자동으로 로그아웃됩니다. 사용자가 다시 로그인했을 때는 그 사용자의 장바구니를 사용할 수 있게 합니다. Google이 권장하는 모범 사례에 따라 사용자의 세션과 장바구니 정보를 저장하려면 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "セッションとショッピング カートの情報をローカルメモリに保存し、Google HTTP ロードバランサで Cookie ベースのセッション アフィニティを有効にする。", ko: "세션과 장바구니 정보를 로컬 메모리에 저장하고, Google HTTP 로드밸런서에서 cookie 기반 세션 어피니티를 사용 설정한다." },
+    B: { en: "Cloud Storage のオブジェクトにショッピング カートの情報を保存し、オブジェクト名をセッション ID にする。", ko: "Cloud Storage 객체에 장바구니 정보를 저장하고, 객체 이름을 세션 ID로 한다." },
+    C: { en: "セッションとショッピング カートの情報を BigQuery に保存する。", ko: "세션과 장바구니 정보를 BigQuery에 저장한다." },
+    D: { en: "Memorystore for Redis にセッション情報を保存し、ショッピング カート情報を Firestore に保存する。", ko: "Memorystore for Redis에 세션 정보를 저장하고, 장바구니 정보를 Firestore에 저장한다." }
+  },
+  keywords: [
+    ["アクティブでない状態が 30 分続くと…自動的にログアウト", "세션은 <mark>사라져도 되는 짧은 상태</mark> → 키 TTL로 유휴 만료하는 인메모리 저장소", "D"],
+    ["再びログインした場合は…ショッピング カートを使用できる", "장바구니는 세션보다 오래 <mark>남아야 하는 영구 데이터</mark> → 사용자 ID 키의 Firestore 문서", "D(A 제외)"],
+    ["ローカルメモリ + セッション アフィニティ(A)", "어피니티는 같은 인스턴스로 보내는 최적화일 뿐, 인스턴스 교체·축소 시 세션·카트 소실", "A 제외"],
+    ["オブジェクト名をセッション ID(B)", "세션이 끝나면 ID가 바뀌어 재로그인 후 카트를 못 찾음. 세션 저장도 빠져 있음", "B 제외"],
+    ["BigQuery(C)", "분석용 DWH, 건별 저지연 읽기·쓰기(OLTP)용이 아님", "C 제외"]
+  ],
+  keywordNote: "일본어 표기: Memorystore for Redis(영어 그대로), Firestore, セッション アフィニティ, インメモリ データストア, セッション管理. 1세트 Q41과 같은 문제(일본어 문구와 보기만 다름).",
+  whyWrong: "",
+  whyRight: "<p><b>수명으로 나누면</b> 바로 D입니다.</p>\n<div class=\"tbl\"><table><thead><tr><th>데이터</th><th>성격</th><th>저장소</th></tr></thead><tbody><tr><td>세션</td><td>30분 무조작이면 버려도 됨, 요청마다 읽음(저지연)</td><td><mark>Memorystore for Redis</mark>(키에 TTL, 접근 때마다 <code>EXPIRE</code> 갱신 → 30분 유휴 만료)</td></tr><tr><td>장바구니</td><td>로그아웃 뒤에도 남아야 함(영구)</td><td><mark>Firestore</mark>(사용자 ID를 키로 한 문서)</td></tr></tbody></table></div>\n<p>둘 다 앱 서버 밖에 있으므로 서버는 <b>스테이트리스</b>가 되어 자동 확장·재시작에도 로그인 상태와 카트가 유지됩니다.</p>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"41\">1세트 Q41</button>과 <mark>같은 문제</mark>입니다(그때 보기는 Pub/Sub+Cloud SQL, SESSION ID 파일명의 Cloud Storage, VM의 MySQL, Memorystore+Firestore). 이번에는 A에 “로컬 메모리 + 세션 어피니티”가 들어왔는데, 이건 <button class=\"qref\" data-id=\"337\">3세트 Q37</button>의 “어피니티는 상태 보존이 아니다”와 같은 함정입니다. 카트 = Firestore 문서는 <button class=\"qref\" data-id=\"20\">Q20</button>과도 같습니다.</p>",
+  others: {
+    A: "세션 어피니티(cookie 기반)는 같은 백엔드로 보내려는 <b>최선 노력</b>일 뿐이라, 인스턴스가 축소·재생성되거나 장애가 나면 로컬 메모리의 세션과 카트가 사라집니다. 재로그인 후 카트 보존도 보장하지 못합니다.",
+    B: "객체 이름이 세션 ID라 로그아웃 후 새 세션에서는 이전 카트를 찾을 수 없습니다(키는 사용자 ID여야 함). 세션 정보 자체의 저장·만료 방법도 없습니다.",
+    C: "BigQuery는 분석용 데이터 웨어하우스로, 요청마다 저지연으로 읽고 쓰는 세션·카트 저장(OLTP(Online Transaction Processing, 온라인 트랜잭션 처리))에 맞지 않습니다."
+  },
+  rules: [
+    ["사라져도 되는 짧은 상태(세션, 유휴 만료)", "Memorystore for Redis(키 TTL)"],
+    ["재로그인·다른 기기에서도 남아야 하는 사용자 데이터(장바구니)", "Firestore(사용자 ID 키 문서)"],
+    ["로컬 메모리 + 세션 어피니티", "오답: 인스턴스 교체 시 소실, 상태 보존 아님"],
+    ["세션 ID를 키로 한 영구 저장", "오답: 재로그인하면 ID가 바뀜"],
+    ["BigQuery·Pub/Sub에 세션 저장", "오답: 분석용·메시징용"]
+  ],
+  oneLine: "세션은 사라져도 되니 Memorystore(TTL), 장바구니는 남아야 하니 Firestore. 로컬 메모리 + 세션 어피니티는 상태 보존이 아니다.",
+  tip: "Redis에서 세션 키에 <code>SET session:&lt;id&gt; ... EX 1800</code>으로 30분 TTL을 걸고, 요청이 올 때마다 <code>EXPIRE</code>로 연장하면 “무조작 30분 로그아웃”이 됩니다. 카트 문서는 <code>carts/{userId}</code>처럼 변하지 않는 사용자 ID를 키로 둡니다."
 }
 ];
