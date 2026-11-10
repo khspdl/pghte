@@ -12490,5 +12490,51 @@ var PROBLEMS = [
   ],
   oneLine: "Cloud Build는 한 단계라도 실패하면 거기서 멈춘다. 정리를 꼭 하려면 테스트는 결과를 파일에 남기고 성공으로 끝내고, 정리 뒤에 파일로 판정한다.",
   tip: "현재 Cloud Build는 단계에 <code>allowFailure: true</code>(또는 <code>allowExitCodes</code>)를 지정해 실패해도 빌드를 계속하게 할 수 있지만, 그러면 빌드 전체가 성공으로 끝날 수 있으니 마지막 판정 단계는 여전히 필요합니다. 함수 이름에 <code>$BUILD_ID</code>나 <code>$SHORT_SHA</code>를 붙이면 동시 빌드끼리 충돌하지 않습니다."
+},
+{
+  id: 944,
+  title: "GKE 클러스터의 CPU 부하가 하루 내내 변동, 비용 최소·성능 최대로 Pod와 노드 수 자동 조정 → 클러스터 오토스케일러(노드 수) + CPU 기준 HPA(Pod 수)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["HPA", "클러스터 오토스케일러", "GKE", "VPA", "MIG", "CPU 사용률", "자동 확장"],
+  mine: "B",
+  correct: "B",
+  pending: true,
+  section: "3.2",
+  freq: "high",
+  freqNote: "GKE 배포·HPA(3.2)는 CLAUDE.md high 기준이고, 1세트 Q16·3세트 Q3·공식 모의고사 Q25와 같은 축입니다. <b>“Pod 수 = HPA, 노드 수 = 클러스터 오토스케일러(노드 풀 MIG를 직접 건드리지 않음)”</b>를 가져가면 됩니다.",
+  question: {
+    en: "あなたは、GKEクラスタにウェブ アプリケーションをデプロイしました。Cloud Monitoring の指標を調べたところ、クラスタの CPU 負荷が 1 日を通じて変動し続けていることがわかりました。コストを最小限に抑えつつパフォーマンスを最大にするために、Pod とノードの数を自動調整するにはどうすればよいですか。",
+    ko: "당신은 GKE 클러스터에 웹 애플리케이션을 배포했습니다. Cloud Monitoring 지표를 살펴보니 클러스터의 CPU 부하가 하루 내내 계속 변동한다는 것을 알았습니다. 비용을 최소화하면서 성능을 최대로 하기 위해 Pod와 노드의 수를 자동 조정하려면 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "マネージド インスタンス グループ（MIG）を変更して自動スケーリングを有効にし、CPU 負荷に基づいてノードの最大数と最小数を構成する。", ko: "관리형 인스턴스 그룹(MIG)을 변경해 자동 확장을 사용 설정하고, CPU 부하에 따라 노드의 최대 수와 최소 수를 구성한다." },
+    B: { en: "GKE クラスタでクラスタ オートスケーラーを有効にし、CPU 負荷に基づいてワークロードを自動スケーリングするよう Horizontal Pod Autoscaler（HPA）を構成する。", ko: "GKE 클러스터에서 클러스터 오토스케일러를 사용 설정하고, CPU 부하에 따라 워크로드를 자동 확장하도록 Horizontal Pod Autoscaler(HPA)를 구성한다." },
+    C: { en: "GKE クラスタでクラスタ オートスケーラーを有効にし、カスタム指標に基づいてワークロードを自動スケーリングするよう HPA を構成する。", ko: "GKE 클러스터에서 클러스터 오토스케일러를 사용 설정하고, 커스텀 지표에 따라 워크로드를 자동 확장하도록 HPA를 구성한다." },
+    D: { en: "MIG を変更して自動スケーリングを有効にし、CPU 負荷に基づいてノードの最大数と最小数を構成する。また、CPU 負荷に基づいてワークロードをスケールするよう Vertical Pod Autoscaler（VPA）を構成する。", ko: "MIG를 변경해 자동 확장을 사용 설정하고, CPU 부하에 따라 노드의 최대 수와 최소 수를 구성한다. 또 CPU 부하에 따라 워크로드를 확장하도록 Vertical Pod Autoscaler(VPA)를 구성한다." }
+  },
+  keywords: [
+    ["Pod とノードの数を自動調整", "Pod 수 = <mark>HPA</mark>, 노드 수 = <mark>클러스터 오토스케일러</mark>", "B·C"],
+    ["CPU 負荷が…変動", "관측된 지표가 CPU → CPU 기준 HPA(기본 제공 지표)", "B(C 제외)"],
+    ["MIG を変更して自動スケーリング(A·D)", "GKE 노드 풀 MIG에 Compute Engine 자동 확장을 직접 켜면 GKE 스케줄러와 따로 놀아 Pod를 고려하지 못함(비권장)", "A·D 제외"],
+    ["VPA(D)", "Pod 개수가 아니라 요청 크기만 조정", "D 제외"],
+    ["カスタム指標(C)", "CPU로 충분한데 지표 파이프라인 추가 구성", "C 제외"]
+  ],
+  keywordNote: "일본어 표기: クラスタ オートスケーラー, Horizontal Pod Autoscaler（HPA）·水平 Pod 自動スケーリング, Vertical Pod Autoscaler（VPA）, マネージド インスタンス グループ（MIG）, カスタム指標.",
+  whyWrong: "",
+  whyRight: "<p>GKE 자동 확장은 두 층으로 나눕니다.</p>\n<div class=\"tbl\"><table><thead><tr><th>층</th><th>도구</th><th>동작</th></tr></thead><tbody><tr><td>Pod 수</td><td><mark>HPA(CPU)</mark></td><td>CPU 사용률이 목표를 넘으면 Pod 증가, 내려가면 감소</td></tr><tr><td>노드 수</td><td><mark>클러스터 오토스케일러</mark></td><td>Pod가 배치될 곳이 없으면(Pending) 노드 추가, 노드가 비면 제거 → 비용 최소</td></tr></tbody></table></div>\n<p>둘을 함께 켜면 부하 증가 → HPA가 Pod 증가 → 자리 부족 → 노드 증가, 부하 감소 → Pod 감소 → 빈 노드 제거로 이어집니다.</p>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"925\">공식 모의고사 Q25</button>(최소 변경 = CPU 기준 HPA)에 노드 층(클러스터 오토스케일러)을 더한 문제입니다. “GKE 노드 풀 MIG에 직접 자동 확장을 켜면 안 됨”은 <button class=\"qref\" data-id=\"303\">3세트 Q3</button>, HPA + 클러스터 오토스케일러는 <button class=\"qref\" data-id=\"16\">Q16</button>과 같습니다.</p>",
+  others: {
+    A: "GKE 노드 풀 뒤의 MIG에 Compute Engine 자동 확장을 직접 켜는 것은 지원되지 않는 방식이라 Pod 배치를 모른 채 노드를 늘리고 줄입니다(실행 중인 Pod가 있는 노드를 지울 수도 있음). Pod 수 조정도 없습니다.",
+    C: "구조(클러스터 오토스케일러 + HPA)는 맞지만, 관측된 부하가 CPU인데 커스텀 지표를 쓰려면 앱 계측·어댑터가 추가로 필요합니다. CPU 기준 HPA가 더 단순합니다.",
+    D: "MIG 직접 자동 확장의 문제(A)에 더해, VPA는 Pod 개수가 아니라 Pod 하나의 CPU·메모리 요청을 조정하며 적용 시 Pod를 재생성합니다."
+  },
+  rules: [
+    ["GKE에서 Pod 수 + 노드 수 자동 조정", "HPA + 클러스터 오토스케일러"],
+    ["부하 지표가 CPU", "CPU 기준 HPA(커스텀 지표는 업무 지표가 필요할 때)"],
+    ["GKE 노드 풀 MIG에 직접 자동 확장", "오답(클러스터 오토스케일러를 씀)"],
+    ["Pod 하나의 요청 크기 최적화", "VPA"],
+    ["노드 관리 자체를 맡기기", "GKE Autopilot(노드 자동)"]
+  ],
+  oneLine: "GKE는 Pod 수는 HPA, 노드 수는 클러스터 오토스케일러. 노드 풀 MIG를 직접 자동 확장하지 않는다.",
+  tip: "<code>gcloud container clusters update CLUSTER --enable-autoscaling --min-nodes=1 --max-nodes=10 --node-pool=default-pool</code>와 <code>kubectl autoscale deployment web --cpu-percent=60 --min=2 --max=30</code>을 함께 씁니다. Autopilot 클러스터라면 노드는 자동이므로 HPA만 구성하면 됩니다."
 }
 ];
