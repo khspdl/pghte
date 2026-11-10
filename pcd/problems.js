@@ -12536,5 +12536,51 @@ var PROBLEMS = [
   ],
   oneLine: "GKE는 Pod 수는 HPA, 노드 수는 클러스터 오토스케일러. 노드 풀 MIG를 직접 자동 확장하지 않는다.",
   tip: "<code>gcloud container clusters update CLUSTER --enable-autoscaling --min-nodes=1 --max-nodes=10 --node-pool=default-pool</code>와 <code>kubectl autoscale deployment web --cpu-percent=60 --min=2 --max=30</code>을 함께 씁니다. Autopilot 클러스터라면 노드는 자동이므로 HPA만 구성하면 됩니다."
+},
+{
+  id: 945,
+  title: "Cloud Run Java 앱의 오류가 Error Reporting에 안 보임 → 애플리케이션 오류(스택 트레이스)가 stderr에 쓰이는지 확인(Cloud Logging 경유로 자동 분석)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Error Reporting", "stderr", "스택 트레이스", "Cloud Run", "Cloud Logging", "Java"],
+  mine: "C",
+  correct: "C",
+  pending: true,
+  guess: true,
+  section: "4.3",
+  freq: "high",
+  freqNote: "관측 가능성(Error Reporting, 4.3)은 CLAUDE.md high 기준이고, 2세트 Q18·3세트 Q30과 같은 서비스입니다. <b>“Error Reporting은 Cloud Logging에 들어온 스택 트레이스를 자동 분석 → Cloud Run에선 오류를 stderr(또는 stdout)로”</b>를 가져가면 됩니다.",
+  question: {
+    en: "あなたは、Cloud Run で Java アプリケーションを実行しています。アプリケーションのエラー メッセージが Error Reporting コンソールに表示されません。どうすればよいですか。",
+    ko: "당신은 Cloud Run에서 Java 애플리케이션을 실행하고 있습니다. 애플리케이션의 오류 메시지가 Error Reporting 콘솔에 표시되지 않습니다. 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "その Java アプリケーションに Cloud Monitoring クライアント ライブラリがバンドルされていることを確認する。", ko: "그 Java 애플리케이션에 Cloud Monitoring 클라이언트 라이브러리가 번들되어 있는지 확인한다." },
+    B: { en: "アプリケーション ログが正しい Regional Storage バケットに書き込まれていることを確認する。", ko: "애플리케이션 로그가 올바른 Regional Storage 버킷에 쓰이고 있는지 확인한다." },
+    C: { en: "アプリケーション エラーが stderr に書き込まれることを確認する。", ko: "애플리케이션 오류가 stderr에 쓰이는지 확인한다." },
+    D: { en: "System.out.println を使用して例外をログに記録する。", ko: "System.out.println을 사용해 예외를 로그에 기록한다." }
+  },
+  keywords: [
+    ["Cloud Run", "stdout·stderr가 자동으로 Cloud Logging에 들어가고, Error Reporting은 그 로그에서 <mark>스택 트레이스</mark>를 찾아 그룹화", "C"],
+    ["エラー メッセージが表示されない", "오류가 Cloud Logging에 오류(스택 트레이스) 형태로 안 들어오고 있음 → <mark>stderr</mark>로 쓰는지 확인", "C"],
+    ["Cloud Monitoring クライアント ライブラリ(A)", "지표용 라이브러리, Error Reporting과 무관", "A 제외"],
+    ["Regional Storage バケット(B)", "Error Reporting은 Cloud Storage를 읽지 않음", "B 제외"],
+    ["System.out.println(D)", "stdout에 예외의 toString만 출력 → 스택 트레이스가 없어 오류로 인식되지 않음", "D 제외"]
+  ],
+  keywordNote: "일본어 표기: Error Reporting(영어 그대로), 標準エラー（stderr）, スタック トレース, エラー グループ.",
+  whyWrong: "",
+  whyRight: "<p>Error Reporting은 별도 수집 경로가 아니라 <mark>Cloud Logging에 들어온 로그를 분석</mark>해 스택 트레이스·예외가 있는 항목을 오류 그룹으로 묶습니다.</p>\n<ul><li>Cloud Run은 컨테이너의 stdout·stderr를 자동으로 Cloud Logging에 보냄</li><li>Java에서 <code>e.printStackTrace()</code>나 로거의 <code>logger.error(\"...\", e)</code>(콘솔 핸들러)는 스택 트레이스 전체를 stderr로 씀 → Error Reporting이 인식</li><li>구조화 로그라면 <code>severity: ERROR</code> + <code>stack_trace</code>(또는 <code>message</code>에 스택 트레이스)를 넣으면 인식</li></ul>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"218\">2세트 Q18</button>(새 종류 예외만 알림 = Error Reporting), <button class=\"qref\" data-id=\"330\">3세트 Q30</button>(Cloud Run + Error Reporting)과 같은 서비스이고, “Cloud Run 로그는 표준 출력으로”는 <button class=\"qref\" data-id=\"933\">공식 모의고사 Q33</button>과 같은 원리입니다.</p>",
+  others: {
+    A: "Cloud Monitoring 라이브러리는 지표를 보내는 용도라 Error Reporting 표시와 관계없습니다(필요하다면 Error Reporting 라이브러리나 로깅).",
+    B: "Error Reporting은 Cloud Storage 버킷의 로그 파일을 읽지 않습니다. 로그는 Cloud Logging으로 가야 합니다.",
+    D: "<code>System.out.println(e)</code>는 예외의 클래스·메시지 한 줄만 stdout에 찍고 스택 트레이스가 없어 Error Reporting이 오류로 인식하지 못합니다."
+  },
+  rules: [
+    ["Cloud Run·GKE 오류를 Error Reporting에 표시", "스택 트레이스를 stderr(또는 구조화 로그 severity ERROR)로 출력"],
+    ["Error Reporting의 데이터 원천", "Cloud Logging의 로그(스택 트레이스 자동 인식)"],
+    ["로그 위치가 Cloud Storage·Monitoring 라이브러리", "무관"],
+    ["println으로 예외 한 줄", "스택 트레이스가 없어 인식 안 됨"]
+  ],
+  oneLine: "Error Reporting은 Cloud Logging에 들어온 스택 트레이스를 읽는다. Cloud Run에선 오류를 stderr로 쓰면 된다.",
+  tip: "Logback·Log4j2를 쓰면 콘솔 Appender를 stderr로 두거나 JSON 레이아웃(<code>severity</code>, <code>message</code>, 스택 트레이스 포함)으로 출력합니다. 직접 보고하려면 Error Reporting 클라이언트 라이브러리의 <code>reportErrorEvent</code>를 쓸 수 있지만, Cloud Run에선 로그 경유가 가장 간단합니다."
 }
 ];
