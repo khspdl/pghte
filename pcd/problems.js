@@ -12582,5 +12582,51 @@ var PROBLEMS = [
   ],
   oneLine: "Error Reporting은 Cloud Logging에 들어온 스택 트레이스를 읽는다. Cloud Run에선 오류를 stderr로 쓰면 된다.",
   tip: "Logback·Log4j2를 쓰면 콘솔 Appender를 stderr로 두거나 JSON 레이아웃(<code>severity</code>, <code>message</code>, 스택 트레이스 포함)으로 출력합니다. 직접 보고하려면 Error Reporting 클라이언트 라이브러리의 <code>reportErrorEvent</code>를 쓸 수 있지만, Cloud Run에선 로그 경유가 가장 간단합니다."
+},
+{
+  id: 946,
+  title: "미국 인기 멀티플레이어 게임을 다른 리전으로 확장 + 전 세계 사용자 간 포인트 교환, VM의 MySQL이 한계 → 리전 전체의 일관성·고가용성 = Spanner(옛 Cloud Spanner)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Spanner", "저장소 선택", "강한 일관성", "글로벌 트랜잭션", "고가용성", "MySQL 이전", "Cloud SQL", "Bigtable"],
+  mine: "C",
+  correct: "C",
+  pending: true,
+  section: "1.3",
+  freq: "high",
+  freqNote: "저장소 선택(1.3)은 CLAUDE.md high 기준이고, 3세트 Q47·4세트 Q19와 같은 Spanner 선택 유형입니다. <b>“여러 리전·전 세계 + 거래(포인트 교환) 일관성 + 고가용성 + 관계형 = Spanner”</b>를 가져가면 됩니다.",
+  question: {
+    en: "あなたの会社で提供しているマルチプレーヤー ゲームは米国で人気があります。そこで今回、提供範囲を他のリージョンにも拡大することになりました。また、ユーザー同士がポイントを交換できる新機能をリリースする予定です。この機能は全世界のユーザーが利用できるようにします。会社で現在使用している MySQL バックエンドでは、ゲームをホストしている Compute Engine インスタンスが間もなく上限に達します。そのため、対象のリージョン全体での整合性と高可用性を実現できる他のデータベースに移行することを検討しています。どのデータベースを選択すればよいですか。",
+    ko: "당신 회사가 제공하는 멀티플레이어 게임은 미국에서 인기가 있습니다. 그래서 이번에 제공 범위를 다른 리전으로도 확대하기로 했습니다. 또 사용자끼리 포인트를 교환할 수 있는 새 기능을 출시할 예정입니다. 이 기능은 전 세계 사용자가 이용할 수 있게 합니다. 회사에서 현재 사용 중인 MySQL 백엔드는, 게임을 호스팅하는 Compute Engine 인스턴스가 곧 한계에 도달합니다. 그래서 대상 리전 전체에서 일관성과 고가용성을 실현할 수 있는 다른 데이터베이스로 이전하는 것을 검토하고 있습니다. 어떤 데이터베이스를 선택해야 합니까?"
+  },
+  options: {
+    A: { en: "BigQuery", ko: "BigQuery" },
+    B: { en: "Cloud SQL", ko: "Cloud SQL" },
+    C: { en: "Cloud Spanner", ko: "Cloud Spanner" },
+    D: { en: "Cloud Bigtable", ko: "Cloud Bigtable" }
+  },
+  keywords: [
+    ["他のリージョンにも拡大 / 全世界のユーザー", "여러 리전에 걸친 하나의 DB → 멀티 리전 구성", "C(B 제외)"],
+    ["ポイントを交換(ユーザー同士)", "두 사용자 잔액을 함께 바꾸는 <mark>트랜잭션</mark> → 강한 일관성 필요", "C(A·D 제외)"],
+    ["リージョン全体での整合性と高可用性", "<mark>외부 일관성 + 99.999% 가용성(멀티 리전)</mark> = Spanner", "C"],
+    ["MySQL…上限に達する", "수직 확장 한계 → 수평 확장되는 관계형", "C(B 제외)"],
+    ["Cloud SQL(B)", "쓰기는 한 리전의 기본 인스턴스 하나, 리전 간 복제본은 비동기 읽기 전용", "B 제외"],
+    ["BigQuery(A)·Bigtable(D)", "분석 DWH / 행 단위 일관성만·다중 행 트랜잭션 없음", "A·D 제외"]
+  ],
+  keywordNote: "일본어 표기: Spanner(옛 Cloud Spanner), マルチリージョン構成, 外部整合性(외부 일관성, 확인 필요), 高可用性, 整合性.",
+  whyWrong: "",
+  whyRight: "<p>요건 세 개가 모두 Spanner를 가리킵니다.</p>\n<div class=\"tbl\"><table><thead><tr><th>요건</th><th>Spanner</th></tr></thead><tbody><tr><td>여러 리전·전 세계 사용자</td><td>멀티 리전 인스턴스 구성(여러 리전에 복제, 가까운 리전에서 읽기)</td></tr><tr><td>사용자 간 포인트 교환</td><td>여러 행·여러 리전에 걸친 ACID 트랜잭션, 외부 일관성(강한 일관성)</td></tr><tr><td>고가용성</td><td>멀티 리전 99.999% SLA, 자동 장애 조치</td></tr><tr><td>MySQL 한계</td><td>관계형·SQL을 유지하면서 노드(처리 단위) 추가로 수평 확장</td></tr></tbody></table></div>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"347\">3세트 Q47</button>(한 리전에서 세계로 확장하는 SQL DB = Spanner), <button class=\"qref\" data-id=\"419\">4세트 Q19</button>(멀티 리전 강한 일관성·전역 트랜잭션 = Spanner)와 같은 판단입니다. 반대로 <button class=\"qref\" data-id=\"246\">2세트 Q46</button>은 전역·수평 확장 요건이 없어 Cloud SQL이 답이었습니다.</p>",
+  others: {
+    A: "BigQuery는 분석용 데이터 웨어하우스라 게임의 잦은 소규모 트랜잭션(포인트 교환)을 처리하는 운영 DB로 쓰지 않습니다.",
+    B: "Cloud SQL은 쓰기가 한 리전의 기본 인스턴스에만 가능하고 리전 간 복제본은 비동기 읽기 전용이라, 전 세계 일관성과 수평 확장 요건을 충족하지 못합니다.",
+    D: "Bigtable은 대량 키-값·시계열용으로 행 단위 원자성만 있고 여러 행(두 사용자)에 걸친 트랜잭션이 없으며, 다중 클러스터 복제는 최종 일관성입니다."
+  },
+  rules: [
+    ["전 세계(여러 리전) + 강한 일관성 트랜잭션 + 고가용성 + 관계형", "Spanner(멀티 리전)"],
+    ["기존 MySQL + 한 리전 + 관리 부담 감소", "Cloud SQL for MySQL"],
+    ["대량 시계열·키-값, 단일 행 접근", "Bigtable"],
+    ["분석·BI", "BigQuery"]
+  ],
+  oneLine: "세계로 넓히고 사용자끼리 포인트를 주고받으며 일관성·고가용성이 필요하면 Spanner. Cloud SQL은 쓰기가 한 리전이다.",
+  tip: "게임처럼 사용자 ID로 쓰기가 몰리는 테이블은 순차 증가 키 대신 UUID나 비트 반전 시퀀스를 기본 키로 써 핫스팟을 피합니다. MySQL에서 옮길 때는 Spanner 마이그레이션 도구(SMT)로 스키마·데이터를 이전하고, GoogleSQL 대신 PostgreSQL 인터페이스를 고를 수도 있습니다."
 }
 ];
