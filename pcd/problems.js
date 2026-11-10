@@ -12718,5 +12718,51 @@ var PROBLEMS = [
   ],
   oneLine: "디자인 3개를 비교하려면 Cloud Run 트래픽 분할로 사용자를 나눈다. 리비전을 배포하기만 하면 최신 하나로만 간다.",
   tip: "전환율 비교 중 같은 사용자가 페이지마다 다른 디자인을 보면 결과가 흐려지므로 세션 어피니티(<code>--session-affinity</code>)를 켭니다. 리비전마다 태그를 달아 두면 <code>https://a---web-xxx.run.app</code> 같은 고정 URL로 디자인별 확인도 할 수 있습니다."
+},
+{
+  id: 949,
+  title: "Cloud Run으로 모든 Pub/Sub 메시지를 Cloud Storage와 BigQuery 양쪽에 쓰기, 운영 부담 최소 → 토픽 1 + push 구독 2(팬아웃) + Cloud Run 서비스 2(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Pub/Sub", "팬아웃", "push 구독", "Cloud Run", "BigQuery", "Cloud Storage", "구독 설계"],
+  mine: "A",
+  correct: "B",
+  pending: true,
+  section: ["1.1", "4.1"],
+  freq: "high",
+  freqNote: "이벤트 기반 통합(Pub/Sub)은 CLAUDE.md high 기준이고, 바로 앞 공식 모의고사 Q38과 짝을 이루는 문제입니다. <b>“구독마다 모든 메시지 사본(팬아웃), push 구독 하나 = 엔드포인트 하나”</b>를 가져가면 됩니다.",
+  question: {
+    en: "あなたのチームでは Cloud Run を使用してすべての Pub/Sub メッセージを Cloud Storage オブジェクトと BigQuery テーブルの両方に書き込んでいます。運用上のオーバーヘッドを最小限に抑えるには、どのアーキテクチャを実装すればよいですか。",
+    ko: "당신의 팀은 Cloud Run을 사용해 모든 Pub/Sub 메시지를 Cloud Storage 객체와 BigQuery 테이블 양쪽에 쓰고 있습니다. 운영상의 오버헤드를 최소화하려면 어떤 아키텍처를 구현해야 합니까?"
+  },
+  questionCode: "[보기 그림]\nA. トピックを 1 つ、サブスクリプションを 1 つ、Cloud Run サービスを 2 つ。\n   Pub/Sub Topic → Pub/Sub Push Subscription ─┬→ Write to BigQuery\n                                               └→ Write to Cloud Storage\nB. トピックを 1 つ、サブスクリプションを 2 つ、Cloud Run サービスを 2 つ。\n   Pub/Sub Topic ─┬→ Pub/Sub Push Subscription → Write to BigQuery\n                  └→ Pub/Sub Push Subscription → Write to Cloud Storage\nC. トピックを 1 つ、サブスクリプションを 1 つ、Cloud Run サービスを 1 つ。\n   Pub/Sub Topic → Pub/Sub Push Subscription → Write to BigQuery then write to Cloud Storage\nD. トピックを 2 つ、サブスクリプションを 2 つ、Cloud Run サービスを 2 つ。\n   Pub/Sub Topic → Pub/Sub Push Subscription → Write to BigQuery\n   Pub/Sub Topic → Pub/Sub Push Subscription → Write to Cloud Storage",
+  options: {
+    A: { en: "トピックを 1 つ、サブスクリプションを 1 つ、Cloud Run サービスを 2 つ。（Pub/Sub Topic → Pub/Sub Push Subscription → Write to BigQuery / Write to Cloud Storage）", ko: "토픽 1개, 구독 1개, Cloud Run 서비스 2개.(Pub/Sub 토픽 → Pub/Sub push 구독 → BigQuery 쓰기 / Cloud Storage 쓰기)" },
+    B: { en: "トピックを 1 つ、サブスクリプションを 2 つ、Cloud Run サービスを 2 つ。（Pub/Sub Topic → Pub/Sub Push Subscription ×2 → Write to BigQuery / Write to Cloud Storage）", ko: "토픽 1개, 구독 2개, Cloud Run 서비스 2개.(Pub/Sub 토픽 → Pub/Sub push 구독 2개 → 각각 BigQuery 쓰기 / Cloud Storage 쓰기)" },
+    C: { en: "トピックを 1 つ、サブスクリプションを 1 つ、Cloud Run サービスを 1 つ。（Pub/Sub Topic → Pub/Sub Push Subscription → Write to BigQuery then write to Cloud Storage）", ko: "토픽 1개, 구독 1개, Cloud Run 서비스 1개.(Pub/Sub 토픽 → Pub/Sub push 구독 → BigQuery에 쓴 뒤 Cloud Storage에 쓰기)" },
+    D: { en: "トピックを 2 つ、サブスクリプションを 2 つ、Cloud Run サービスを 2 つ。（Pub/Sub Topic → Push Subscription → Write to BigQuery、Pub/Sub Topic → Push Subscription → Write to Cloud Storage）", ko: "토픽 2개, 구독 2개, Cloud Run 서비스 2개.(토픽 → push 구독 → BigQuery 쓰기, 토픽 → push 구독 → Cloud Storage 쓰기)" }
+  },
+  keywords: [
+    ["すべての…メッセージを…両方に書き込む", "같은 메시지가 <mark>두 곳 모두</mark>에 가야 함 = 팬아웃 → <mark>구독 2개</mark>(구독마다 전체 사본)", "B"],
+    ["Push Subscription 1 つ → 2 サービス(A)", "push 구독은 <mark>엔드포인트 하나</mark>만 지정, 한 구독을 둘로 나누지 못함", "A 제외"],
+    ["1 サービスで BigQuery then Cloud Storage(C)", "한쪽만 실패하면 재시도로 다른 쪽 중복 쓰기, 실패·확장을 따로 관리 못 함", "C 제외"],
+    ["トピックを 2 つ(D)", "게시자가 두 토픽에 각각 보내야 함 = 게시 쪽 변경·관리 증가", "D 제외"],
+    ["運用上のオーバーヘッドを最小限", "목적지별 독립 구독·서비스 → 실패·재시도·확장이 서로 영향 없음", "B"]
+  ],
+  keywordNote: "일본어 표기: トピック, サブスクリプション, push サブスクリプション(Push Subscription), ファンアウト(확인 필요), 運用上のオーバーヘッド.",
+  whyWrong: "<p><b>틀린 원인: 구독 하나가 여러 서비스로 복사해 준다고 생각함.</b> 그림 A처럼 구독 하나에서 화살표 두 개가 갈라지는 것은 Pub/Sub에서 불가능합니다.</p>\n<ul><li>push 구독은 <mark>push 엔드포인트 URL을 하나</mark>만 가집니다. 메시지를 두 서비스로 복사해 보낼 수 없습니다.</li><li>pull이었더라도 한 구독에 구독자가 둘이면 메시지가 <b>나뉘어</b>(각 메시지는 둘 중 하나만) 전달되므로, “모든 메시지를 양쪽에”가 되지 않습니다.</li></ul>\n<p>판단법(<button class=\"qref\" data-id=\"938\">공식 모의고사 Q38</button>과 짝): <b>같은 일을 나눠 하기 = 구독 1개 공유</b>, <b>서로 다른 일을 모두 하기(팬아웃) = 목적지마다 구독 1개</b>.</p>",
+  whyRight: "<div class=\"tbl\"><table><thead><tr><th>규칙</th><th>이 문제에서</th></tr></thead><tbody><tr><td>구독마다 모든 메시지의 사본</td><td>BigQuery용 구독 + Cloud Storage용 구독 → 두 곳 모두 전체 메시지 수신</td></tr><tr><td>push 구독 1개 = 엔드포인트 1개</td><td>각 구독이 각자의 Cloud Run 서비스로 push</td></tr><tr><td>구독마다 독립된 ack·재시도·데드 레터</td><td>BigQuery 쓰기가 실패해도 Cloud Storage 쪽에 영향 없음 = 운영 부담 최소</td></tr></tbody></table></div>\n<p>게시자는 토픽 하나에만 보내면 되고, 목적지를 늘릴 때도 구독만 추가합니다.</p>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"938\">공식 모의고사 Q38</button>은 감사 VM 여러 대가 <b>같은 일을 나눠</b> 해서 구독 1개가 답이었고, 이번은 <b>다른 목적지 두 곳에 모두</b> 써야 해서 구독 2개입니다.</p>",
+  others: {
+    C: "한 서비스가 두 곳에 순서대로 쓰면, BigQuery는 성공하고 Cloud Storage가 실패했을 때 메시지 재전송으로 BigQuery에 중복이 생깁니다. 한쪽 장애가 다른 쪽까지 막고, 확장도 따로 할 수 없습니다.",
+    D: "토픽을 둘로 나누면 게시하는 쪽이 같은 메시지를 두 토픽에 각각 보내야 해 게시 코드 변경·불일치 위험이 생깁니다. Pub/Sub의 팬아웃(구독 여러 개)을 쓰면 토픽 하나로 충분합니다."
+  },
+  rules: [
+    ["모든 메시지를 서로 다른 목적지 여러 곳에(팬아웃)", "토픽 1 + 목적지별 구독"],
+    ["같은 처리를 여러 워커가 나눠서", "토픽 1 + 구독 1 공유"],
+    ["push 구독", "엔드포인트 하나만 지정"],
+    ["한 서비스에서 여러 목적지에 순차 쓰기", "실패·재시도가 얽혀 운영 부담 증가"],
+    ["변환 없이 BigQuery·Cloud Storage에 적재만", "BigQuery 구독·Cloud Storage 구독(서비스 코드도 불필요)"]
+  ],
+  oneLine: "모든 메시지를 두 곳에 쓰려면 토픽 하나에 구독 두 개(팬아웃). 구독 하나는 엔드포인트 하나이고, 나눠 받는 것이지 복사가 아니다.",
+  tip: "변환이 필요 없다면 Pub/Sub의 <b>BigQuery 구독</b>과 <b>Cloud Storage 구독</b>을 쓰면 Cloud Run 서비스 없이 바로 적재돼 운영 부담이 더 줄어듭니다. push 구독에는 인증용 서비스 계정(OIDC 토큰)을 지정하고, Cloud Run 서비스는 그 SA에만 <code>roles/run.invoker</code>를 줍니다."
 }
 ];
