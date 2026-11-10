@@ -12193,8 +12193,7 @@ var PROBLEMS = [
     ["Cloud Storage FUSE(A)", "객체 저장소라 완전한 POSIX가 아님(동시 쓰기·잠금·부분 수정 미지원)", "A 제외"]
   ],
   keywordNote: "일본어 표기: Filestore(영어 그대로), NFS, 永続ディスク, PersistentVolume·ConfigMap(영어 그대로), アクセスモード ReadWriteMany(확인 필요), Cloud Storage FUSE.",
-  whyWrong: "<p><b>틀린 원인: 서비스 이름 오독.</b> 보기 C의 <mark>Filestore(ファイルストア, 관리형 NFS 파일 서버)</mark>를 <b>Firestore(ファイアストア, 문서형 NoSQL DB)</b>로 읽어서, “DB에 파일 시스템을 마운트한다”는 이상한 보기로 보고 제외했습니다. 철자 한 글자 차이(<code>Fil<b>e</b>store</code> vs <code>Fi<b>re</b>store</code>)라 일본어 시험에서도 가타카나(ファイル vs ファイア)로 구분해야 합니다.</p>
-<p>그 다음 “구성 파일”이라는 말에서 ConfigMap이 바로 떠오르는 함정에 걸렸습니다.</p>\n<ul><li>ConfigMap을 볼륨으로 마운트하면 <mark>읽기 전용</mark>입니다. 문제는 “여러 인스턴스가 구성 파일에 <b>읽기와 쓰기</b> 권한”이라고 명시했으므로, 앱이 파일을 쓰는 순간 실패합니다.</li><li>쓰기를 하려면 앱이 Kubernetes API로 ConfigMap을 수정하도록 코드를 바꿔야 해 “코드 재작성 회피”에도 어긋납니다.</li></ul>\n<p>판단법: “구성 파일”이라는 단어가 아니라 <b>접근 방식(누가·읽기만/쓰기도·여러 개가 동시에)</b>을 봅니다. 읽기만 = ConfigMap·Secret, 여러 Pod가 쓰기 = Filestore(RWX).</p>",
+  whyWrong: "<p><b>틀린 원인: 서비스 이름 오독.</b> 보기 C의 <mark>Filestore(ファイルストア, 관리형 NFS 파일 서버)</mark>를 <b>Firestore(ファイアストア, 문서형 NoSQL DB)</b>로 읽어서, “DB에 파일 시스템을 마운트한다”는 이상한 보기로 보고 제외했습니다. 철자 한 글자 차이(<code>Fil<b>e</b>store</code> vs <code>Fi<b>re</b>store</code>)라 일본어 시험에서도 가타카나(ファイル vs ファイア)로 구분해야 합니다.</p>\n<p>그 다음 “구성 파일”이라는 말에서 ConfigMap이 바로 떠오르는 함정에 걸렸습니다.</p>\n<ul><li>ConfigMap을 볼륨으로 마운트하면 <mark>읽기 전용</mark>입니다. 문제는 “여러 인스턴스가 구성 파일에 <b>읽기와 쓰기</b> 권한”이라고 명시했으므로, 앱이 파일을 쓰는 순간 실패합니다.</li><li>쓰기를 하려면 앱이 Kubernetes API로 ConfigMap을 수정하도록 코드를 바꿔야 해 “코드 재작성 회피”에도 어긋납니다.</li></ul>\n<p>판단법: “구성 파일”이라는 단어가 아니라 <b>접근 방식(누가·읽기만/쓰기도·여러 개가 동시에)</b>을 봅니다. 읽기만 = ConfigMap·Secret, 여러 Pod가 쓰기 = Filestore(RWX).</p>",
   whyRight: "<p>Filestore는 Google Cloud의 <mark>관리형 NFS 파일 서버</mark>입니다. GKE에서 NFS PersistentVolume(또는 Filestore CSI 드라이버의 StorageClass)으로 마운트하면 <b>여러 노드의 여러 Pod가 같은 파일을 동시에 읽고 쓸 수 있습니다(ReadWriteMany)</b>.</p>\n<ul><li>지금 쓰는 “공유 파일 시스템”과 같은 방식(NFS·POSIX) → 앱은 같은 경로에서 파일을 읽고 쓰면 됨 = 코드 재작성 없음</li><li>관리형이라 NFS 서버를 직접 운영할 필요 없음 = 이전 작업 최소</li></ul>\n<div class=\"tbl\"><table><thead><tr><th>보기</th><th>여러 Pod 동시 쓰기</th><th>코드 변경</th></tr></thead><tbody><tr><td>A Cloud Storage FUSE</td><td>제한적(POSIX 아님)</td><td>잠금·부분 쓰기 쓰면 필요</td></tr><tr><td>B 영구 디스크</td><td>✕(RWO, 다중 노드는 읽기 전용)</td><td>—</td></tr><tr><td><mark>C Filestore NFS</mark></td><td>○(RWX)</td><td>없음</td></tr><tr><td>D ConfigMap</td><td>✕(읽기 전용)</td><td>필요</td></tr></tbody></table></div>\n<p><b>기존 문제와 비교</b>: GKE의 영구 디스크·PVC는 <button class=\"qref\" data-id=\"428\">4세트 Q28</button>(PVC 확장)에서 다뤘습니다. 이번은 “여러 Pod 공유 쓰기”라 영구 디스크가 아니라 Filestore입니다.</p>",
   others: {
     A: "Cloud Storage FUSE는 버킷을 파일처럼 마운트하지만 객체 저장소라 동시 쓰기 제어·파일 잠금·부분 수정이 안 되고, 마지막 쓰기가 덮어씁니다. 여러 인스턴스가 같은 구성 파일을 쓰는 용도에 맞지 않습니다.",
@@ -12206,7 +12205,8 @@ var PROBLEMS = [
     ["Pod 하나의 영구 저장(DB 데이터 등)", "영구 디스크 PVC(ReadWriteOnce)"],
     ["읽기 전용 설정값·설정 파일 주입", "ConfigMap(민감 정보는 Secret)"],
     ["대용량 객체를 파일처럼 읽기(주로 읽기·추가)", "Cloud Storage FUSE"],
-    ["“구성 파일”이라는 단어", "접근 방식(쓰기 여부·동시 접근)으로 판단"]
+    ["“구성 파일”이라는 단어", "접근 방식(쓰기 여부·동시 접근)으로 판단"],
+    ["Filestore vs Firestore", "Filestore = 파일 서버(NFS, ファイルストア), Firestore = 문서 DB(ファイアストア)"]
   ],
   oneLine: "여러 Pod가 같은 파일을 읽고 쓰면 Filestore(NFS, RWX). ConfigMap은 읽기 전용, 영구 디스크는 한 노드만 쓴다.",
   tip: "GKE에서는 Filestore CSI 드라이버를 켜고 <code>storageClassName: standard-rwx</code>, <code>accessModes: [ReadWriteMany]</code>인 PVC를 만들면 Filestore 인스턴스가 자동으로 생깁니다. 다만 마이크로서비스로 쪼갠 뒤에는 공유 파일로 설정을 주고받는 구조 자체를 ConfigMap(읽기)·DB·Firestore로 점진적으로 바꾸는 것이 장기적으로 좋습니다."
