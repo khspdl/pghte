@@ -11977,5 +11977,50 @@ var PROBLEMS = [
   ],
   oneLine: "Cloud Build가 느리면 머신을 키우고(고 CPU) --cache-from으로 레이어를 재사용한다. 레지스트리 자체 운영·무거운 베이스 이미지는 역효과다.",
   tip: "cloudbuild.yaml 예: 첫 단계에서 <code>docker pull IMAGE:latest || exit 0</code>, 빌드 단계에서 <code>docker build --cache-from IMAGE:latest -t IMAGE:$SHORT_SHA .</code>, 마지막에 <code>options: machineType: E2_HIGHCPU_8</code>. 고 CPU 머신은 분당 요금이 높으니 빌드 시간 단축 효과와 함께 비용도 확인합니다."
+},
+{
+  id: 933,
+  title: "Cloud Run 앱이 로그를 로컬 파일에 씀, Cloud Logging으로 보내면서 유지보수할 코드 최소 → 언어 기본 로거로 stdout·stderr에 쓰기(Cloud Run이 자동 수집)(Cloud Logging 라이브러리 아님)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Cloud Logging", "Cloud Run", "stdout", "stderr", "로깅 라이브러리", "구조화 로깅"],
+  mine: "A",
+  correct: "B",
+  pending: true,
+  section: "4.3",
+  freq: "high",
+  freqNote: "관측 가능성(Logging)은 CLAUDE.md high 기준이고, 같은 축(표준 출력 vs Logging API)이 2세트 Q7·3세트 Q10·공식 모의고사 Q12에 나왔습니다. <b>“Cloud Run·GKE에서 코드 최소로 Cloud Logging = stdout·stderr(필요하면 JSON 한 줄)”</b>를 가져가면 됩니다.",
+  question: {
+    en: "開発したアプリケーションを Cloud Run でホストしようとしています。このアプリケーションはログレコードをテキストとしてローカル ファイルに書き込みます。ログが Cloud Logging に書き込まれるようにし、さらに、保守する必要があるコードの量を最小化する必要があります。どうすればよいですか。",
+    ko: "개발한 애플리케이션을 Cloud Run에서 호스팅하려고 합니다. 이 애플리케이션은 로그 레코드를 텍스트로 로컬 파일에 씁니다. 로그가 Cloud Logging에 기록되게 하고, 나아가 유지보수해야 하는 코드의 양을 최소화해야 합니다. 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "コードに Cloud Logging ライブラリをインポートして、それをログの書き込みに使用する。", ko: "코드에 Cloud Logging 라이브러리를 가져와서 로그 기록에 사용한다." },
+    B: { en: "プログラミング言語のロガーを使用して、標準出力（stdout）ストリームと標準エラー（stderr）ストリームにログを書き込む。", ko: "프로그래밍 언어의 로거를 사용해 표준 출력(stdout) 스트림과 표준 오류(stderr) 스트림에 로그를 쓴다." },
+    C: { en: "ログファイルを www.mycompany.com/logs に公開する。ブラウザを使用してファイルを手動でダウンロードして Cloud Storage にアップロードする。", ko: "로그 파일을 www.mycompany.com/logs에 공개한다. 브라우저로 파일을 수동으로 내려받아 Cloud Storage에 업로드한다." },
+    D: { en: "cron を使用して、ログファイルを 1 日に 1 回 Cloud Storage にコピーするジョブをスケジュールする。", ko: "cron을 사용해 로그 파일을 하루에 한 번 Cloud Storage에 복사하는 작업을 예약한다." }
+  },
+  keywords: [
+    ["Cloud Run でホスト", "Cloud Run은 컨테이너의 <mark>stdout·stderr를 자동으로 Cloud Logging에 보냄</mark>(에이전트·설정 불필요)", "B"],
+    ["保守する必要があるコードの量を最小化", "언어 기본 로거의 출력 대상만 바꿈 → Google 라이브러리 의존성·인증·버전 관리 없음", "B(A 제외)"],
+    ["Cloud Logging ライブラリ(A)", "가능은 하지만 의존성과 호출 코드를 계속 유지보수해야 함", "A 제외"],
+    ["ローカル ファイル", "Cloud Run 파일 시스템은 메모리 기반·인스턴스와 함께 사라짐 → 파일 로그 자체가 부적절", "C·D 제외"],
+    ["手動ダウンロード / cron で Cloud Storage(C·D)", "Cloud Logging에 들어가지 않음, 공개·수작업·cron은 보안·운영 문제", "C·D 제외"]
+  ],
+  keywordNote: "일본어 표기: 標準出力（stdout） / 標準エラー（stderr）, Cloud Logging ライブラリ(クライアント ライブラリ), 構造化ロギング, ロガー.",
+  whyWrong: "<p><b>틀린 원인: 요건 우선순위 놓침.</b> “Cloud Logging에 쓰기”만 보면 전용 라이브러리(A)가 가장 확실해 보입니다. 하지만 두 번째 요건 <mark>“保守する必要があるコードの量を最小化”</mark>가 결정 기준입니다.</p>\n<ul><li>A는 Google Cloud 라이브러리를 의존성으로 추가하고, 로그를 쓰는 곳마다 라이브러리 호출로 바꿔야 합니다. 라이브러리 버전 업데이트·인증 설정도 계속 관리해야 합니다.</li><li>B는 이미 쓰고 있는 언어 기본 로거의 <b>출력 대상만 파일 → stdout·stderr로</b> 바꾸면 끝입니다. 나머지는 Cloud Run이 자동으로 Cloud Logging에 보냅니다.</li></ul>\n<p>판단법: Cloud Run·GKE·Cloud Run functions에서 “최소 코드·최소 노력·가장 간단히”가 붙으면 <b>stdout</b>. Logging API(라이브러리)는 “표준 출력을 쓸 수 없는 환경”이나 3세트 Q10처럼 “둘 다 고르라”일 때만 답입니다.</p>",
+  whyRight: "<p>Cloud Run은 컨테이너가 <code>stdout</code>·<code>stderr</code>에 쓴 내용을 <mark>자동으로 Cloud Logging</mark>에 보냅니다(<code>run.googleapis.com/stdout</code>, <code>run.googleapis.com/stderr</code> 로그). 로깅 에이전트도 라이브러리도 필요 없습니다.</p>\n<ul><li>코드 변경: 로거의 핸들러(출력 대상)를 파일에서 콘솔로 바꾸는 한 줄 수준</li><li>심각도·검색성을 높이려면 한 줄 JSON(<code>{\"severity\":\"ERROR\",\"message\":\"...\"}</code>)으로 출력 → <code>jsonPayload</code>·<code>severity</code>로 자동 해석(구조화 로깅)</li></ul>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"912\">공식 모의고사 Q12</button>(로깅 라이브러리로 stdout + 메타데이터 = JSON 구조화 로깅), <button class=\"qref\" data-id=\"207\">2세트 Q7</button>(검색성 = JSON을 stdout)과 같은 계열입니다. <button class=\"qref\" data-id=\"310\">3세트 Q10</button>은 2개를 고르는 문제라 Logging API 직접 쓰기도 정답에 들어갔지만, 이번처럼 하나만 고르고 “코드 최소”면 stdout이 우선입니다.</p>",
+  others: {
+    C: "로그 파일을 외부에 공개하는 것은 보안상 문제이고, 수동 다운로드·업로드는 Cloud Logging에 넣는 것도 아닙니다. Cloud Run 인스턴스의 로컬 파일은 인스턴스가 사라지면 함께 사라집니다.",
+    D: "Cloud Storage에 복사해도 Cloud Logging에는 들어가지 않습니다. Cloud Run에는 cron이 상주할 곳이 없고, 인스턴스가 축소되면 하루치 파일이 복사 전에 사라질 수 있습니다."
+  },
+  rules: [
+    ["Cloud Run·GKE에서 Cloud Logging + 코드 최소", "언어 로거로 stdout·stderr"],
+    ["심각도·필드 검색·요청 메타데이터", "stdout에 한 줄 JSON(구조화 로깅)"],
+    ["stdout을 쓸 수 없거나 로그 이름·리소스를 직접 지정", "Cloud Logging 클라이언트 라이브러리(Logging API)"],
+    ["Compute Engine VM의 로그 파일", "Ops Agent로 수집"],
+    ["로그를 파일로 남겨 Cloud Storage에 복사·공개", "오답"]
+  ],
+  oneLine: "Cloud Run에서는 stdout·stderr에 쓰기만 하면 Cloud Logging에 들어간다. 코드 최소면 라이브러리보다 표준 출력이다.",
+  tip: "Python이면 <code>logging.basicConfig(stream=sys.stdout)</code>, Node.js면 <code>console.log(JSON.stringify({severity:'INFO', message:'...'}))</code>처럼 씁니다. JSON에 <code>logging.googleapis.com/trace</code> 필드를 넣으면 같은 요청의 로그가 Cloud Trace와 묶입니다. Cloud Run 파일 시스템은 메모리를 차지하므로 로그 파일을 쌓으면 메모리 부족으로 인스턴스가 재시작될 수도 있습니다."
 }
 ];
