@@ -12443,5 +12443,52 @@ var PROBLEMS = [
   ],
   oneLine: "대량 투표는 Pub/Sub으로 받고, Dataflow로 30분씩 집계해 BigQuery에 쌓고, Looker Studio로 본다.",
   tip: "Dataflow는 Google 제공 템플릿(Pub/Sub to BigQuery)으로 시작할 수 있고, 집계 로직은 Apache Beam의 <code>FixedWindows(30분)</code> + <code>Count.perKey()</code>로 씁니다. 집계 없이 원본만 쌓으면 된다면 Pub/Sub의 BigQuery 구독으로 Dataflow 없이 적재하고, 집계는 BigQuery에서 예약 쿼리로 해도 됩니다."
+},
+{
+  id: 943,
+  title: "Cloud Build로 함수 배포 → 테스트 → 삭제(정리)하는데 테스트 실패 시 삭제가 안 됨 → 테스트 단계는 결과를 파일(/workspace)에 쓰고 0 반환, 삭제 뒤에 파일을 검사해 실패시키는 단계 추가(환경 변수는 단계 간 유지 안 됨)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Cloud Build", "빌드 단계", "종료 코드", "/workspace", "waitFor", "allowFailure", "Cloud Run functions", "정리 단계"],
+  mine: "B",
+  correct: "C",
+  pending: true,
+  guess: true,
+  section: ["2.2", "2.3"],
+  freq: "mid",
+  freqNote: "Cloud Build(CI/CD)는 high 영역이지만 이번은 단계 실패 시 동작이라는 세부입니다. <b>“단계가 0이 아닌 값으로 끝나면 빌드 즉시 중단(뒤 단계 실행 안 됨), 단계 간 공유는 /workspace 파일만”</b>을 가져가면 됩니다.",
+  question: {
+    en: "あなたは、Node.js で Cloud Run functions の関数を記述して、ソースコードを Git リポジトリに格納しました。ソースコードに commit された変更が自動的にテストされるようにしたいと考えています。そこで、ソースコードを一意の名前の Cloud Run functions の関数に push し、関数をテストで呼び出した後に、削除してクリーンアップする Cloud Build 構成を記述しました。ところが、テストに失敗すると関数が削除されないことがわかりました。どうすればよいですか。",
+    ko: "당신은 Node.js로 Cloud Run functions 함수를 작성하고 소스 코드를 Git 저장소에 저장했습니다. 소스 코드에 커밋된 변경이 자동으로 테스트되게 하려고 합니다. 그래서 소스 코드를 고유한 이름의 Cloud Run functions 함수에 push하고, 함수를 테스트로 호출한 뒤 삭제해 정리하는 Cloud Build 구성을 작성했습니다. 그런데 테스트가 실패하면 함수가 삭제되지 않는다는 것을 알게 되었습니다. 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "テストの実行前に Cloud Run functions の関数を削除するようにステップの順序を変更する。", ko: "테스트 실행 전에 Cloud Run functions 함수를 삭제하도록 단계 순서를 바꾼다." },
+    B: { en: "Cloud Build ステップに waitFor オプションを追加し、Cloud Run functions 関数のテストステップを必要な直前のステップとして指定して削除する。", ko: "Cloud Build 단계에 waitFor 옵션을 추가하고, Cloud Run functions 함수의 테스트 단계를 필요한 직전 단계로 지정해 삭제한다." },
+    C: { en: "Cloud Build ステップで Cloud Run functions 関数の結果をファイルに書き込み、0 を返すようにする。そのファイルに予想どおりの結果が含まれるかどうかを確認し、期待される結果でない場合は失敗とするステップを、Cloud Run functions 関数の削除の後に追加する。", ko: "Cloud Build 단계에서 Cloud Run functions 함수의 결과를 파일에 쓰고 0을 반환하게 한다. 그 파일에 예상한 결과가 들어 있는지 확인해, 기대한 결과가 아니면 실패로 처리하는 단계를 Cloud Run functions 함수 삭제 뒤에 추가한다." },
+    D: { en: "Cloud Build ステップで結果を「result」という環境変数に設定し、0 を返すようにする。その環境変数に予想どおりの結果が含まれるかどうかを確認する最後のステップを、Cloud Run functions 関数の削除の後に追加する。", ko: "Cloud Build 단계에서 결과를 “result”라는 환경 변수에 설정하고 0을 반환하게 한다. 그 환경 변수에 예상한 결과가 들어 있는지 확인하는 마지막 단계를 Cloud Run functions 함수 삭제 뒤에 추가한다." }
+  },
+  keywords: [
+    ["テストに失敗すると関数が削除されない", "단계가 <mark>0이 아닌 종료 코드</mark>로 끝나면 Cloud Build는 <mark>빌드를 즉시 중단</mark> → 뒤의 삭제 단계가 실행되지 않음", "C"],
+    ["結果をファイルに書き込み、0 を返す(C)", "테스트 단계는 항상 성공으로 끝내 삭제까지 진행, 결과는 <mark>/workspace 파일</mark>로 넘김", "C"],
+    ["削除の後に…失敗とするステップ(C)", "정리가 끝난 뒤 파일을 보고 실패 처리 → 빌드 결과도 정확", "C"],
+    ["waitFor(B)", "실행 <b>순서·병렬</b>만 지정. 앞 단계가 실패하면 빌드가 멈추는 것은 그대로", "B 제외"],
+    ["環境変数「result」(D)", "각 단계는 별도 컨테이너라 환경 변수가 <mark>다음 단계로 전달되지 않음</mark>", "D 제외"],
+    ["テスト前に削除(A)", "함수를 지우면 테스트할 대상이 없음", "A 제외"]
+  ],
+  keywordNote: "일본어 표기: ビルドステップ, waitFor(그대로), 終了コード, /workspace(그대로), allowFailure(그대로), Cloud Run functions(옛 Cloud Functions).",
+  whyWrong: "<p><b>틀린 원인: waitFor의 역할 오해.</b> waitFor로 “테스트 다음에 삭제”를 지정하면 실패해도 삭제가 돌 것처럼 보이지만, waitFor는 <mark>언제 시작할지(의존 관계·병렬 실행)</mark>만 정합니다.</p>\n<ul><li>Cloud Build는 어떤 단계든 0이 아닌 종료 코드로 끝나면 <b>빌드 전체를 실패로 끝내고 남은 단계를 실행하지 않습니다</b>. 그래서 테스트 단계가 실패하는 한, waitFor를 어떻게 걸어도 삭제 단계는 돌지 않습니다.</li><li>해결은 “테스트 단계를 실패시키지 않는 것”: 결과를 파일에 저장하고 0을 반환 → 삭제 → 마지막에 파일을 보고 실패 처리(C).</li></ul>\n<p>판단법: Cloud Build에서 “실패해도 뒤 단계를 돌려야 함”이면 <b>종료 코드를 0으로 만들고 결과를 /workspace 파일로 넘기기</b>(현재는 <code>allowFailure: true</code>도 가능).</p>",
+  whyRight: "<p>Cloud Build의 두 규칙에서 바로 나옵니다.</p>\n<div class=\"tbl\"><table><thead><tr><th>규칙</th><th>결과</th></tr></thead><tbody><tr><td>단계가 실패(0 이외 종료)하면 빌드 중단</td><td>테스트 단계가 실패로 끝나면 삭제 단계는 영원히 안 돎 → 테스트 단계는 0으로 끝내야 함</td></tr><tr><td>단계 간 공유는 <code>/workspace</code> 볼륨뿐</td><td>결과는 파일로 넘김(환경 변수는 단계마다 사라짐)</td></tr></tbody></table></div>\n<pre><code>steps:\n- name: gcr.io/google.com/cloudsdktool/cloud-sdk   # 배포\n  args: ['gcloud','functions','deploy','fn-$BUILD_ID', ...]\n- name: ...                                          # 테스트(결과를 파일로, 항상 0)\n  entrypoint: bash\n  args: ['-c','./test.sh > /workspace/result.txt; exit 0']\n- name: gcr.io/google.com/cloudsdktool/cloud-sdk   # 정리\n  args: ['gcloud','functions','delete','fn-$BUILD_ID','--quiet']\n- name: bash                                         # 판정(마지막)\n  args: ['-c','grep -q PASS /workspace/result.txt']</code></pre>\n<p><b>기존 문제와 비교</b>: 단계 간 데이터는 /workspace 파일로 넘긴다는 <button class=\"qref\" data-id=\"324\">3세트 Q24</button>, <button class=\"qref\" data-id=\"204\">2세트 Q4</button>와 같은 원리입니다. 실패하면 배포를 막는다는 <button class=\"qref\" data-id=\"344\">3세트 Q44</button>는 이 “실패 시 중단” 성질을 거꾸로 이용한 문제입니다.</p>",
+  others: {
+    A: "테스트 전에 함수를 지우면 테스트할 함수가 없어 테스트 자체가 의미 없어집니다.",
+    D: "Cloud Build 단계는 각각 별도 컨테이너로 실행되므로 한 단계에서 설정한 환경 변수는 다음 단계에 남지 않습니다. 마지막 단계는 결과를 읽을 수 없습니다."
+  },
+  rules: [
+    ["단계 실패(0 이외 종료) 시 동작", "빌드 즉시 중단, 뒤 단계 실행 안 됨"],
+    ["실패해도 정리 단계를 꼭 돌려야 함", "테스트 결과를 /workspace 파일에 쓰고 0 반환 → 정리 → 마지막에 판정(또는 allowFailure)"],
+    ["단계 간 데이터 전달", "/workspace 파일(환경 변수·VM 메타데이터 아님)"],
+    ["waitFor", "실행 순서·병렬 지정만(실패 처리와 무관)"],
+    ["테스트 실패 시 배포 막기", "실패 시 중단되는 성질 그대로 이용(테스트 → 배포 순)"]
+  ],
+  oneLine: "Cloud Build는 한 단계라도 실패하면 거기서 멈춘다. 정리를 꼭 하려면 테스트는 결과를 파일에 남기고 성공으로 끝내고, 정리 뒤에 파일로 판정한다.",
+  tip: "현재 Cloud Build는 단계에 <code>allowFailure: true</code>(또는 <code>allowExitCodes</code>)를 지정해 실패해도 빌드를 계속하게 할 수 있지만, 그러면 빌드 전체가 성공으로 끝날 수 있으니 마지막 판정 단계는 여전히 필요합니다. 함수 이름에 <code>$BUILD_ID</code>나 <code>$SHORT_SHA</code>를 붙이면 동시 빌드끼리 충돌하지 않습니다."
 }
 ];
