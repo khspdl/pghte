@@ -12068,5 +12068,51 @@ var PROBLEMS = [
   ],
   oneLine: "외부 IP 없는 VM이 Google API를 부르려면 서브넷에 비공개 Google 액세스를 켠다. 인터넷은 Cloud NAT, VPC끼리는 피어링이다.",
   tip: "VPC 서비스 제어와 함께 쓸 때는 <code>restricted.googleapis.com</code>(199.36.153.4/30)으로 DNS를 돌려 경계 안 서비스만 허용합니다. 비공개 Google 액세스는 기본 인터넷 게이트웨이 경로(0.0.0.0/0 → default-internet-gateway)가 필요하니 경로를 지웠다면 Google API 범위로 다시 만들어야 합니다. 서비스 계정·액세스 범위(IAM) 권한은 별도로 필요합니다."
+},
+{
+  id: 935,
+  title: "로컬에선 빠른데 Compute Engine에 배포하면 성능이 크게 떨어짐, 최소 변경으로 진단 → Cloud Profiler로 시간이 가장 오래 걸리는 함수 파악(Cloud Debugger는 지원 종료)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Cloud Profiler", "플레임 그래프", "Cloud Debugger", "성능 진단", "Compute Engine", "Cloud Logging"],
+  mine: "C",
+  correct: "C",
+  pending: true,
+  section: "4.3",
+  freq: "high",
+  freqNote: "관측 가능성(4.3)은 CLAUDE.md high 기준이고, Profiler는 1세트 Q50에 이어 두 번째입니다. <b>“코드의 어느 함수가 느린가·CPU를 먹는가 = Profiler, 서비스 간 어디서 지연 = Trace”</b>를 가져가면 됩니다.",
+  question: {
+    en: "ローカルテストでは問題がなく、Compute Engine インスタンスにデプロイするとパフォーマンスが大幅に低下するアプリケーションがあります。変更は最小限にして問題を診断する必要があります。どうすればよいですか。",
+    ko: "로컬 테스트에서는 문제가 없지만, Compute Engine 인스턴스에 배포하면 성능이 크게 떨어지는 애플리케이션이 있습니다. 변경은 최소한으로 하면서 문제를 진단해야 합니다. 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "Cloud サポートにチケットを提出し、アプリケーションがローカルでは高速に動作することを説明する。", ko: "Cloud 지원팀에 티켓을 제출하고, 애플리케이션이 로컬에서는 빠르게 동작한다고 설명한다." },
+    B: { en: "Cloud デバッガのスナップショットを使用して、特定時点でのアプリケーションの実行を確認する。", ko: "Cloud Debugger의 스냅숏을 사용해, 특정 시점의 애플리케이션 실행을 확인한다." },
+    C: { en: "Cloud Profiler を使用して、アプリケーションのどの関数に最も時間がかかっているのかを判断する。", ko: "Cloud Profiler를 사용해, 애플리케이션의 어느 함수에 가장 시간이 걸리는지 판단한다." },
+    D: { en: "アプリケーションにロギング コマンドを追加し、Cloud Logging を使用して、レイテンシの問題がどこで発生しているのかを確認する。", ko: "애플리케이션에 로깅 명령을 추가하고, Cloud Logging을 사용해 지연 문제가 어디서 발생하는지 확인한다." }
+  },
+  keywords: [
+    ["パフォーマンスが大幅に低下", "실행 환경에서 <mark>어느 함수가 시간·CPU를 쓰는지</mark> 봐야 함 → Cloud Profiler", "C"],
+    ["変更は最小限", "Profiler는 에이전트(라이브러리) 시작 코드 몇 줄, 오버헤드 낮아 운영 중 상시 실행 가능", "C(D 제외)"],
+    ["ロギング コマンドを追加(D)", "의심 지점마다 로그를 넣고 재배포 반복 → 변경이 큼", "D 제외"],
+    ["Cloud デバッガのスナップショット(B)", "특정 줄의 변수·호출 스택 확인용(성능 측정 아님), 2023년 지원 종료", "B 제외"],
+    ["Cloud サポートにチケット(A)", "직접 진단 수단이 아님", "A 제외"]
+  ],
+  keywordNote: "일본어 표기: Cloud Profiler(영어 그대로), フレームグラフ, 継続的なプロファイリング, Cloud デバッガ(Cloud Debugger, 지원 종료), スナップショット.",
+  whyWrong: "",
+  whyRight: "<p>Cloud Profiler는 운영 중인 앱에서 <mark>함수별 CPU 시간·실제 경과 시간(wall time)·힙 메모리</mark>를 낮은 오버헤드로 계속 샘플링해 플레임 그래프로 보여 줍니다.</p>\n<ul><li>로컬과 클라우드의 차이(CPU 크기, 디스크, 네트워크 호출 대기 등)는 실제 VM에서 측정해야 보입니다 → 운영 환경 상시 프로파일링이 맞음</li><li>변경: 언어별 Profiler 에이전트를 시작할 때 한 번 초기화(Java는 JVM 옵션만)하고, VM 서비스 계정에 <code>roles/cloudprofiler.agent</code></li><li>결과: “어느 함수가 가장 오래 걸리나”가 바로 보임</li></ul>\n<p><b>기존 문제와 비교</b>: <button class=\"qref\" data-id=\"50\">Q50</button>(GKE Go 앱 CPU 사용률 높음, 어느 함수가 CPU를 쓰나 = Profiler)과 같은 답입니다. 지연이 <b>여러 서비스 사이 어디</b>에서 나는지라면 <button class=\"qref\" data-id=\"901\">공식 모의고사 Q1</button>처럼 Cloud Trace입니다.</p>",
+  others: {
+    A: "지원팀 티켓은 직접 진단 방법이 아니고, 앱 코드의 성능 문제는 사용자 쪽에서 분석해야 합니다.",
+    B: "Cloud Debugger 스냅숏은 특정 코드 줄의 변수·호출 스택을 보는 디버깅 도구로 성능(시간) 측정이 아닙니다. 게다가 Cloud Debugger는 2023년에 지원 종료되었습니다(후속은 오픈소스 Snapshot Debugger).",
+    D: "로그로 지연 지점을 찾으려면 여러 곳에 시간 측정 코드를 넣고 재배포를 반복해야 해 “최소 변경”에 어긋나고, 함수 단위 전체 모습도 보기 어렵습니다."
+  },
+  rules: [
+    ["코드의 어느 함수가 느림·CPU·메모리 소비", "Cloud Profiler(플레임 그래프)"],
+    ["여러 서비스 사이 어디서 지연", "Cloud Trace"],
+    ["새 예외 발생·그룹화", "Error Reporting"],
+    ["특정 줄의 변수값 확인(디버깅)", "(옛) Cloud Debugger 스냅숏 → 현재는 Snapshot Debugger·로그"],
+    ["로그를 추가해 지연 위치 찾기", "변경이 커서 “최소 변경”에선 오답"]
+  ],
+  oneLine: "어느 함수가 느린지는 Profiler로, 어느 서비스가 느린지는 Trace로 본다. Debugger 스냅숏은 성능 도구가 아니다.",
+  tip: "Profiler 결과를 로컬과 비교할 때는 같은 기간·같은 부하로 비교하고, “wall time은 큰데 CPU time은 작다”면 I/O·네트워크·잠금 대기(예: 리전이 다른 DB 호출)를 의심합니다. Compute Engine에서는 VM의 액세스 범위에 cloud-platform(또는 Profiler 범위)이 있어야 에이전트가 데이터를 보낼 수 있습니다."
 }
 ];
