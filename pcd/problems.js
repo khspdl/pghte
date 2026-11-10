@@ -11971,7 +11971,7 @@ var PROBLEMS = [
   rules: [
     ["Cloud Build 빌드가 느림(CPU 단계)", "더 큰 머신 유형(options.machineType, 비공개 풀)"],
     ["Docker 레이어를 매번 다시 빌드", "--cache-from(또는 Kaniko 캐시)"],
-    ["업로드할 소스가 큼", "​.gcloudignore로 불필요 파일 제외"],
+    ["업로드할 소스가 큼", ".gcloudignore로 불필요 파일 제외"],
     ["베이스 이미지 교체", "더 가벼운 쪽(alpine·distroless)이면 단축, 무거운 쪽(ubuntu + 설치)은 역효과"],
     ["레지스트리 자체 운영·소스 재다운로드", "오답"]
   ],
