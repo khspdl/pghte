@@ -12397,5 +12397,51 @@ var PROBLEMS = [
   ],
   oneLine: "남의(사용자) Drive에 쓰려면 그 사용자의 동의 = OAuth 클라이언트 ID + drive.file 스코프. 도메인 전체 위임은 자기 회사 도메인 안에서만 통한다.",
   tip: "갱신 토큰(refresh token)은 Secret Manager나 암호화된 DB(Firestore 등)에 사용자별로 저장하고, 오프라인 접근이 필요하면 인증 요청에 <code>access_type=offline</code>을 붙입니다. 외부 사용자가 대상이면 OAuth 동의 화면의 사용자 유형을 “外部”로 두고 앱 검증을 받습니다."
+},
+{
+  id: 942,
+  title: "전 세계 사용자의 대량 투표를 30분마다 주제별 집계 + 향후 분석용으로 보존 → Pub/Sub로 게시 → Dataflow 파이프라인(30분 윈도 집계)으로 집계값·원본 투표를 BigQuery에 → Looker Studio(옛 Google データポータル)(추정, 채점 전)",
+  added: "2026-11-10",
+  tags: ["Pub/Sub", "Dataflow", "BigQuery", "Looker Studio", "스트리밍 집계", "윈도", "Cloud Run functions"],
+  mine: "B",
+  correct: "B",
+  pending: true,
+  section: ["1.3", "4.1"],
+  freq: "mid",
+  freqNote: "PCD 범위에서는 1.3 “分析と AI / ML ワークロードのための BigQuery へのデータの書き込み”에 해당합니다. Dataflow 세부는 PDE 영역이라 <b>“대량 이벤트 수집 + 주기 집계 + 분석 보존 = Pub/Sub → Dataflow → BigQuery”</b> 정석 파이프라인만 가져가면 됩니다.",
+  question: {
+    en: "あなたのチームは、世界中のユーザーが一般的なトピックについて投票できるモバイル ウェブ アプリケーションを開発しました。各トピックにつき、それぞれ 30 分の投票期間中に非常に多くの投票が行われることが予想されます。30 分ごとに各トピックの票を集計する必要があります。また、将来の分析とレポートのために票を保存する必要もあります。どうすればよいですか。",
+    ko: "당신의 팀은 전 세계 사용자가 일반적인 주제에 대해 투표할 수 있는 모바일 웹 애플리케이션을 개발했습니다. 각 주제마다 30분의 투표 기간 동안 매우 많은 투표가 이루어질 것으로 예상됩니다. 30분마다 각 주제의 표를 집계해야 합니다. 또한 향후 분석과 보고를 위해 표를 저장해야 합니다. 어떻게 해야 합니까?"
+  },
+  options: {
+    A: { en: "Memorystore に票を保存した後、Cloud Run functions を使用して集計値を BigQuery に挿入し、結果を Google データポータルで表示する。", ko: "Memorystore에 표를 저장한 뒤, Cloud Run functions로 집계값을 BigQuery에 삽입하고, 결과를 Google 데이터 포털에서 표시한다." },
+    B: { en: "Pub/Sub に票をパブリッシュした後、Dataflow パイプラインを使用して集計値と票を BigQuery に挿入し、結果を Google データポータルで表示する。", ko: "Pub/Sub에 표를 게시한 뒤, Dataflow 파이프라인으로 집계값과 표를 BigQuery에 삽입하고, 결과를 Google 데이터 포털에서 표시한다." },
+    C: { en: "Pub/Sub に票をパブリッシュした後、Cloud Run functions を使用して集計値と票を Cloud Storage に挿入し、結果を Google データポータルで表示する。", ko: "Pub/Sub에 표를 게시한 뒤, Cloud Run functions로 집계값과 표를 Cloud Storage에 삽입하고, 결과를 Google 데이터 포털에서 표시한다." },
+    D: { en: "Firebase でモバイル ユーザーを認証し、票を直接 Firestore にパブリッシュする。その後、票を CSV ファイルにエクスポートしてから、レポートのためにスプレッドシートにインポートする。", ko: "Firebase로 모바일 사용자를 인증하고, 표를 직접 Firestore에 게시한다. 그 후 표를 CSV 파일로 내보낸 다음, 보고를 위해 스프레드시트로 가져온다." }
+  },
+  keywords: [
+    ["非常に多くの投票(世界中)", "급증하는 쓰기를 받아 줄 버퍼 → <mark>Pub/Sub</mark>", "B·C"],
+    ["30 分ごとに…集計", "스트리밍 <mark>윈도 집계</mark>(30분 고정 윈도) = Dataflow", "B(C 제외)"],
+    ["将来の分析とレポートのために保存", "원본 투표·집계값 모두 SQL 분석용 <mark>BigQuery</mark>", "B(C·D 제외)"],
+    ["Memorystore に票を保存(A)", "휘발성 캐시라 원본 보존 불가, 집계값만 BigQuery에 들어감", "A 제외"],
+    ["Cloud Storage に挿入(C)", "파일 저장소라 바로 SQL 분석·대시보드에 불리, 함수로 30분 집계는 상태 관리가 어려움", "C 제외"],
+    ["CSV → スプレッドシート(D)", "수작업·대량 데이터에 맞지 않음", "D 제외"]
+  ],
+  keywordNote: "일본어 표기: Google データポータル(옛 이름) → <b>Looker Studio</b>, Dataflow, パイプライン, ウィンドウ(윈도), パブリッシュ, Cloud Run functions(옛 Cloud Functions).",
+  whyWrong: "",
+  whyRight: "<p>대량 이벤트 수집·집계·분석의 Google 정석 파이프라인입니다.</p>\n<div class=\"tbl\"><table><thead><tr><th>단계</th><th>서비스</th><th>역할</th></tr></thead><tbody><tr><td>수집</td><td><mark>Pub/Sub</mark></td><td>전 세계에서 몰리는 투표를 받아 버퍼링(자동 확장)</td></tr><tr><td>집계</td><td><mark>Dataflow</mark></td><td>주제별로 30분 고정 윈도 집계(스트리밍), 원본 투표도 함께 기록</td></tr><tr><td>보존·분석</td><td><mark>BigQuery</mark></td><td>집계값 + 원본 투표를 SQL로 분석</td></tr><tr><td>표시</td><td>Looker Studio(옛 Google データポータル)</td><td>BigQuery를 연결한 대시보드</td></tr></tbody></table></div>\n<p><b>기존 문제와 비교</b>: 클릭스트림 → BigQuery로 BI 분석하는 <button class=\"qref\" data-id=\"13\">Q13</button>(데이터 유형 3)과 같은 방향입니다. BigQuery로 스트리밍 쓰기 세부는 <button class=\"qref\" data-id=\"44\">Q44</button>(Storage Write API).</p>",
+  others: {
+    A: "Memorystore는 인메모리 캐시라 원본 투표를 장기 보존할 수 없고(재시작·제거 위험), 집계값만 BigQuery에 들어가 “표 보존” 요건을 만족하지 못합니다.",
+    C: "Cloud Run functions는 요청 단위 처리라 30분 윈도 집계 같은 상태 있는 스트리밍 처리에 맞지 않고, Cloud Storage 파일은 바로 SQL 분석·대시보드 원본으로 쓰기 불편합니다.",
+    D: "Firestore는 앱 데이터 저장은 되지만, CSV 내보내기 → 스프레드시트 가져오기는 수작업이고 대량 투표 분석에 맞지 않습니다."
+  },
+  rules: [
+    ["대량 이벤트 수집 + 주기(윈도) 집계 + 분석 보존", "Pub/Sub → Dataflow → BigQuery"],
+    ["BigQuery 대시보드", "Looker Studio(옛 Google データポータル)"],
+    ["변환 없이 Pub/Sub → BigQuery 적재만", "BigQuery 구독(Dataflow 불필요)"],
+    ["Memorystore·Cloud Storage·스프레드시트에 분석 원본", "오답"]
+  ],
+  oneLine: "대량 투표는 Pub/Sub으로 받고, Dataflow로 30분씩 집계해 BigQuery에 쌓고, Looker Studio로 본다.",
+  tip: "Dataflow는 Google 제공 템플릿(Pub/Sub to BigQuery)으로 시작할 수 있고, 집계 로직은 Apache Beam의 <code>FixedWindows(30분)</code> + <code>Count.perKey()</code>로 씁니다. 집계 없이 원본만 쌓으면 된다면 Pub/Sub의 BigQuery 구독으로 Dataflow 없이 적재하고, 집계는 BigQuery에서 예약 쿼리로 해도 됩니다."
 }
 ];
