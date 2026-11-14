@@ -3,7 +3,18 @@
    sections: 시험 가이드(일본어판)의 대섹션. 문제의 section 필드("2.1" 등) 앞자리와 맞춘다. weight는 출제 비중(%) */
 const EXAMS = [
   {
-    id: "pcd", name: "PCD", full: "Professional Cloud Developer", status: "active", dir: "pcd", srcLang: "ja",
+    id: "pmle", name: "PMLE", full: "Professional Machine Learning Engineer", status: "active", dir: "pmle", srcLang: "ja",
+    sections: [
+      { no: 1, name: "로우코드 AI 솔루션 구축", ja: "ローコード AI ソリューションの構築", weight: 13 },
+      { no: 2, name: "팀 내·팀 간 협업으로 데이터·모델 관리", ja: "チーム内およびチーム間の連携によるデータとモデルの管理", weight: 16 },
+      { no: 3, name: "프로토타입을 ML 모델로 확장", ja: "プロトタイプの ML モデルへのスケーリング", weight: 21 },
+      { no: 4, name: "모델 서빙·확장", ja: "モデルのサービングとスケーリング", weight: 20 },
+      { no: 5, name: "ML 파이프라인 자동화·오케스트레이션", ja: "ML パイプラインの自動化とオーケストレーション", weight: 18 },
+      { no: 6, name: "AI 솔루션 모니터링", ja: "AI ソリューションのモニタリング", weight: 13 }
+    ]
+  },
+  {
+    id: "pcd", name: "PCD", full: "Professional Cloud Developer", status: "passed", dir: "pcd", srcLang: "ja",
     sections: [
       { no: 1, name: "확장성·보안·신뢰성 있는 클라우드 네이티브 앱 설계", ja: "スケーラビリティ、安全性、信頼性に優れたクラウド ネイティブなアプリケーションの設計", weight: 32 },
       { no: 2, name: "앱 빌드·테스트", ja: "アプリケーションの構築とテスト", weight: 23 },
