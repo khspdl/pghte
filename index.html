@@ -171,7 +171,7 @@ pre code{background:none;padding:0}
 .card .meta{font-size:13px;color:var(--muted);margin:8px 0 0}
 .card .go{display:inline-block;margin-top:12px;font-size:14px;color:var(--blue);font-weight:500}
 .st{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px}
-.st.passed{background:var(--ok-soft);color:var(--ok)} .st.active{background:var(--blue-soft);color:var(--blue)}
+.st.passed{background:var(--ok-soft);color:var(--ok)} .st.active{background:var(--blue-soft);color:var(--blue)} .st.paused{background:var(--line);color:var(--muted)}
 .bar{display:flex;height:10px;border-radius:99px;overflow:hidden;background:var(--line);min-width:80px}
 .bar i{display:block;height:100%}
 .bar i.ok{background:var(--ok)} .bar i.guess{background:var(--guess)} .bar i.bad{background:var(--bad)}
@@ -310,8 +310,9 @@ function bar(t){
 }
 
 // ===== 시험 전환 · 홈 =====
+const STL={active:"진행 중",paused:"보류",passed:"합격"};
 function renderExamTabs(){
-  $("#examTabs").innerHTML=EXAMS.map(e=>`<button data-exam="${e.id}" aria-pressed="${!!EX&&EX.id===e.id}">${esc(e.name)}<small>${e.status==="passed"?"합격":"진행 중"}</small></button>`).join("");
+  $("#examTabs").innerHTML=EXAMS.map(e=>`<button data-exam="${e.id}" aria-pressed="${!!EX&&EX.id===e.id}">${esc(e.name)}<small>${STL[e.status]||"진행 중"}</small></button>`).join("");
   document.querySelectorAll("#examTabs button").forEach(b=>b.onclick=()=>switchExam(b.dataset.exam));
   $("#subTitle").textContent=EX?EX.full:"문제를 풀 때마다 하나씩 쌓아가는 분석 노트";
 }
@@ -338,7 +339,7 @@ function goHome(){
     <div class="cards">${EXAMS.map(e=>{
       const d=DATA[e.id], t=tally(d.problems);
       return `<button class="card" data-exam="${e.id}">
-        <span class="st ${e.status}">${e.status==="passed"?"합격":"진행 중"}</span>
+        <span class="st ${e.status}">${STL[e.status]||"진행 중"}</span>
         <p class="nm">${esc(e.name)}</p><p class="fl">${esc(e.full)}</p>
         ${bar(t)}
         <div class="nums"><span>문제 <b>${t.n}</b></span><span class="w">오답 <b>${t.w}</b></span><span class="g">찍음 <b>${t.g}</b></span><span class="r">정답 <b>${t.r}</b></span></div>

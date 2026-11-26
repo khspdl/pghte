@@ -1,9 +1,19 @@
 /* 시험 목록. 시험마다 dir 폴더에 problems.js(SETS, PROBLEMS)와 guides.js(GUIDES)를 둔다.
-   status: "active"(준비 중) | "passed"(합격), srcLang: 원문 언어("ja" | 생략 시 "en"). 원문은 항상 en 필드에 넣는다
+   status: "active"(준비 중) | "paused"(보류) | "passed"(합격), srcLang: 원문 언어("ja" | 생략 시 "en"). 원문은 항상 en 필드에 넣는다
    sections: 시험 가이드(일본어판)의 대섹션. 문제의 section 필드("2.1" 등) 앞자리와 맞춘다. weight는 출제 비중(%) */
 const EXAMS = [
   {
-    id: "pmle", name: "PMLE", full: "Professional Machine Learning Engineer", status: "active", dir: "pmle", srcLang: "ja",
+    id: "paa", name: "PAA", full: "Professional Agentic Architect", status: "active", dir: "paa", srcLang: "ja",
+    sections: [
+      { no: 1, name: "로우코드 도구로 에이전트 구축", ja: "ローコード ツールを使用したエージェントの構築", weight: 13 },
+      { no: 2, name: "앱 개발에 코딩 에이전트 활용", ja: "アプリケーション開発におけるコーディング エージェントの使用", weight: 17 },
+      { no: 3, name: "커스텀 에이전트 개발", ja: "カスタム エージェントの開発", weight: 33 },
+      { no: 4, name: "에이전트 워크플로 평가·배포", ja: "エージェント ワークフローの評価とデプロイ", weight: 22 },
+      { no: 5, name: "에이전트 워크플로 보안·거버넌스", ja: "エージェント ワークフローのセキュリティとガバナンス", weight: 15 }
+    ]
+  },
+  {
+    id: "pmle", name: "PMLE", full: "Professional Machine Learning Engineer", status: "paused", dir: "pmle", srcLang: "ja",
     sections: [
       { no: 1, name: "로우코드 AI 솔루션 구축", ja: "ローコード AI ソリューションの構築", weight: 13 },
       { no: 2, name: "팀 내·팀 간 협업으로 데이터·모델 관리", ja: "チーム内およびチーム間の連携によるデータとモデルの管理", weight: 16 },
