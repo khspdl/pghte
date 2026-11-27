@@ -347,5 +347,60 @@ var PROBLEMS = [
   ],
   oneLine: "범용 라벨이면 Vision API, 자사 고유 클래스면 AutoML. 엣지 배포면 처음부터 AutoML Edge로 학습해 내보낸다.",
   tip: "외관 검사 전용으로는 Google Cloud의 Visual Inspection AI(제조 결함 검출)도 있지만, 시험 가이드에 이름이 없으므로 이 시험에서는 AutoML 이미지 분류·객체 감지가 기본 답입니다. 불량 <b>위치</b>까지 필요하면 이미지 분류가 아니라 AutoML <b>객체 감지</b>(바운딩 박스)를 고릅니다. 정상품이 압도적으로 많은 불균형 데이터라면 클래스별 정밀도·재현율을 따로 확인하세요."
+},
+{
+  id: 7,
+  title: "BigQuery의 고객 리뷰 500만 건을 긍정/부정/중립으로 분류, 라벨 없음·BigQuery 안에서 완결 → ML.GENERATE_TEXT(권장 AI.GENERATE_TEXT)로 Gemini에 프롬프트 분류",
+  added: "2026-11-27",
+  tags: ["BigQuery ML", "ML.GENERATE_TEXT", "AI.GENERATE_TEXT", "Gemini", "감성 분석", "KMEANS", "원격 모델"],
+  mine: "C",
+  correct: "A",
+  section: "1.1",
+  freq: "high",
+  freqNote: "시험 가이드 1.1의 BigQuery ML 모델 선택(분류·클러스터링)과 생성 AI 활용이 겹치는 문제입니다. <b>“라벨 없음 + 의미로 분류(정해진 클래스) → Gemini 프롬프트(AI.GENERATE_TEXT), 클러스터링은 클러스터의 의미를 보장하지 않음”</b>을 가져가면 됩니다.",
+  question: {
+    en: "マーケティング部門が、BigQuery に格納された顧客レビュー 500 万件をポジティブ / ネガティブ / 中立に分類したいと考えています。ラベル付きデータはなく、分析は BigQuery 内で完結させたいです。最も適したアプローチはどれですか。",
+    ko: "마케팅 부문이 BigQuery에 저장된 고객 리뷰 500만 건을 긍정 / 부정 / 중립으로 분류하려고 합니다. 라벨이 붙은 데이터는 없고, 분석은 BigQuery 안에서 끝내고 싶습니다. 가장 적합한 접근 방식은 무엇입니까?"
+  },
+  options: {
+    A: { en: "ML.GENERATE_TEXT で Gemini モデルを呼び出し、プロンプトで分類させる", ko: "ML.GENERATE_TEXT로 Gemini 모델을 호출해, 프롬프트로 분류시킨다" },
+    B: { en: "BigQuery ML の CREATE MODEL で多クラス ロジスティック回帰をトレーニングする", ko: "BigQuery ML의 CREATE MODEL로 다중 클래스 로지스틱 회귀를 학습시킨다" },
+    C: { en: "BigQuery ML の KMEANS でレビューを 3 クラスタに分割する", ko: "BigQuery ML의 KMEANS로 리뷰를 3개 클러스터로 나눈다" },
+    D: { en: "レビューを CSV でエクスポートし、カスタム トレーニングで分類器を学習させる", ko: "리뷰를 CSV로 내보내고, 커스텀 트레이닝으로 분류기를 학습시킨다" }
+  },
+  explanation: {
+    A: { en: "正解です。BigQuery からリモートモデル経由で Gemini を呼び出せるため、ラベル付きデータを用意せずにプロンプトベースの分類を SQL で実行できます。", ko: "정답입니다. BigQuery에서 원격 모델을 거쳐 Gemini를 호출할 수 있으므로, 라벨 데이터를 준비하지 않고 프롬프트 기반 분류를 SQL로 실행할 수 있습니다." },
+    B: { en: "教師あり学習であるロジスティック回帰には正解ラベル付きのトレーニング データが必須です。ラベルがないという前提を満たせません。", ko: "지도 학습인 로지스틱 회귀에는 정답 라벨이 붙은 학습 데이터가 필수입니다. 라벨이 없다는 전제를 충족할 수 없습니다." },
+    C: { en: "クラスタリングは類似度でグループ化するだけで、各クラスタがポジティブ / ネガティブ / 中立のどれに対応するかを保証しません。", ko: "클러스터링은 유사도로 그룹화할 뿐, 각 클러스터가 긍정 / 부정 / 중립 중 어느 것에 대응하는지 보장하지 않습니다." },
+    D: { en: "教師あり学習のためラベル付きデータが必要なうえ、BigQuery の外へデータを出すことになり、BigQuery 内で完結させたいという要件から外れます。", ko: "지도 학습이라 라벨 데이터가 필요한 데다, BigQuery 밖으로 데이터를 내보내게 되어 BigQuery 안에서 끝내고 싶다는 요건에서 벗어납니다." }
+  },
+  explanationAll: {
+    en: "ラベル付きデータがない状態で意味的な分類を行うには、基盤モデルにプロンプトで指示するアプローチが適します。BigQuery のリモートモデルを介した ML.GENERATE_TEXT なら、SQL の中から Gemini を呼び出して分類結果を得られ、分析を BigQuery 内で完結できます。なお新規クエリでは同等の機能を提供する AI.GENERATE_TEXT の利用が推奨されています。ロジスティック回帰やカスタム トレーニングによる分類器は教師あり学習でラベルが必須で、クラスタリングは各クラスタの意味を保証しません。",
+    ko: "라벨 데이터가 없는 상태에서 의미적 분류를 하려면, 기반 모델에 프롬프트로 지시하는 접근 방식이 적합합니다. BigQuery 원격 모델을 거친 ML.GENERATE_TEXT라면 SQL 안에서 Gemini를 호출해 분류 결과를 얻을 수 있고, 분석을 BigQuery 안에서 끝낼 수 있습니다. 덧붙여 새 쿼리에서는 같은 기능을 제공하는 AI.GENERATE_TEXT 사용이 권장됩니다. 로지스틱 회귀나 커스텀 트레이닝 분류기는 지도 학습이라 라벨이 필수이고, 클러스터링은 각 클러스터의 의미를 보장하지 않습니다."
+  },
+  refs: [],
+  keywords: [
+    ["ポジティブ / ネガティブ / 中立に分類", "<b>정해진 의미</b>의 클래스로 분류(감성 분석)", "C 약화"],
+    ["ラベル付きデータはない", "지도 학습(로지스틱 회귀·분류기) 불가", "B·D 제외"],
+    ["BigQuery 内で完結", "SQL에서 Gemini 호출 = 원격 모델 + <mark>ML.GENERATE_TEXT / AI.GENERATE_TEXT</mark>", "A, D 제외"],
+    ["KMEANS で 3 クラスタ", "유사도로 묶을 뿐 <mark>클러스터의 의미는 보장 안 됨</mark>", "C 제외"],
+    ["AI.GENERATE_TEXT", "새 쿼리 권장 함수(ML.GENERATE_TEXT와 같은 기능)", "—"]
+  ],
+  keywordNote: "일본어 표기: リモートモデル = remote model(BigQuery에서 Agent Platform 모델을 참조), 教師あり学習 = supervised learning, 教師なし学習 = unsupervised learning, クラスタリング = clustering, 正解ラベル = ground-truth label, 中立 = neutral. 함수 이름(ML.GENERATE_TEXT, AI.GENERATE_TEXT, KMEANS)은 영어 그대로.",
+  whyWrong: "<p>“라벨이 없다 → 비지도 학습 → 클러스터링”으로 연결한 것으로 보입니다. 라벨이 없을 때 쓸 수 있는 방법이라는 점은 맞지만, 이 문제는 <mark>긍정/부정/중립이라는 의미가 정해진 클래스</mark>로 나누라고 합니다.</p>\n<p>KMEANS는 리뷰를 “비슷한 것끼리” 3묶음으로 나눌 뿐이고, 그 기준은 감성이 아니라 주제(배송·가격·품질)나 문장 길이일 수도 있습니다. 어느 클러스터가 “긍정”인지 정해 주지 않으므로 사람이 다시 라벨을 붙여야 합니다.</p>\n<p>단서: <b>클래스 이름이 미리 정해져 있으면</b> 클러스터링이 아니라 분류 문제입니다. 라벨 없이 분류하는 방법은 기반 모델 프롬프트(제로샷 분류)입니다.</p>",
+  whyRight: "<p>Gemini는 학습 없이도 “이 리뷰를 positive / negative / neutral 중 하나로 답하라”는 지시를 이해합니다(<mark>제로샷 분류</mark>). BigQuery에서는 원격 모델을 만들어 SQL로 호출합니다.</p>\n<pre><code>-- 1회: Agent Platform의 Gemini를 가리키는 원격 모델\nCREATE OR REPLACE MODEL `ds.gemini`\n  REMOTE WITH CONNECTION `us.my_conn`\n  OPTIONS (endpoint = 'gemini-2.5-flash');\n\n-- 분류(새 쿼리 권장: AI.GENERATE_TEXT)\nSELECT review_id, ml_generate_text_llm_result AS sentiment\nFROM ML.GENERATE_TEXT(MODEL `ds.gemini`,\n  (SELECT review_id,\n     CONCAT('次のレビューを positive / negative / neutral のいずれか1語で分類: ', text) AS prompt\n   FROM `ds.reviews`),\n  STRUCT(0 AS temperature, TRUE AS flatten_json_output));</code></pre>\n<p>데이터가 BigQuery 밖으로 나가지 않고(“BigQuery 内で完結”), 라벨도 필요 없습니다. 출력 형식을 고정하려면 <code>temperature 0</code>과 구조화 출력(스키마 지정)을 함께 씁니다.</p>",
+  others: {
+    B: "로지스틱 회귀는 지도 학습이라 정답 라벨이 있어야 학습할 수 있습니다. “라벨 없음” 전제와 맞지 않습니다.",
+    D: "지도 학습이라 라벨이 필요하고, CSV로 내보내면 BigQuery 밖으로 데이터가 나가 “BigQuery 안에서 완결” 요건도 어깁니다."
+  },
+  rules: [
+    ["라벨 없음 + 정해진 의미의 클래스로 분류", "Gemini 프롬프트(제로샷 분류)"],
+    ["BigQuery 안에서 Gemini 호출", "원격 모델 + AI.GENERATE_TEXT(권장) / ML.GENERATE_TEXT"],
+    ["라벨 없음 + 자연스러운 그룹 발견(세그먼트)", "KMEANS 클러스터링"],
+    ["라벨 있음 + 표 데이터 분류", "LOGISTIC_REG, BOOSTED_TREE 등 지도 학습"],
+    ["단순 감성 점수만 필요", "Natural Language API 감성 분석도 후보(BigQuery 완결이면 Gemini 원격 모델)"]
+  ],
+  oneLine: "클래스 이름이 정해져 있고 라벨이 없으면 Gemini 프롬프트 분류. BigQuery 안에서는 원격 모델 + AI.GENERATE_TEXT. 클러스터링은 의미를 보장하지 않는다.",
+  tip: "500만 건이면 비용과 쿼터가 문제가 됩니다. 작은 모델(Flash-Lite)을 쓰고, 출력은 한 단어로 제한해 출력 토큰을 줄이고, 결과를 테이블로 저장해 재사용합니다. 대량 처리는 Gemini 배치 예측을 쓰는 방법도 있습니다. BigQuery에는 감성 분석 전용 <code>AI.CLASSIFY</code>·<code>AI.IF</code> 같은 관리형 AI 함수도 추가되고 있으니, 문제에 나오면 같은 계열(프롬프트 기반, 라벨 불필요)로 이해하면 됩니다."
 }
 ];

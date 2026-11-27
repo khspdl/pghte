@@ -99,20 +99,20 @@ var GUIDES = [
   id: "s1",
   title: "1. 로우코드 AI 솔루션 구축 (13%)",
   updated: "2026-11-27",
-  related: [1, 2, 3, 4, 5, 6],
+  related: [1, 2, 3, 4, 5, 6, 7],
   html: `
 <section>
   <h2>0. 이 섹션</h2>
   <p><b>ローコード AI ソリューションの構築</b>(시험 내용의 약 13%). 문제를 반영할 때마다 아래 표의 “핵심 개념·판단 기준”을 채우고 노트 문제를 링크합니다.</p>
   <div class="tbl"><table><thead><tr><th>세트</th><th>문제 수</th><th>오답</th><th>찍음</th></tr></thead><tbody>
-    <tr><td>1세트</td><td>6</td><td>1</td><td>2</td></tr>
+    <tr><td>1세트</td><td>7</td><td>2</td><td>2</td></tr>
   </tbody></table></div>
 </section>
 
 <section>
   <h2>1.1 Gemini Enterprise Agent Platform で BigQuery ML または AutoML を使用した ML モデルの開発 (BigQuery ML·AutoML로 ML 모델 개발)</h2>
   <div class="tbl"><table><thead><tr><th>출제 항목</th><th>핵심 개념·판단 기준</th><th>노트 문제</th></tr></thead><tbody>
-    <tr><td>BigQuery ML 또는 Agent Platform AutoML에서 과제별 모델(분류·회귀·예측·클러스터링) 구축<br><small>BigQuery ML または Agent Platform AutoML における、ビジネス課題に応じた各種モデル（分類、回帰、予測、クラスタリングなど）の構築</small></td><td>시계열 예측(SQL만, 계절성·공휴일) → <mark>ARIMA_PLUS</mark>(외부 변수까지면 ARIMA_PLUS_XREG). 날짜를 숫자로 넣는 LINEAR_REG는 주기성을 못 잡음. 매장별처럼 여러 시계열은 <code>TIME_SERIES_ID_COL</code></td><td><button class="qref" data-id="1">Q1</button></td></tr>
+    <tr><td>BigQuery ML 또는 Agent Platform AutoML에서 과제별 모델(분류·회귀·예측·클러스터링) 구축<br><small>BigQuery ML または Agent Platform AutoML における、ビジネス課題に応じた各種モデル（分類、回帰、予測、クラスタリングなど）の構築</small></td><td>시계열 예측(SQL만, 계절성·공휴일) → <mark>ARIMA_PLUS</mark>(외부 변수까지면 ARIMA_PLUS_XREG). 날짜를 숫자로 넣는 LINEAR_REG는 주기성을 못 잡음. 매장별처럼 여러 시계열은 <code>TIME_SERIES_ID_COL</code>. 라벨 없음 + <b>정해진 클래스</b>(긍정/부정/중립) → 원격 모델 + <mark>AI.GENERATE_TEXT</mark>(Gemini 프롬프트 분류). KMEANS는 클러스터의 의미를 보장하지 않음, 지도 학습(LOGISTIC_REG)은 라벨 필요</td><td><button class="qref" data-id="1">Q1</button> <button class="qref" data-id="7">Q7</button> ✕</td></tr>
     <tr><td>BigQuery ML로 특징량 엔지니어링·특징량 선택<br><small>BigQuery ML を使用した特徴量エンジニアリングまたは特徴量選択の実行</small></td><td>추론 때도 같은 전처리 → <mark>CREATE MODEL의 TRANSFORM 절</mark>(모델에 저장, ML.PREDICT가 자동 적용). 표준화·원-핫은 자동이라 비닝(ML.QUANTILE_BUCKETIZE)·교차(ML.FEATURE_CROSS)만 명시. SELECT 절·뷰는 추론 쪽 재현 책임이 남음</td><td><button class="qref" data-id="2">Q2</button></td></tr>
     <tr><td>BigQuery ML로 예측 생성<br><small>BigQuery ML を使用した予測の生成</small></td><td>시계열 모델 → <code>ML.FORECAST</code>(HORIZON·신뢰 구간), 그 외 모델 → <code>ML.PREDICT</code>. 성분 분해는 <code>ML.EXPLAIN_FORECAST</code></td><td><button class="qref" data-id="1">Q1</button></td></tr>
     <tr><td>Agent Platform AutoML로 모델 학습<br><small>Agent Platform AutoML を使用したモデルのトレーニング</small></td><td>자사 고유 클래스 + 라벨 이미지 + 전문 지식 없음 → <mark>AutoML 이미지 분류</mark>. 엣지 배포면 처음부터 <mark>AutoML Edge</mark>로 학습 → TensorFlow Lite 등으로 내보내기(Cloud 모델은 엣지로 못 내보냄)</td><td><button class="qref" data-id="6">Q6</button> ✕</td></tr>
@@ -325,7 +325,7 @@ var GUIDES = [
   id: "ja",
   title: "일본어 용어집 (시험 표기)",
   updated: "2026-11-27",
-  related: [1, 2, 3, 4, 5, 6],
+  related: [1, 2, 3, 4, 5, 6, 7],
   html: `
 <section>
   <h2>0. 읽는 법</h2>
@@ -348,6 +348,7 @@ var GUIDES = [
     <tr><td class="strong">context caching</td><td><mark>コンテキスト キャッシュ</mark> / キャッシュ済みトークン</td><td>반복 입력 비용 절감(<button class="qref" data-id="4">Q4</button>). 入力トークン / 出力トークン, 保持時間 = TTL, ストレージ料金</td></tr>
     <tr><td class="strong">open weights / self-deploy</td><td><mark>オープンウェイト</mark> / <mark>セルフデプロイ</mark> / ライセンス条項</td><td>가중치를 받아 자체 호스팅(<button class="qref" data-id="5">Q5</button>). 반대는 マネージド API（Model as a Service）</td></tr>
     <tr><td class="strong">image classification / label detection / AutoML Edge</td><td><mark>画像分類</mark> / <mark>ラベル検出</mark> / AutoML Edge</td><td>ラベル検出 = Vision API 범용 라벨(<button class="qref" data-id="6">Q6</button>). エッジデバイス, エクスポート, 外観不良 = 외관 불량</td></tr>
+    <tr><td class="strong">remote model / supervised · unsupervised learning</td><td><mark>リモートモデル</mark> / <mark>教師あり学習</mark> / 教師なし学習</td><td>BigQuery에서 Gemini 호출(AI.GENERATE_TEXT)(<button class="qref" data-id="7">Q7</button>). 正解ラベル = 정답 라벨, 中立 = 중립</td></tr>
     <tr><td class="strong">industry-specific APIs</td><td><mark>業界固有の API</mark></td><td>Document AI API, Vision API, Translate API</td></tr>
     <tr><td class="strong">Model as a Service (MaaS)</td><td>Model Garden の<mark>サービスとしてのモデル</mark></td><td>Model Garden에서 서버 관리 없이 API로 쓰는 모델. 문제집 표기는 マネージド API（Model as a Service）(<button class="qref" data-id="5">Q5</button>)</td></tr>
     <tr><td class="strong">personally identifiable information (PII)</td><td><mark>個人を特定できる情報 [PII]</mark> / 機密情報</td><td>데이터 프라이버시(2.1). 비식별화는 Sensitive Data Protection</td></tr>
