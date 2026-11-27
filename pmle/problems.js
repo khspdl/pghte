@@ -402,5 +402,62 @@ var PROBLEMS = [
   ],
   oneLine: "클래스 이름이 정해져 있고 라벨이 없으면 Gemini 프롬프트 분류. BigQuery 안에서는 원격 모델 + AI.GENERATE_TEXT. 클러스터링은 의미를 보장하지 않는다.",
   tip: "500만 건이면 비용과 쿼터가 문제가 됩니다. 작은 모델(Flash-Lite)을 쓰고, 출력은 한 단어로 제한해 출력 토큰을 줄이고, 결과를 테이블로 저장해 재사용합니다. 대량 처리는 Gemini 배치 예측을 쓰는 방법도 있습니다. BigQuery에는 감성 분석 전용 <code>AI.CLASSIFY</code>·<code>AI.IF</code> 같은 관리형 AI 함수도 추가되고 있으니, 문제에 나오면 같은 계열(프롬프트 기반, 라벨 불필요)로 이해하면 됩니다."
+},
+{
+  id: 8,
+  title: "Cloud Storage에 매일 도착하는 수 TB JSON 로그 전처리(파싱·필터·윈도 집계), 배치·스트리밍 같은 로직, 운영 부담 최소 → Dataflow + Apache Beam",
+  added: "2026-11-27",
+  tags: ["Dataflow", "Apache Beam", "전처리 도구 선택", "배치·스트리밍 통합", "서버리스", "Managed Service for Apache Spark"],
+  mine: "C",
+  correct: "C",
+  guess: true,
+  section: "2.1",
+  freq: "high",
+  freqNote: "시험 가이드 2.1 “規模と複雑さに応じた、適切なデータ前処理ツールの選択（BigQuery [SQL]、Dataflow、Apache Spark、インメモリ Python フレームワーク）”에 선택지 4개가 그대로 나옵니다. <b>“배치·스트리밍 같은 코드 + 서버리스 = Dataflow(Beam), 작은 데이터 = pandas, Spark 자산 = Managed Service for Apache Spark”</b>를 가져가면 됩니다.",
+  question: {
+    en: "データ エンジニアリング チームが、Cloud Storage に日次で到着する数 TB の JSON ログを ML トレーニング用に前処理します。処理内容はパースとフィルタリング、ウィンドウ集計で、バッチとストリーミングの両方で同じロジックを使いたいと考えています。運用負荷は最小化したいです。最も適したツールはどれですか。",
+    ko: "데이터 엔지니어링 팀이 Cloud Storage에 매일 도착하는 수 TB의 JSON 로그를 ML 학습용으로 전처리합니다. 처리 내용은 파싱과 필터링, 윈도 집계이며, 배치와 스트리밍 양쪽에서 같은 로직을 쓰고 싶습니다. 운영 부담은 최소화하고 싶습니다. 가장 적합한 도구는 무엇입니까?"
+  },
+  options: {
+    A: { en: "Agent Platform Workbench のノートブックで pandas を使って処理する", ko: "Agent Platform Workbench 노트북에서 pandas를 사용해 처리한다" },
+    B: { en: "Managed Service for Apache Spark のクラスタでバッチ処理する", ko: "Managed Service for Apache Spark 클러스터에서 배치 처리한다" },
+    C: { en: "Dataflow で Apache Beam パイプラインを実装する", ko: "Dataflow에서 Apache Beam 파이프라인을 구현한다" },
+    D: { en: "BigQuery に外部テーブルとして読み込み、SQL で処理する", ko: "BigQuery에 외부 테이블로 읽어 들여, SQL로 처리한다" }
+  },
+  explanation: {
+    A: { en: "pandas は単一マシンのメモリに収まるデータを前提としており、日次数 TB のデータ処理には適しません。", ko: "pandas는 단일 머신의 메모리에 들어가는 데이터를 전제로 하므로, 일일 수 TB의 데이터 처리에는 적합하지 않습니다." },
+    B: { en: "Spark でも Structured Streaming で同様の記述は可能ですが、選択肢のようにクラスタを構成する場合はサイジングとチューニングの運用が残ります。", ko: "Spark로도 Structured Streaming으로 비슷한 기술이 가능하지만, 선택지처럼 클러스터를 구성하는 경우는 사이징과 튜닝 운영이 남습니다." },
+    C: { en: "正解です。Apache Beam はバッチとストリーミングを同一のコードで表現できる統一プログラミング モデルを提供し、Dataflow はサーバーレスで自動スケーリングするためクラスタ管理が不要です。", ko: "정답입니다. Apache Beam은 배치와 스트리밍을 같은 코드로 표현할 수 있는 통합 프로그래밍 모델을 제공하고, Dataflow는 서버리스로 자동 확장하므로 클러스터 관리가 필요 없습니다." },
+    D: { en: "バッチ集計には有効ですが、ストリーミングの継続的な処理を同じロジックで扱う要件には合致しません。", ko: "배치 집계에는 유효하지만, 스트리밍의 지속적인 처리를 같은 로직으로 다루는 요건에는 맞지 않습니다." }
+  },
+  explanationAll: {
+    en: "Apache Beam はバッチとストリーミングを単一のパイプライン コードで記述でき、Dataflow はそれをサーバーレスで実行してワーカーを自動スケーリングします。クラスタのプロビジョニングやチューニングが不要なため運用負荷を最小化できます。Managed Service for Apache Spark（旧 Dataproc）でも大規模処理は可能ですが、選択肢のようにクラスタを構成する場合はサイジングと運用の手間が残ります。pandas は規模の点で不適です。",
+    ko: "Apache Beam은 배치와 스트리밍을 단일 파이프라인 코드로 기술할 수 있고, Dataflow는 그것을 서버리스로 실행해 워커를 자동 확장합니다. 클러스터 프로비저닝이나 튜닝이 필요 없으므로 운영 부담을 최소화할 수 있습니다. Managed Service for Apache Spark(옛 Dataproc)로도 대규모 처리는 가능하지만, 선택지처럼 클러스터를 구성하는 경우는 사이징과 운영 수고가 남습니다. pandas는 규모 면에서 부적합합니다."
+  },
+  refs: [],
+  keywords: [
+    ["バッチとストリーミングの両方で同じロジック", "<mark>Apache Beam</mark> 통합 프로그래밍 모델", "C"],
+    ["運用負荷は最小化", "서버리스·자동 확장 = <mark>Dataflow</mark>(클러스터 관리 없음)", "B 제외"],
+    ["日次で数 TB", "단일 머신 메모리 초과", "A 제외"],
+    ["ウィンドウ集計（ストリーミング）", "스트리밍 윈도 처리. 외부 테이블 SQL은 배치용", "D 제외"],
+    ["Managed Service for Apache Spark（旧 Dataproc）", "Spark 자산 재사용엔 좋지만 클러스터 사이징·튜닝 운영이 남음", "B"]
+  ],
+  keywordNote: "일본어 표기: 統一プログラミング モデル = unified programming model, ウィンドウ集計 = window aggregation, 自動スケーリング = autoscaling, サーバーレス = serverless, 外部テーブル = external table, パース = parse. Managed Service for Apache Spark = 옛 Dataproc(가이드 2.1은 “Apache Spark”로만 표기).",
+  whyWrong: "",
+  whyRight: "<p>결정적인 조건은 두 개입니다.</p>\n<ol><li><b>“배치와 스트리밍에서 같은 로직”</b> → Apache Beam은 같은 파이프라인 코드를 배치(Cloud Storage 파일)와 스트리밍(Pub/Sub) 소스에 모두 쓸 수 있는 <mark>통합 프로그래밍 모델</mark>입니다. 윈도 집계도 Beam의 기본 기능입니다.</li>\n<li><b>“운영 부담 최소”</b> → Dataflow는 Beam을 <mark>서버리스</mark>로 실행하고 워커를 자동 확장합니다. 클러스터 크기 결정·튜닝이 없습니다.</li></ol>\n<div class=\"tbl\"><table><thead><tr><th>도구(가이드 2.1)</th><th>맞는 상황</th></tr></thead><tbody>\n<tr><td>인메모리 Python(pandas)</td><td>한 대 메모리에 들어가는 작은 데이터, 탐색</td></tr>\n<tr><td>BigQuery SQL</td><td>BigQuery에 있는 정형 데이터의 배치 변환·집계</td></tr>\n<tr><td><mark>Dataflow(Beam)</mark></td><td>대규모, 배치+스트리밍 통합, 서버리스</td></tr>\n<tr><td>Managed Service for Apache Spark</td><td>기존 Spark·Hadoop 코드 재사용, Spark ML 생태계</td></tr>\n</tbody></table></div>",
+  others: {
+    A: "pandas는 한 대의 메모리에 데이터가 들어간다는 전제입니다. 매일 수 TB는 처리할 수 없습니다(탐색·작은 샘플용).",
+    B: "Spark Structured Streaming으로 비슷하게 짤 수는 있지만, 클러스터를 만들어 쓰면 사이징·튜닝·운영이 남습니다. 기존 Spark 코드가 있다는 조건이 없으면 Dataflow가 앞섭니다(Spark 서버리스 실행 옵션도 있지만 선택지는 클러스터).",
+    D: "외부 테이블 + SQL은 배치 집계에는 좋지만, 스트리밍의 연속 처리를 같은 로직으로 다루는 요건을 충족하지 못합니다."
+  },
+  rules: [
+    ["배치·스트리밍 같은 로직 + 서버리스·운영 최소", "Dataflow(Apache Beam)"],
+    ["기존 Spark·Hadoop 코드 재사용", "Managed Service for Apache Spark(옛 Dataproc)"],
+    ["BigQuery에 있는 정형 데이터 배치 변환", "BigQuery SQL(또는 BigQuery ML TRANSFORM)"],
+    ["메모리에 들어가는 작은 데이터·탐색", "pandas 등 인메모리 Python(Workbench·Colab Enterprise)"],
+    ["학습-서빙 같은 전처리를 TF로", "TensorFlow Transform(Beam/Dataflow 위에서 실행)"]
+  ],
+  oneLine: "배치와 스트리밍을 같은 코드로, 운영 최소면 Dataflow(Apache Beam). pandas는 작은 데이터, Spark는 기존 Spark 자산이 있을 때.",
+  tip: "ML 전처리에서 Dataflow가 자주 나오는 또 하나의 이유는 <b>TensorFlow Transform(TFT)</b>입니다. TFT는 Beam 위에서 돌아가며, 학습 데이터 전체로 계산한 통계(평균·어휘 등)를 그래프로 저장해 서빙 때 같은 변환을 적용합니다(BigQuery ML TRANSFORM 절과 같은 목적, Q2 참고). PDE 노트의 Dataflow·Beam 정리(윈도·워터마크·지연 데이터)도 그대로 쓸 수 있습니다."
 }
 ];

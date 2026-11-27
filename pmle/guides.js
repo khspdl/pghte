@@ -134,14 +134,14 @@ var GUIDES = [
 {
   id: "s2",
   title: "2. 팀 내·팀 간 협업으로 데이터·모델 관리 (16%)",
-  updated: "2026-11-14",
-  related: [],
+  updated: "2026-11-27",
+  related: [8],
   html: `
 <section>
   <h2>0. 이 섹션</h2>
   <p><b>チーム内およびチーム間の連携によるデータとモデルの管理</b>(시험 내용의 약 16%). 문제를 반영할 때마다 아래 표의 “핵심 개념·판단 기준”을 채우고 노트 문제를 링크합니다.</p>
   <div class="tbl"><table><thead><tr><th>세트</th><th>문제 수</th><th>오답</th><th>찍음</th></tr></thead><tbody>
-    <tr><td colspan="4">아직 문제가 없습니다</td></tr>
+    <tr><td>1세트</td><td>1</td><td>0</td><td>1</td></tr>
   </tbody></table></div>
 </section>
 
@@ -149,7 +149,7 @@ var GUIDES = [
   <h2>2.1 ML 用データの探索と前処理 (ML용 데이터 탐색·전처리)</h2>
   <div class="tbl"><table><thead><tr><th>출제 항목</th><th>핵심 개념·판단 기준</th><th>노트 문제</th></tr></thead><tbody>
     <tr><td>데이터 유형(표 형식·텍스트·이미지)별 정리·탐색<br><small>効率的なテスト、トレーニング、サービングのための、さまざまなデータタイプ（表形式、テキスト、画像など）の整理と探索</small></td><td>—</td><td>미출제</td></tr>
-    <tr><td>규모·복잡도에 맞는 전처리 도구 선택(BigQuery SQL, Dataflow, Apache Spark, 인메모리 Python)<br><small>規模と複雑さに応じた、適切なデータ前処理ツールの選択（BigQuery [SQL]、Dataflow、Apache Spark、インメモリ Python フレームワークなど）</small></td><td>—</td><td>미출제</td></tr>
+    <tr><td>규모·복잡도에 맞는 전처리 도구 선택(BigQuery SQL, Dataflow, Apache Spark, 인메모리 Python)<br><small>規模と複雑さに応じた、適切なデータ前処理ツールの選択（BigQuery [SQL]、Dataflow、Apache Spark、インメモリ Python フレームワークなど）</small></td><td>배치·스트리밍 같은 로직 + 운영 최소 → <mark>Dataflow(Apache Beam)</mark>. 작은 데이터 = pandas, BigQuery 정형 배치 = SQL, 기존 Spark 코드 = Managed Service for Apache Spark(클러스터면 사이징·튜닝 운영이 남음)</td><td><button class="qref" data-id="8">Q8</button> △</td></tr>
     <tr><td>Agent Platform Feature Store에서 특징 생성·통합<br><small>Gemini Enterprise Agent Platform Feature Store での特徴量の作成と統合</small></td><td>—</td><td>미출제</td></tr>
     <tr><td>데이터 프라이버시·기밀 정보(PII) 취급<br><small>データ プライバシーの確保と機密情報（個人を特定できる情報 [PII] など）の取り扱い</small></td><td>—</td><td>미출제</td></tr>
   </tbody></table></div>
@@ -325,7 +325,7 @@ var GUIDES = [
   id: "ja",
   title: "일본어 용어집 (시험 표기)",
   updated: "2026-11-27",
-  related: [1, 2, 3, 4, 5, 6, 7],
+  related: [1, 2, 3, 4, 5, 6, 7, 8],
   html: `
 <section>
   <h2>0. 읽는 법</h2>
@@ -349,6 +349,7 @@ var GUIDES = [
     <tr><td class="strong">open weights / self-deploy</td><td><mark>オープンウェイト</mark> / <mark>セルフデプロイ</mark> / ライセンス条項</td><td>가중치를 받아 자체 호스팅(<button class="qref" data-id="5">Q5</button>). 반대는 マネージド API（Model as a Service）</td></tr>
     <tr><td class="strong">image classification / label detection / AutoML Edge</td><td><mark>画像分類</mark> / <mark>ラベル検出</mark> / AutoML Edge</td><td>ラベル検出 = Vision API 범용 라벨(<button class="qref" data-id="6">Q6</button>). エッジデバイス, エクスポート, 外観不良 = 외관 불량</td></tr>
     <tr><td class="strong">remote model / supervised · unsupervised learning</td><td><mark>リモートモデル</mark> / <mark>教師あり学習</mark> / 教師なし学習</td><td>BigQuery에서 Gemini 호출(AI.GENERATE_TEXT)(<button class="qref" data-id="7">Q7</button>). 正解ラベル = 정답 라벨, 中立 = 중립</td></tr>
+    <tr><td class="strong">unified programming model / window aggregation</td><td><mark>統一プログラミング モデル</mark> / <mark>ウィンドウ集計</mark></td><td>Apache Beam(Dataflow)(<button class="qref" data-id="8">Q8</button>). 自動スケーリング, 外部テーブル, パース</td></tr>
     <tr><td class="strong">industry-specific APIs</td><td><mark>業界固有の API</mark></td><td>Document AI API, Vision API, Translate API</td></tr>
     <tr><td class="strong">Model as a Service (MaaS)</td><td>Model Garden の<mark>サービスとしてのモデル</mark></td><td>Model Garden에서 서버 관리 없이 API로 쓰는 모델. 문제집 표기는 マネージド API（Model as a Service）(<button class="qref" data-id="5">Q5</button>)</td></tr>
     <tr><td class="strong">personally identifiable information (PII)</td><td><mark>個人を特定できる情報 [PII]</mark> / 機密情報</td><td>데이터 프라이버시(2.1). 비식별화는 Sensitive Data Protection</td></tr>
@@ -397,7 +398,7 @@ var GUIDES = [
     <tr><td class="strong">Gemini Enterprise Agent Platform Inference</td><td>Vertex AI Prediction(예측)으로 보임(확인 필요)</td><td>4.2, 6.1</td></tr>
     <tr><td class="strong">Ray on Gemini Enterprise Agent Platform</td><td>Ray on Vertex AI</td><td>5.1</td></tr>
     <tr><td class="strong">Managed Service for Apache Airflow</td><td>Cloud Composer</td><td>5.1. 일본어 문서 “Cloud Composer は Managed Service for Apache Airflow に進化します”</td></tr>
-    <tr><td class="strong">Managed Service for Apache Spark</td><td>Dataproc</td><td>가이드 2.1은 “Apache Spark”로만 표기</td></tr>
+    <tr><td class="strong">Managed Service for Apache Spark</td><td>Dataproc</td><td>가이드 2.1은 “Apache Spark”로만 표기. 문제집은 “Managed Service for Apache Spark（旧 Dataproc）”(<button class="qref" data-id="8">Q8</button>)</td></tr>
     <tr><td class="strong">Embeddings API / Vector Search / RAG Engine</td><td>Vertex AI Embeddings / Vertex AI Vector Search / Vertex AI RAG Engine</td><td>가이드에 직접 이름은 없음. 생성 AI 앱 문제에 나올 수 있음</td></tr>
     <tr><td class="strong">Sensitive Data Protection</td><td>Cloud DLP</td><td>PII 처리(2.1)</td></tr>
     <tr><td class="strong">Gemini</td><td>PaLM 2 / PaLM API</td><td>보기에 PaLM이 보이면 옛 문제</td></tr>
