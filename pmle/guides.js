@@ -99,13 +99,13 @@ var GUIDES = [
   id: "s1",
   title: "1. 로우코드 AI 솔루션 구축 (13%)",
   updated: "2026-11-27",
-  related: [1],
+  related: [1, 2],
   html: `
 <section>
   <h2>0. 이 섹션</h2>
   <p><b>ローコード AI ソリューションの構築</b>(시험 내용의 약 13%). 문제를 반영할 때마다 아래 표의 “핵심 개념·판단 기준”을 채우고 노트 문제를 링크합니다.</p>
   <div class="tbl"><table><thead><tr><th>세트</th><th>문제 수</th><th>오답</th><th>찍음</th></tr></thead><tbody>
-    <tr><td>1세트</td><td>1</td><td>0</td><td>0</td></tr>
+    <tr><td>1세트</td><td>2</td><td>0</td><td>0</td></tr>
   </tbody></table></div>
 </section>
 
@@ -113,7 +113,7 @@ var GUIDES = [
   <h2>1.1 Gemini Enterprise Agent Platform で BigQuery ML または AutoML を使用した ML モデルの開発 (BigQuery ML·AutoML로 ML 모델 개발)</h2>
   <div class="tbl"><table><thead><tr><th>출제 항목</th><th>핵심 개념·판단 기준</th><th>노트 문제</th></tr></thead><tbody>
     <tr><td>BigQuery ML 또는 Agent Platform AutoML에서 과제별 모델(분류·회귀·예측·클러스터링) 구축<br><small>BigQuery ML または Agent Platform AutoML における、ビジネス課題に応じた各種モデル（分類、回帰、予測、クラスタリングなど）の構築</small></td><td>시계열 예측(SQL만, 계절성·공휴일) → <mark>ARIMA_PLUS</mark>(외부 변수까지면 ARIMA_PLUS_XREG). 날짜를 숫자로 넣는 LINEAR_REG는 주기성을 못 잡음. 매장별처럼 여러 시계열은 <code>TIME_SERIES_ID_COL</code></td><td><button class="qref" data-id="1">Q1</button></td></tr>
-    <tr><td>BigQuery ML로 특징량 엔지니어링·특징량 선택<br><small>BigQuery ML を使用した特徴量エンジニアリングまたは特徴量選択の実行</small></td><td>—</td><td>미출제</td></tr>
+    <tr><td>BigQuery ML로 특징량 엔지니어링·특징량 선택<br><small>BigQuery ML を使用した特徴量エンジニアリングまたは特徴量選択の実行</small></td><td>추론 때도 같은 전처리 → <mark>CREATE MODEL의 TRANSFORM 절</mark>(모델에 저장, ML.PREDICT가 자동 적용). 표준화·원-핫은 자동이라 비닝(ML.QUANTILE_BUCKETIZE)·교차(ML.FEATURE_CROSS)만 명시. SELECT 절·뷰는 추론 쪽 재현 책임이 남음</td><td><button class="qref" data-id="2">Q2</button></td></tr>
     <tr><td>BigQuery ML로 예측 생성<br><small>BigQuery ML を使用した予測の生成</small></td><td>시계열 모델 → <code>ML.FORECAST</code>(HORIZON·신뢰 구간), 그 외 모델 → <code>ML.PREDICT</code>. 성분 분해는 <code>ML.EXPLAIN_FORECAST</code></td><td><button class="qref" data-id="1">Q1</button></td></tr>
     <tr><td>Agent Platform AutoML로 모델 학습<br><small>Agent Platform AutoML を使用したモデルのトレーニング</small></td><td>—</td><td>미출제</td></tr>
     <tr><td>BigQuery로 Gemini 모델 미세 조정<br><small>BigQuery を使用した Gemini モデルのファインチューニング</small></td><td>—</td><td>미출제</td></tr>
@@ -325,7 +325,7 @@ var GUIDES = [
   id: "ja",
   title: "일본어 용어집 (시험 표기)",
   updated: "2026-11-27",
-  related: [1],
+  related: [1, 2],
   html: `
 <section>
   <h2>0. 읽는 법</h2>
@@ -342,6 +342,7 @@ var GUIDES = [
     <tr><td class="strong">feature engineering / feature selection</td><td><mark>特徴量エンジニアリング</mark> / <mark>特徴量選択</mark></td><td>BigQuery ML로 수행(1.1). Feature Store 쪽은 “特徴量の作成と統合”(2.1), “特徴の管理とサービング”(4.2)</td></tr>
     <tr><td class="strong">classification / regression / forecasting / clustering</td><td><mark>分類</mark> / <mark>回帰</mark> / <mark>予測</mark> / <mark>クラスタリング</mark></td><td>주의: 가이드는 시계열 예측(forecasting)과 예측 생성(prediction) 모두 “予測”로 씀 → 문맥으로 구분</td></tr>
     <tr><td class="strong">time series forecasting (ARIMA_PLUS)</td><td><mark>時系列予測</mark> / <mark>祝日効果</mark> / <mark>季節性</mark></td><td>BigQuery ML ARIMA_PLUS·ML.FORECAST·holiday_region은 영어 그대로(<button class="qref" data-id="1">Q1</button>). 外れ値 = 이상값, 自己相関 = 자기 상관</td></tr>
+    <tr><td class="strong">TRANSFORM clause / binning / feature cross</td><td><mark>TRANSFORM 句</mark> / <mark>ビン分割</mark>(ビニング) / <mark>特徴量クロス</mark></td><td>BigQuery ML 전처리를 모델에 저장(<button class="qref" data-id="2">Q2</button>). 標準化 = 표준화, ワンホット エンコーディング = 원-핫 인코딩</td></tr>
     <tr><td class="strong">industry-specific APIs</td><td><mark>業界固有の API</mark></td><td>Document AI API, Vision API, Translate API</td></tr>
     <tr><td class="strong">Model as a Service (MaaS)</td><td>Model Garden の<mark>サービスとしてのモデル</mark></td><td>Model Garden에서 서버 관리 없이 API로 쓰는 모델</td></tr>
     <tr><td class="strong">personally identifiable information (PII)</td><td><mark>個人を特定できる情報 [PII]</mark> / 機密情報</td><td>데이터 프라이버시(2.1). 비식별화는 Sensitive Data Protection</td></tr>
@@ -369,7 +370,7 @@ var GUIDES = [
     <tr><td class="strong">safety filter / regular expression</td><td><mark>安全フィルタ</mark> / <mark>正規表現</mark></td><td>6.1. Model Armor와 함께</td></tr>
     <tr><td class="strong">data exfiltration / malicious prompt</td><td><mark>データの引き出し</mark> / <mark>悪意のあるプロンプト</mark> / センシティブ データの共有</td><td>6.1</td></tr>
     <tr><td class="strong">responsible AI / bias</td><td><mark>責任ある AI</mark> / <mark>バイアス</mark>のモニタリング</td><td>6.1</td></tr>
-    <tr><td class="strong">training-serving skew</td><td><mark>トレーニング サービング スキュー</mark></td><td>6.2(PDE 문서 표기는 トレーニング・サービングスキュー)</td></tr>
+    <tr><td class="strong">training-serving skew</td><td><mark>トレーニング サービング スキュー</mark></td><td>6.2(PDE 문서 표기는 トレーニング・サービングスキュー, 문제집은 トレーニング / サービング スキュー <button class="qref" data-id="2">Q2</button>)</td></tr>
     <tr><td class="strong">data drift / concept drift / feature attribution drift</td><td><mark>データドリフト</mark> / <mark>コンセプト ドリフト</mark> / <mark>特徴アトリビューションのドリフト</mark></td><td>6.2</td></tr>
     <tr><td class="strong">prompt engineering / context engineering</td><td>プロンプト エンジニアリング / コンテキスト エンジニアリング</td><td>가이드 머리말</td></tr>
     <tr><td class="strong">generative AI (GenAI)</td><td><mark>生成 AI</mark>（GenAI） / 予測 AI</td><td>“予測 AI ソリューションと生成 AI ソリューションの評価”(2.3)</td></tr>
