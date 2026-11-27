@@ -99,13 +99,13 @@ var GUIDES = [
   id: "s1",
   title: "1. 로우코드 AI 솔루션 구축 (13%)",
   updated: "2026-11-27",
-  related: [1, 2, 3],
+  related: [1, 2, 3, 4],
   html: `
 <section>
   <h2>0. 이 섹션</h2>
   <p><b>ローコード AI ソリューションの構築</b>(시험 내용의 약 13%). 문제를 반영할 때마다 아래 표의 “핵심 개념·판단 기준”을 채우고 노트 문제를 링크합니다.</p>
   <div class="tbl"><table><thead><tr><th>세트</th><th>문제 수</th><th>오답</th><th>찍음</th></tr></thead><tbody>
-    <tr><td>1세트</td><td>3</td><td>0</td><td>1</td></tr>
+    <tr><td>1세트</td><td>4</td><td>0</td><td>1</td></tr>
   </tbody></table></div>
 </section>
 
@@ -126,7 +126,7 @@ var GUIDES = [
     <tr><td>Model Garden에서 작업에 맞는 모델 평가·선택<br><small>Gemini Enterprise Agent Platform の Model Garden から、特定のタスクに応じたモデルの評価と選択</small></td><td>—</td><td>미출제</td></tr>
     <tr><td>업계 특화 API(Document AI API, Vision API, Translate API 등)로 앱 구축<br><small>業界固有の API（Document AI API、Vision API、Translate API など）を使用したアプリケーションの構築</small></td><td>문서에서 항목(키-값·엔티티) 추출, 학습 없이 → <mark>Document AI 폼 파서·특화형 프로세서</mark>(손글씨·여러 레이아웃 OK). Vision API <code>DOCUMENT_TEXT_DETECTION</code>은 글자+좌표만(항목 의미 없음)</td><td><button class="qref" data-id="3">Q3</button> △</td></tr>
     <tr><td>사용 사례별 솔루션 구축·모델 튜닝(Gemini, Imagen, Veo, Model Garden의 서비스형 모델)<br><small>特定のユースケース向けのソリューションの構築とモデルのチューニング（Gemini、Imagen、Veo、Model Garden のサービスとしてのモデルなど）</small></td><td>—</td><td>미출제</td></tr>
-    <tr><td>비용·지연 시간·가용성을 고려한 Gemini 앱 최적화<br><small>費用、レイテンシ、可用性を考慮した Gemini ベースのアプリケーションの最適化</small></td><td>—</td><td>미출제</td></tr>
+    <tr><td>비용·지연 시간·가용성을 고려한 Gemini 앱 최적화<br><small>費用、レイテンシ、可用性を考慮した Gemini ベースのアプリケーションの最適化</small></td><td>같은 긴 입력을 반복 전송 → <mark>컨텍스트 캐시</mark>(명시적 캐시는 TTL 스토리지 요금 있음 → 재사용 많을수록 이득). temperature·maxOutputTokens는 출력 쪽이라 입력 비용 무관. 그 밖에 배치 예측, 작은 모델(Flash-Lite)</td><td><button class="qref" data-id="4">Q4</button></td></tr>
   </tbody></table></div>
 </section>
 `
@@ -325,7 +325,7 @@ var GUIDES = [
   id: "ja",
   title: "일본어 용어집 (시험 표기)",
   updated: "2026-11-27",
-  related: [1, 2, 3],
+  related: [1, 2, 3, 4],
   html: `
 <section>
   <h2>0. 읽는 법</h2>
@@ -345,6 +345,7 @@ var GUIDES = [
     <tr><td class="strong">TRANSFORM clause / binning / feature cross</td><td><mark>TRANSFORM 句</mark> / <mark>ビン分割</mark>(ビニング) / <mark>特徴量クロス</mark></td><td>BigQuery ML 전처리를 모델에 저장(<button class="qref" data-id="2">Q2</button>). 標準化 = 표준화, ワンホット エンコーディング = 원-핫 인코딩</td></tr>
     <tr><td class="strong">Document AI Form Parser / specialized processor</td><td><mark>フォーム パーサー</mark> / <mark>特化型プロセッサ</mark></td><td>사전 학습(事前学習済み) 프로세서, 키-값(キーと値のペア) 추출(<button class="qref" data-id="3">Q3</button>). 帳票 = 서식 문서, 信頼度スコア = 신뢰도 점수</td></tr>
     <tr><td class="strong">BigQuery object table</td><td><mark>オブジェクト テーブル</mark></td><td>Cloud Storage의 비정형 파일(PDF·이미지)을 BigQuery에서 참조(<button class="qref" data-id="3">Q3</button>)</td></tr>
+    <tr><td class="strong">context caching</td><td><mark>コンテキスト キャッシュ</mark> / キャッシュ済みトークン</td><td>반복 입력 비용 절감(<button class="qref" data-id="4">Q4</button>). 入力トークン / 出力トークン, 保持時間 = TTL, ストレージ料金</td></tr>
     <tr><td class="strong">industry-specific APIs</td><td><mark>業界固有の API</mark></td><td>Document AI API, Vision API, Translate API</td></tr>
     <tr><td class="strong">Model as a Service (MaaS)</td><td>Model Garden の<mark>サービスとしてのモデル</mark></td><td>Model Garden에서 서버 관리 없이 API로 쓰는 모델</td></tr>
     <tr><td class="strong">personally identifiable information (PII)</td><td><mark>個人を特定できる情報 [PII]</mark> / 機密情報</td><td>데이터 프라이버시(2.1). 비식별화는 Sensitive Data Protection</td></tr>
