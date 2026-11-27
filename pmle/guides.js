@@ -99,13 +99,13 @@ var GUIDES = [
   id: "s1",
   title: "1. 로우코드 AI 솔루션 구축 (13%)",
   updated: "2026-11-27",
-  related: [1, 2, 3, 4, 5],
+  related: [1, 2, 3, 4, 5, 6],
   html: `
 <section>
   <h2>0. 이 섹션</h2>
   <p><b>ローコード AI ソリューションの構築</b>(시험 내용의 약 13%). 문제를 반영할 때마다 아래 표의 “핵심 개념·판단 기준”을 채우고 노트 문제를 링크합니다.</p>
   <div class="tbl"><table><thead><tr><th>세트</th><th>문제 수</th><th>오답</th><th>찍음</th></tr></thead><tbody>
-    <tr><td>1세트</td><td>5</td><td>0</td><td>2</td></tr>
+    <tr><td>1세트</td><td>6</td><td>1</td><td>2</td></tr>
   </tbody></table></div>
 </section>
 
@@ -115,7 +115,7 @@ var GUIDES = [
     <tr><td>BigQuery ML 또는 Agent Platform AutoML에서 과제별 모델(분류·회귀·예측·클러스터링) 구축<br><small>BigQuery ML または Agent Platform AutoML における、ビジネス課題に応じた各種モデル（分類、回帰、予測、クラスタリングなど）の構築</small></td><td>시계열 예측(SQL만, 계절성·공휴일) → <mark>ARIMA_PLUS</mark>(외부 변수까지면 ARIMA_PLUS_XREG). 날짜를 숫자로 넣는 LINEAR_REG는 주기성을 못 잡음. 매장별처럼 여러 시계열은 <code>TIME_SERIES_ID_COL</code></td><td><button class="qref" data-id="1">Q1</button></td></tr>
     <tr><td>BigQuery ML로 특징량 엔지니어링·특징량 선택<br><small>BigQuery ML を使用した特徴量エンジニアリングまたは特徴量選択の実行</small></td><td>추론 때도 같은 전처리 → <mark>CREATE MODEL의 TRANSFORM 절</mark>(모델에 저장, ML.PREDICT가 자동 적용). 표준화·원-핫은 자동이라 비닝(ML.QUANTILE_BUCKETIZE)·교차(ML.FEATURE_CROSS)만 명시. SELECT 절·뷰는 추론 쪽 재현 책임이 남음</td><td><button class="qref" data-id="2">Q2</button></td></tr>
     <tr><td>BigQuery ML로 예측 생성<br><small>BigQuery ML を使用した予測の生成</small></td><td>시계열 모델 → <code>ML.FORECAST</code>(HORIZON·신뢰 구간), 그 외 모델 → <code>ML.PREDICT</code>. 성분 분해는 <code>ML.EXPLAIN_FORECAST</code></td><td><button class="qref" data-id="1">Q1</button></td></tr>
-    <tr><td>Agent Platform AutoML로 모델 학습<br><small>Agent Platform AutoML を使用したモデルのトレーニング</small></td><td>—</td><td>미출제</td></tr>
+    <tr><td>Agent Platform AutoML로 모델 학습<br><small>Agent Platform AutoML を使用したモデルのトレーニング</small></td><td>자사 고유 클래스 + 라벨 이미지 + 전문 지식 없음 → <mark>AutoML 이미지 분류</mark>. 엣지 배포면 처음부터 <mark>AutoML Edge</mark>로 학습 → TensorFlow Lite 등으로 내보내기(Cloud 모델은 엣지로 못 내보냄)</td><td><button class="qref" data-id="6">Q6</button> ✕</td></tr>
     <tr><td>BigQuery로 Gemini 모델 미세 조정<br><small>BigQuery を使用した Gemini モデルのファインチューニング</small></td><td>—</td><td>미출제</td></tr>
   </tbody></table></div>
 </section>
@@ -124,7 +124,7 @@ var GUIDES = [
   <h2>1.2 Google Cloud AI API または基盤モデルを使用した AI ソリューションの構築 (Google Cloud AI API·기반 모델로 AI 솔루션 구축)</h2>
   <div class="tbl"><table><thead><tr><th>출제 항목</th><th>핵심 개념·판단 기준</th><th>노트 문제</th></tr></thead><tbody>
     <tr><td>Model Garden에서 작업에 맞는 모델 평가·선택<br><small>Gemini Enterprise Agent Platform の Model Garden から、特定のタスクに応じたモデルの評価と選択</small></td><td>자체 VPC 호스팅(외부 API 불가) → <mark>오픈 웨이트(셀프 배포)</mark> + <mark>라이선스</mark>(상용·자체 호스팅 허용) 확인. Google 호스팅 API면 MaaS. 언어 수·파라미터 수 자체는 기준 아님(작업별 성능·가속기 비용)</td><td><button class="qref" data-id="5">Q5</button> △</td></tr>
-    <tr><td>업계 특화 API(Document AI API, Vision API, Translate API 등)로 앱 구축<br><small>業界固有の API（Document AI API、Vision API、Translate API など）を使用したアプリケーションの構築</small></td><td>문서에서 항목(키-값·엔티티) 추출, 학습 없이 → <mark>Document AI 폼 파서·특화형 프로세서</mark>(손글씨·여러 레이아웃 OK). Vision API <code>DOCUMENT_TEXT_DETECTION</code>은 글자+좌표만(항목 의미 없음)</td><td><button class="qref" data-id="3">Q3</button> △</td></tr>
+    <tr><td>업계 특화 API(Document AI API, Vision API, Translate API 등)로 앱 구축<br><small>業界固有の API（Document AI API、Vision API、Translate API など）を使用したアプリケーションの構築</small></td><td>문서에서 항목(키-값·엔티티) 추출, 학습 없이 → <mark>Document AI 폼 파서·특화형 프로세서</mark>(손글씨·여러 레이아웃 OK). Vision API <code>DOCUMENT_TEXT_DETECTION</code>은 글자+좌표만(항목 의미 없음). Vision API 라벨 감지는 <b>범용 라벨</b>만 → 자사 고유 클래스(외관 불량 등)는 AutoML</td><td><button class="qref" data-id="3">Q3</button> △ <button class="qref" data-id="6">Q6</button> ✕</td></tr>
     <tr><td>사용 사례별 솔루션 구축·모델 튜닝(Gemini, Imagen, Veo, Model Garden의 서비스형 모델)<br><small>特定のユースケース向けのソリューションの構築とモデルのチューニング（Gemini、Imagen、Veo、Model Garden のサービスとしてのモデルなど）</small></td><td>—</td><td>미출제</td></tr>
     <tr><td>비용·지연 시간·가용성을 고려한 Gemini 앱 최적화<br><small>費用、レイテンシ、可用性を考慮した Gemini ベースのアプリケーションの最適化</small></td><td>같은 긴 입력을 반복 전송 → <mark>컨텍스트 캐시</mark>(명시적 캐시는 TTL 스토리지 요금 있음 → 재사용 많을수록 이득). temperature·maxOutputTokens는 출력 쪽이라 입력 비용 무관. 그 밖에 배치 예측, 작은 모델(Flash-Lite)</td><td><button class="qref" data-id="4">Q4</button></td></tr>
   </tbody></table></div>
@@ -325,7 +325,7 @@ var GUIDES = [
   id: "ja",
   title: "일본어 용어집 (시험 표기)",
   updated: "2026-11-27",
-  related: [1, 2, 3, 4, 5],
+  related: [1, 2, 3, 4, 5, 6],
   html: `
 <section>
   <h2>0. 읽는 법</h2>
@@ -347,6 +347,7 @@ var GUIDES = [
     <tr><td class="strong">BigQuery object table</td><td><mark>オブジェクト テーブル</mark></td><td>Cloud Storage의 비정형 파일(PDF·이미지)을 BigQuery에서 참조(<button class="qref" data-id="3">Q3</button>)</td></tr>
     <tr><td class="strong">context caching</td><td><mark>コンテキスト キャッシュ</mark> / キャッシュ済みトークン</td><td>반복 입력 비용 절감(<button class="qref" data-id="4">Q4</button>). 入力トークン / 出力トークン, 保持時間 = TTL, ストレージ料金</td></tr>
     <tr><td class="strong">open weights / self-deploy</td><td><mark>オープンウェイト</mark> / <mark>セルフデプロイ</mark> / ライセンス条項</td><td>가중치를 받아 자체 호스팅(<button class="qref" data-id="5">Q5</button>). 반대는 マネージド API（Model as a Service）</td></tr>
+    <tr><td class="strong">image classification / label detection / AutoML Edge</td><td><mark>画像分類</mark> / <mark>ラベル検出</mark> / AutoML Edge</td><td>ラベル検出 = Vision API 범용 라벨(<button class="qref" data-id="6">Q6</button>). エッジデバイス, エクスポート, 外観不良 = 외관 불량</td></tr>
     <tr><td class="strong">industry-specific APIs</td><td><mark>業界固有の API</mark></td><td>Document AI API, Vision API, Translate API</td></tr>
     <tr><td class="strong">Model as a Service (MaaS)</td><td>Model Garden の<mark>サービスとしてのモデル</mark></td><td>Model Garden에서 서버 관리 없이 API로 쓰는 모델. 문제집 표기는 マネージド API（Model as a Service）(<button class="qref" data-id="5">Q5</button>)</td></tr>
     <tr><td class="strong">personally identifiable information (PII)</td><td><mark>個人を特定できる情報 [PII]</mark> / 機密情報</td><td>데이터 프라이버시(2.1). 비식별화는 Sensitive Data Protection</td></tr>
